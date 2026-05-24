@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Resources Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ivory: #F4EFE5;
+            --ink: #14282E;
+            --teal: #1F5560;
+            --gold: #B8932F;
+            --card: #FBF7EE;
+            --rule: #D4C9B0;
+            --display: "DM Serif Display", "Georgia", serif;
+            --body: "DM Sans", sans-serif;
+        }
+        body {
+            margin: 0; padding: 0; font-family: var(--body); background-color: var(--ivory); color: var(--ink);
+            min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        body::before {
+            content: ""; position: fixed; inset: 0; z-index: -1;
+            background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(221, 233, 236, 0.6), transparent 70%);
+        }
+        .container { max-width: 900px; width: 90%; text-align: center; padding: 40px 20px; }
+        .smallcaps { font-size: .75rem; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
+        h1 { font-family: var(--display); font-style: italic; font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0 0 10px 0; font-weight: 500; }
+        .subtitle { font-size: 1.1rem; color: #5E747A; max-width: 600px; margin: 0 auto 40px auto; line-height: 1.6; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; width: 100%; }
+        .card {
+            background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 35px 25px;
+            text-align: left; box-shadow: 0 8px 24px -10px rgba(18, 56, 66, 0.14); transition: transform 0.2s, box-shadow 0.2s;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 18px 42px -16px rgba(18, 56, 66, 0.24); border-color: var(--teal); }
+        .card-meta { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+        .card h2 { font-family: var(--display); font-style: italic; font-size: 1.8rem; font-weight: 500; margin: 0 0 12px 0; }
+        .card p { color: #2D4A52; font-size: 0.98rem; line-height: 1.5; margin: 0 0 24px 0; }
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; padding: 11px 22px;
+            font-size: .68rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
+            color: var(--ivory); background: var(--teal); border: 1px solid var(--teal); border-radius: 999px;
+            cursor: pointer; text-decoration: none; transition: background .15s;
+        }
+        .btn:hover { background: #123842; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="smallcaps">Curriculum & Learning Journals</div>
+        <h1>ESL Classroom Hub</h1>
+        <p class="subtitle">Interactive practice pathways, vocabulary tools, and resources curated for secondary English language streams.</p>
+        
+        <div class="grid">
+            <!-- CARD FOR PROJECT 1 -->
+            <div class="card">
+                <div>
+                    <div class="card-meta">Core Stream · Term 3</div>
+                    <h2>11 General</h2>
+                    <p>An interactive practice journal covering foundational grammar, core vocabulary, reading strategies, and structured listening exercises.</p>
+                </div>
+                <a href="./11-General/" class="btn">Explore Journal</a>
+            </div>
+
+            <!-- CARD FOR PROJECT 2 -->
+            <div class="card">
+                <div>
+                    <div class="card-meta">Advanced Stream · Term 3</div>
+                    <h2>11 Advanced</h2>
+                    <p>Accelerated academic English modules focusing on analytical reading, advanced composition structures, and persuasive speaking tracks.</p>
+                </div>
+                <a href="./11-Advanced/" class="btn">Explore Journal</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
