@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="An interactive practice journal for Grade 11 Advanced English — grammar, vocabulary, reading, writing, listening and speaking. Designed and Developed by Jawahar." />
+<meta name="theme-color" content="#FFF0DA" />
+<meta name="color-scheme" content="light" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Stage 8 / English · Term 3 · 2026" />
+<meta property="og:description" content="An interactive practice journal for Grade 11 Advanced English — designed and created by Jawahar." />
+<meta property="og:locale" content="en_AE" />
+<title>Stage 8 · English · Term 3 · 2026</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --cream:       #FFF0DA;
+  --cream-deep:  #FCE2BD;
+  --blush:       #FFE0CE;
+  --blush-deep:  #FBC9B5;
+  --coral-pale:  #FFD2C2;
+  --card:        #FFF7E8;
+  --wine:        #3D1A24;
+  --wine-2:      #6A2C3A;
+  --mute:        #7B5560;     
+  --rule:        #E5C6B6;
+  --rule-2:      #D6A595;
+  --rose:        #D63660;     
+  --rose-deep:   #A8254A;
+  --rose-soft:   #F2A6B8;
+  --gold:        #DDA13B;     
+  --gold-deep:   #A8741F;
+  --sage:        #8FA987;
+  --ok:          #6E9A6A;
+  --no:          #C84A4A;
+  --display:     "DM Serif Display", "Georgia", serif;
+  --body:        "DM Sans", sans-serif;
+  --shadow-1:    0 8px 24px -10px rgba(168, 37, 74, 0.12), 0 2px 6px -2px rgba(168, 37, 74, 0.06);
+}
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; font-family: var(--body); font-size: 17px; line-height: 1.6; color: var(--wine); background: var(--cream); min-height: 100vh; position: relative;
+}
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 80% 50% at 80% 0%, rgba(255, 210, 194, 0.55), transparent 70%), radial-gradient(ellipse 60% 40% at 0% 100%, rgba(214, 54, 96, 0.08), transparent 60%);
+}
+h1, h2 { font-family: var(--display); font-weight: 500; margin: 0; color: var(--wine); }
+h1 { font-size: clamp(2.6rem, 6.5vw, 5.6rem); line-height: 1; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.7rem, 3.2vw, 2.4rem); line-height: 1.15; }
+h3 { font-size: 1.3rem; font-weight: 600; margin: 0; }
+.topbar { position: sticky; top: 0; z-index: 30; background: rgba(255, 240, 218, 0.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--rule); padding: 14px 40px; display: flex; justify-content: space-between; align-items: center; }
+.brand { font-family: var(--display); font-style: italic; font-size: 1.4rem; color: var(--wine); }
+.brand span { color: var(--rose); }
+.nav-links a { margin-left: 15px; color: var(--wine); text-decoration: none; font-weight: 500; font-size: 0.9rem; }
+.nav-links a:hover { color: var(--rose); }
+.content-container { max-width: var(--content-max); margin: 40px auto; padding: 0 20px; position: relative; z-index: 10; }
+.jawahar-panel { background: #FFF7E8; border: 2px dashed var(--gold); border-radius: 12px; padding: 25px; margin-bottom: 40px; box-shadow: var(--shadow-1); }
+.jawahar-title { font-family: var(--display); font-style: italic; color: var(--wine); font-size: 1.6rem; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+.jawahar-title span { font-size: 0.8rem; background: var(--gold); color: white; padding: 3px 8px; border-radius: 4px; font-family: var(--body); font-style: normal; }
+.jawahar-select { padding: 10px; border-radius: 6px; border: 1px solid var(--rule-2); font-family: var(--body); width: 100%; margin-bottom: 15px; }
+.jawahar-textarea { width: 100%; height: 120px; padding: 12px; border-radius: 6px; border: 1px solid var(--rule-2); font-family: monospace; font-size: 0.9rem; margin-bottom: 15px; background: white; }
+.jawahar-btn { background: var(--rose); color: white; border: none; padding: 12px 24px; font-weight: bold; border-radius: 6px; cursor: pointer; font-family: var(--body); transition: background 0.2s; }
+.jawahar-btn:hover { background: var(--rose-deep); }
+.app-section { background: white; border: 1px solid var(--rule); border-radius: 16px; padding: 30px; margin-bottom: 30px; box-shadow: var(--shadow-1); }
+.section-header { font-family: var(--display); font-size: 2rem; color: var(--wine); border-bottom: 2px solid var(--cream); padding-bottom: 10px; margin-bottom: 20px; }
+.injected-activity { background: var(--card); border-left: 4px solid var(--rose); padding: 15px; margin-top: 15px; border-radius: 0 8px 8px 0; font-style: italic; position: relative; }
+.delete-injected { position: absolute; top: 10px; right: 10px; background: transparent; border: none; color: var(--no); font-weight: bold; cursor: pointer; }
+.quiz-option { display: block; background: var(--cream); border: 1px solid var(--rule); padding: 12px; margin-bottom: 8px; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+.quiz-option:hover { background: var(--blush); }
+.feedback-box { margin-top: 10px; font-weight: bold; font-size: 0.95rem; }
+.feedback-box.correct { color: var(--ok); }
+.feedback-box.incorrect { color: var(--no); }
+footer { text-align: center; padding: 40px; border-top: 1px solid var(--rule); color: var(--mute); font-size: 0.85rem; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">Stage 8 / <span>Advanced English</span></div>
+  <div class="nav-links">
+    <a href="#grammar">Grammar</a>
+    <a href="#vocab">Vocabulary</a>
+    <a href="#reading">Reading</a>
+    <a href="#writing">Writing</a>
+  </div>
+</div>
+
+<div class="content-container">
+  
+  <div class="jawahar-panel">
+    <div class="jawahar-title">Add Custom Content & Dynamic Activities <span>Creator Dashboard</span></div>
+    <p style="font-size:0.85rem; color: var(--mute); margin:-5px 0 15px 0;">Select a specific active section and write or paste raw HTML code / task notes to instantly deploy items directly onto the page layout live.</p>
+    <select id="sectionSelector" class="jawahar-select">
+      <option value="grammar">Grammar Practice Module</option>
+      <option value="vocab">Vocabulary Enrichment</option>
+      <option value="reading">Reading Comprehension Segment</option>
+      <option value="writing">Advanced Writing Workbox</option>
+    </select>
+    <textarea id="customContentInput" class="jawahar-textarea" placeholder="Enter instructions, embedded frame elements, or HTML code blocks here..."></textarea>
+    <button class="jawahar-btn" onclick="injectJawaharContent()">Deploy Element Directly</button>
+  </div>
+
+  <div id="grammar" class="app-section">
+    <div class="section-header">01. Advanced Grammar Hub</div>
+    <p>Practice compound structuring, hedging modifiers, and complex adverbials used in scholarly texts.</p>
+    
+    <div style="margin-top:20px;">
+      <p><b>Question 1:</b> Identify the sentence containing an intentional academic hedging element.</p>
+      <div class="quiz-option" onclick="checkAdvQuiz(this, true, 'Correct! &ldquo;Suggests that&rdquo; helps qualify an academic claim cleanly.')">A) The collected metrics could potentially suggest that social trends alternate rapidly.</div>
+      <div class="quiz-option" onclick="checkAdvQuiz(this, false, 'Try again. This statement declares a rigid fact rather than a hedge.')">B) Statistics definitely declare that online parameters are entirely concrete.</div>
+      <div class="feedback-box"></div>
+    </div>
+    <div id="inject-grammar"></div>
+  </div>
+
+  <div id="vocab" class="app-section">
+    <div class="section-header">02. Vocabulary Enrichment</div>
+    <p>Explore concepts centered on campus life frameworks, global infrastructure, and technical sciences.</p>
+    
+    <div style="margin-top:20px;">
+      <p><b>Question 1:</b> What is the closest context meaning of the academic term <i>"synthesis"</i>?</p>
+      <div class="quiz-option" onclick="checkAdvQuiz(this, false, 'Incorrect. This describes breaking an item down, not synthesis.')">A) Separating a core structure into multiple isolated units.</div>
+      <div class="quiz-option" onclick="checkAdvQuiz(this, true, 'Excellent! Combining unique parts to build an explanatory framework.')">B) Blending diverse materials or viewpoints into a cohesive arrangement.</div>
+      <div class="feedback-box"></div>
+    </div>
+    <div id="inject-vocab"></div>
+  </div>
+
+  <div id="reading" class="app-section">
+    <div class="section-header">03. Reading Comprehension</div>
+    <p>Analyze formal passages detailing digital citizenship guidelines and regional sustainability efforts.</p>
+    <div style="background: var(--card); padding: 15px; border-radius: 8px; font-style: italic; margin-bottom: 15px;">
+      "Environmental models imply that combining structural urban policy with active citizen compliance yields lower infrastructure strain across modern developments."
+    </div>
+    <div>
+      <p><b>Question 1:</b> What primary inference is validated by the short excerpt?</p>
+      <div class="quiz-option" onclick="checkAdvQuiz(this, true, 'Correct! Both combined metrics are vital.')">A) Integrated approaches matter more than relying exclusively on singular guidelines.</div>
+      <div class="quiz-option" onclick="checkAdvQuiz(this, false, 'Incorrect. The prompt states citizen compliance remains highly necessary.')">B) Structural city policies work automatically without citizen adjustments.</div>
+      <div class="feedback-box"></div>
+    </div>
+    <div id="inject-reading"></div>
+  </div>
+
+  <div id="writing" class="app-section">
+    <div class="section-header">04. Advanced Writing Workbox</div>
+    <p>Construct clear supporting arguments, logical analytical linkages, and structured review essays.</p>
+    <textarea style="width:100%; height:120px; border-radius:8px; border:1px solid var(--rule); padding:10px;" placeholder="Compose your response here... (Progress saves to local device memory)"></textarea>
+    <div id="inject-writing"></div>
+  </div>
+
+</div>
+
+<footer>
+  <p>&copy; 2026 Jawahar. Designed & Created by Jawahar. All Rights Reserved.</p>
+</footer>
+
+<script>
+function checkAdvQuiz(element, isCorrect, feedbackText) {
+  const parent = element.parentNode;
+  const feedback = parent.querySelector('.feedback-box');
+  feedback.textContent = feedbackText;
+  feedback.className = 'feedback-box ' + (isCorrect ? 'correct' : 'incorrect');
+}
+
+function injectJawaharContent() {
+  const targetSection = document.getElementById('sectionSelector').value;
+  const rawText = document.getElementById('customContentInput').value.trim();
+  if(!rawText) { alert('Please insert your text or HTML layout first.'); return; }
+  
+  const internalKey = 'jawahar_adv_' + targetSection + '_' + Date.now();
+  const packageData = { id: internalKey, section: targetSection, data: rawText };
+  
+  let currentItems = JSON.parse(localStorage.getItem('jawahar_adv_content') || '[]');
+  currentItems.push(packageData);
+  localStorage.setItem('jawahar_adv_content', JSON.stringify(currentItems));
+  
+  buildInjectedNode(packageData);
+  document.getElementById('customContentInput').value = '';
+}
+
+function buildInjectedNode(item) {
+  const container = document.getElementById('inject-' + item.section);
+  if(!container) return;
+  
+  const wrapper = document.createElement('div');
+  wrapper.className = 'injected-activity';
+  wrapper.id = item.id;
+  wrapper.innerHTML = item.data + `<button class="delete-injected" onclick="removeJawaharNode('${item.id}')">&times;</button>`;
+  container.appendChild(wrapper);
+}
+
+function removeJawaharNode(id) {
+  if(!confirm('Are you sure you want to remove this item?')) return;
+  document.getElementById(id).remove();
+  let currentItems = JSON.parse(localStorage.getItem('jawahar_adv_content') || '[]');
+  currentItems = currentItems.filter(i => i.id !== id);
+  localStorage.setItem('jawahar_adv_content', JSON.stringify(currentItems));
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const stored = JSON.parse(localStorage.getItem('jawahar_adv_content') || '[]');
+  stored.forEach(buildInjectedNode);
+});
+</script>
+</body>
+</html>
