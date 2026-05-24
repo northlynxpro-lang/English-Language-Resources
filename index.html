@@ -64,6 +64,47 @@ body[data-active-stream="advanced"] .card-header{color:var(--rose)}
 .module-card h3{margin:0 0 6px;font-size:1rem}
 .module-card p{margin:0;color:var(--muted);font-size:.9rem}
 footer{margin-top:auto;background:white;border-top:1px solid var(--line);padding:24px 5%;text-align:center;color:#6A6152;font-weight:600}
+
+/* Teacher tools: added without changing the main layout */
+.teacher-tools-btn{border:1px solid var(--line);background:#fff;color:var(--dark);padding:11px 18px;font-weight:800;border-radius:999px;cursor:pointer;white-space:nowrap}
+.teacher-tools-btn:hover{background:#F4EFE5}
+.teacher-modal{position:fixed;inset:0;background:rgba(17,34,38,.42);display:none;align-items:center;justify-content:center;z-index:200;padding:24px}
+.teacher-modal.open{display:flex}
+.teacher-panel{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.22);max-width:920px;width:min(920px,96vw);max-height:90vh;overflow:auto;padding:26px}
+.teacher-panel h2{font-family:"DM Serif Display",serif;font-style:italic;font-size:2rem;margin:0 0 6px}
+.teacher-panel p{color:var(--muted);line-height:1.5}
+.teacher-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:18px}
+.teacher-box{border:1px solid var(--line);background:var(--cream);border-radius:16px;padding:18px}
+.teacher-box h3{margin:0 0 10px;font-size:1rem}
+.teacher-box label{display:block;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#536468;margin:12px 0 6px}
+.teacher-box input,.teacher-box select,.teacher-box textarea{width:100%;min-width:0;padding:10px 12px;border:1px solid #D6CDBC;border-radius:10px;background:#fff;font:inherit}
+.teacher-box textarea{min-height:92px;resize:vertical}
+.teacher-box .btn{width:100%;justify-content:center;margin-top:12px}
+.teacher-close{float:right;background:#EEE7D9;color:var(--dark);border:0;padding:10px 16px;font-weight:800;border-radius:999px;cursor:pointer}
+.teacher-link-output,.teacher-report-output{margin-top:10px;padding:10px 12px;background:#fff;border:1px dashed #c9bfae;border-radius:10px;word-break:break-word;font-size:.9rem;color:#405157}
+.student-strip{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
+.avatar-choice{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;cursor:pointer;font-weight:800}
+.avatar-choice.active{outline:2px solid var(--teal)}
+body[data-active-stream="advanced"] .avatar-choice.active{outline-color:var(--rose)}
+.badge-pill{display:inline-block;background:#EEE7D9;border-radius:999px;padding:7px 11px;font-size:.85rem;font-weight:800;margin:4px 5px 0 0}
+
+/* Visible student profile tools: compact and separate from lesson content */
+.student-tools-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 20px;box-shadow:var(--shadow);margin:-6px 0 24px;display:grid;grid-template-columns:1.2fr 1fr 1.3fr auto;gap:16px;align-items:end}
+.student-tools-card label{display:block;font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:#536468;margin-bottom:6px}
+.student-tools-card input,.student-tools-card select{width:100%;min-width:0;padding:11px 12px;border:1px solid #D6CDBC;border-radius:10px;background:#fff;font:inherit}
+.visible-avatar-strip{display:flex;flex-wrap:wrap;gap:8px}
+.visible-avatar-strip .avatar-choice{padding:7px 10px}
+.visible-badge-area{min-width:170px}
+.visible-badge-area .badge-pill{margin-top:0}
+.sidebar-tools{border:1px dashed var(--line);background:#fff;border-radius:14px;padding:12px;margin:0 0 12px}
+.sidebar-tools .teacher-tools-btn{width:100%;border-color:var(--line)}
+.teacher-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 4px}
+.teacher-tab-btn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 13px;font-weight:800;cursor:pointer}
+.teacher-tab-btn:hover{background:#F4EFE5}
+.teacher-box{scroll-margin-top:18px}
+@media (max-width:900px){.student-tools-card{grid-template-columns:1fr 1fr}.visible-badge-area{grid-column:1/-1}.student-tools-card .btn{width:100%}}
+@media (max-width:600px){.student-tools-card{grid-template-columns:1fr}}
+
 @media (max-width:760px){
   header{position:relative;flex-direction:column;align-items:flex-start}
   .stream-selector{width:100%;overflow:auto}
@@ -84,9 +125,10 @@ footer{margin-top:auto;background:white;border-top:1px solid var(--line);padding
     <button class="stream-btn active" data-stream="general" onclick="switchStream('general')">Grade 11 General</button>
     <button class="stream-btn" data-stream="advanced" onclick="switchStream('advanced')">Grade 11 Advanced</button>
   </div>
+  <button class="teacher-tools-btn" onclick="openTeacherTools()">Teacher Tools</button>
 </header>
 <div class="layout">
-  <aside id="tabSidebar"></aside>
+  <aside id="tabSidebar"><div class="sidebar-tools"><button class="teacher-tools-btn" onclick="openTeacherTools()">Teacher Tools</button></div></aside>
   <main>
     <section class="hero">
       <h2 id="heroHeading">Welcome Student</h2>
@@ -96,9 +138,98 @@ footer{margin-top:auto;background:white;border-top:1px solid var(--line);padding
         <div class="progress"><span id="scoreText">Score: 0 / 0</span><div class="progress-bar"><span id="progressFill"></span></div></div>
       </div>
     </section>
+    <section class="student-tools-card" aria-label="Student profile and rewards">
+      <div>
+        <label for="studentNameInput">Student Name</label>
+        <input id="studentNameInput" placeholder="Enter student name" oninput="saveStudentProfile()" />
+      </div>
+      <div>
+        <label for="studentSectionSelect">Section</label>
+        <select id="studentSectionSelect" onchange="saveStudentProfile()"></select>
+      </div>
+      <div>
+        <label>Choose Avatar</label>
+        <div class="visible-avatar-strip" id="studentAvatarStrip"></div>
+      </div>
+      <div class="visible-badge-area">
+        <label>Badges & Certificate</label>
+        <div id="studentBadgePreview"></div>
+        <button class="btn secondary" style="margin-top:8px" onclick="printCertificate()">Print Certificate</button>
+      </div>
+    </section>
     <section id="moduleList" class="module-grid"></section>
     <section id="quizStage"></section>
   </main>
+</div>
+
+<div class="teacher-modal" id="teacherModal" aria-hidden="true">
+  <div class="teacher-panel" role="dialog" aria-modal="true" aria-labelledby="teacherToolsTitle">
+    <button class="teacher-close" onclick="closeTeacherTools()">Close</button>
+    <h2 id="teacherToolsTitle">Teacher Tools</h2>
+    <p>Add grades, sections, and activities without changing the original Grade 11 General and Advanced practice pages. New content is saved in this browser.</p>
+    <div class="teacher-tabs" aria-label="Teacher tool shortcuts">
+      <button class="teacher-tab-btn" onclick="document.getElementById('toolAddGrade').scrollIntoView({block:'start'})">+ Add Grade</button>
+      <button class="teacher-tab-btn" onclick="document.getElementById('toolAddSection').scrollIntoView({block:'start'})">+ Add Section</button>
+      <button class="teacher-tab-btn" onclick="document.getElementById('toolAddActivity').scrollIntoView({block:'start'})">+ Add Activity</button>
+      <button class="teacher-tab-btn" onclick="document.getElementById('toolTeacherLink').scrollIntoView({block:'start'})">Teacher Link</button>
+      <button class="teacher-tab-btn" onclick="document.getElementById('toolReports').scrollIntoView({block:'start'})">Reports</button>
+    </div>
+    <div class="teacher-grid">
+      <div class="teacher-box" id="toolAddGrade">
+        <h3>+ Add a Grade</h3>
+        <label>Grade name</label>
+        <input id="newGradeName" placeholder="Example: Grade 12" />
+        <button class="btn" onclick="addCustomGrade()">Add Grade</button>
+      </div>
+      <div class="teacher-box" id="toolAddSection">
+        <h3>+ Add a Section</h3>
+        <label>Section name</label>
+        <input id="newSectionName" placeholder="Example: 11 A 1" />
+        <button class="btn" onclick="addSectionName()">Add Section</button>
+      </div>
+      <div class="teacher-box" id="toolAddActivity">
+        <h3>+ Add an Activity</h3>
+        <label>Grade</label>
+        <select id="activityGradeSelect"></select>
+        <label>Skill tab</label>
+        <select id="activityTabSelect"></select>
+        <label>Module title</label>
+        <input id="activityTitle" placeholder="Example: Reading Practice 1" />
+        <label>Question</label>
+        <textarea id="activityQuestion" placeholder="Type one accurate MCQ question."></textarea>
+        <label>Options, one per line</label>
+        <textarea id="activityOptions" placeholder="Option A
+Option B
+Option C"></textarea>
+        <label>Correct answer exactly as written</label>
+        <input id="activityAnswer" placeholder="Copy the correct option here" />
+        <label>Feedback / explanation</label>
+        <textarea id="activityExplanation" placeholder="Explain why the answer is correct."></textarea>
+        <button class="btn" onclick="addActivityToTab()">Add Activity</button>
+      </div>
+      <div class="teacher-box" id="toolTeacherLink">
+        <h3>Generate Teacher Link</h3>
+        <label>Teacher name/code</label>
+        <input id="teacherCode" placeholder="Example: MsAliya" />
+        <label>Section</label>
+        <select id="teacherSectionSelect"></select>
+        <button class="btn" onclick="generateTeacherLink()">Generate Link</button>
+        <div class="teacher-link-output" id="teacherLinkOutput">Your link will appear here.</div>
+      </div>
+      <div class="teacher-box">
+        <h3>Student Avatars</h3>
+        <p>Students can choose an avatar before practising.</p>
+        <div class="student-strip" id="avatarStrip"></div>
+      </div>
+      <div class="teacher-box" id="toolReports">
+        <h3>Reports, Badges & Certificates</h3>
+        <div id="badgePreview"></div>
+        <button class="btn secondary" onclick="downloadReportsCsv()">Download Reports CSV</button>
+        <button class="btn secondary" onclick="printCertificate()">Print Certificate</button>
+        <div class="teacher-report-output" id="reportStatus">Reports are stored locally in this browser.</div>
+      </div>
+    </div>
+  </div>
 </div>
 <footer>&copy; 2026 Aliya Shah. All Rights Reserved. Designed &amp; Created by Aliya Shah.</footer>
 <script>
@@ -121,7 +252,7 @@ function switchStream(stream) {
 }
 function renderTabs(){
   const side=document.getElementById('tabSidebar');
-  side.innerHTML='';
+  side.innerHTML='<div class="sidebar-tools"><button class="teacher-tools-btn" onclick="openTeacherTools()">Teacher Tools</button></div>';
   Object.keys(DATABASE[activeStream]).forEach(tab=>{
     const btn=document.createElement('button');
     btn.className='nav-tab-btn'+(tab===activeTab?' active':'');
@@ -200,6 +331,7 @@ function checkAnswer(){
   document.getElementById('statusText').textContent=isCorrect?'Status: Correct':'Status: Review the answer';
   document.getElementById('checkBtn').textContent='Next Question';
   updateProgress();
+  recordLocalReport(isCorrect);
 }
 function nextQuestion(){
   const module=DATABASE[activeStream][activeTab][activeModuleIndex];
@@ -213,7 +345,196 @@ function updateProgress(){
   const pct= total ? Math.min(100,(answered/total)*100) : 0;
   document.getElementById('progressFill').style.width=pct+'%';
 }
-window.addEventListener('DOMContentLoaded',()=>switchStream('general'));
+
+
+const DEFAULT_TABS = ['Student','SEN A1','Differentiation','Mixed Practice','Reading','Writing','Listening','Speaking','Grammar','Vocabulary'];
+const AVATARS = ['🦉','🦁','🐬','🦋','⭐','🚀','📚','🏆'];
+let selectedAvatar = localStorage.getItem('studentAvatar') || AVATARS[0];
+let teacherSections = JSON.parse(localStorage.getItem('teacherSections') || '[]');
+let localReports = JSON.parse(localStorage.getItem('localReports') || '[]');
+
+function loadTeacherAdditions(){
+  const saved = JSON.parse(localStorage.getItem('teacherAdditions') || '{}');
+  Object.keys(saved).forEach(streamKey => {
+    if(!DATABASE[streamKey]) DATABASE[streamKey] = {};
+    Object.keys(saved[streamKey]).forEach(tab => {
+      if(!DATABASE[streamKey][tab]) DATABASE[streamKey][tab] = [];
+      DATABASE[streamKey][tab].push(...saved[streamKey][tab]);
+    });
+  });
+}
+function saveTeacherModule(streamKey, tab, module){
+  const saved = JSON.parse(localStorage.getItem('teacherAdditions') || '{}');
+  if(!saved[streamKey]) saved[streamKey] = {};
+  if(!saved[streamKey][tab]) saved[streamKey][tab] = [];
+  saved[streamKey][tab].push(module);
+  localStorage.setItem('teacherAdditions', JSON.stringify(saved));
+}
+function refreshStreamButtons(){
+  const selector = document.querySelector('.stream-selector');
+  Object.keys(DATABASE).forEach(streamKey => {
+    if(selector.querySelector(`[data-stream="${streamKey}"]`)) return;
+    const btn = document.createElement('button');
+    btn.className = 'stream-btn';
+    btn.dataset.stream = streamKey;
+    btn.textContent = streamKey.replace(/-/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+    btn.onclick = () => switchStream(streamKey);
+    selector.appendChild(btn);
+  });
+}
+function openTeacherTools(){
+  document.getElementById('teacherModal').classList.add('open');
+  document.getElementById('teacherModal').setAttribute('aria-hidden','false');
+  populateTeacherControls();
+}
+function closeTeacherTools(){
+  document.getElementById('teacherModal').classList.remove('open');
+  document.getElementById('teacherModal').setAttribute('aria-hidden','true');
+}
+function populateTeacherControls(){
+  const gradeSelect = document.getElementById('activityGradeSelect');
+  gradeSelect.innerHTML = Object.keys(DATABASE).map(k => `<option value="${k}">${k.replace(/-/g,' ').replace(/\b\w/g, c => c.toUpperCase())}</option>`).join('');
+  gradeSelect.value = activeStream;
+  gradeSelect.onchange = populateActivityTabs;
+  populateActivityTabs();
+  const secSelect = document.getElementById('teacherSectionSelect');
+  const sections = teacherSections.length ? teacherSections : ['11 G 1','11 G 2','11 G 3','11 G 4'];
+  secSelect.innerHTML = sections.map(s => `<option value="${s}">${s}</option>`).join('');
+  renderAvatars();
+  renderBadges();
+  renderStudentProfileControls();
+}
+function populateActivityTabs(){
+  const streamKey = document.getElementById('activityGradeSelect').value || activeStream;
+  const tabs = Object.keys(DATABASE[streamKey] || {});
+  document.getElementById('activityTabSelect').innerHTML = tabs.map(t => `<option value="${t}">${t}</option>`).join('');
+}
+function addCustomGrade(){
+  const name = document.getElementById('newGradeName').value.trim();
+  if(!name){ alert('Please type a grade name.'); return; }
+  const key = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  if(DATABASE[key]){ alert('This grade already exists.'); return; }
+  DATABASE[key] = {};
+  DEFAULT_TABS.forEach(t => DATABASE[key][t] = []);
+  const saved = JSON.parse(localStorage.getItem('teacherAdditions') || '{}');
+  saved[key] = {}; DEFAULT_TABS.forEach(t => saved[key][t] = []);
+  localStorage.setItem('teacherAdditions', JSON.stringify(saved));
+  refreshStreamButtons(); populateTeacherControls();
+  document.getElementById('newGradeName').value = '';
+  alert('Grade added. You can now add activities to it.');
+}
+function addSectionName(){
+  const sec = document.getElementById('newSectionName').value.trim();
+  if(!sec){ alert('Please type a section name.'); return; }
+  if(!teacherSections.includes(sec)) teacherSections.push(sec);
+  localStorage.setItem('teacherSections', JSON.stringify(teacherSections));
+  document.getElementById('newSectionName').value=''; populateTeacherControls(); renderStudentProfileControls();
+}
+function addActivityToTab(){
+  const streamKey = document.getElementById('activityGradeSelect').value;
+  const tab = document.getElementById('activityTabSelect').value;
+  const title = document.getElementById('activityTitle').value.trim();
+  const q = document.getElementById('activityQuestion').value.trim();
+  const options = document.getElementById('activityOptions').value.split('\n').map(x=>x.trim()).filter(Boolean);
+  const answer = document.getElementById('activityAnswer').value.trim();
+  const explanation = document.getElementById('activityExplanation').value.trim();
+  if(!title || !q || options.length < 2 || !answer || !explanation){ alert('Please complete the activity form.'); return; }
+  if(!options.includes(answer)){ alert('The correct answer must match one of the options exactly.'); return; }
+  const module = {title, questions:[{q, options, answer, explanation}]};
+  if(!DATABASE[streamKey][tab]) DATABASE[streamKey][tab] = [];
+  DATABASE[streamKey][tab].push(module);
+  saveTeacherModule(streamKey, tab, module);
+  if(streamKey === activeStream && tab === activeTab){ renderTabs(); renderTab(); }
+  ['activityTitle','activityQuestion','activityOptions','activityAnswer','activityExplanation'].forEach(id=>document.getElementById(id).value='');
+  alert('Activity added successfully.');
+}
+function generateTeacherLink(){
+  const teacher = encodeURIComponent(document.getElementById('teacherCode').value.trim() || 'teacher');
+  const section = encodeURIComponent(document.getElementById('teacherSectionSelect').value || 'section');
+  const url = `${location.origin}${location.pathname}?teacher=${teacher}&section=${section}&grade=${encodeURIComponent(activeStream)}`;
+  document.getElementById('teacherLinkOutput').textContent = url;
+  navigator.clipboard?.writeText(url).catch(()=>{});
+}
+function renderAvatars(){
+  const html = AVATARS.map(a => `<button class="avatar-choice ${a===selectedAvatar?'active':''}" onclick="selectAvatar('${a}')">${a}</button>`).join('');
+  const strip = document.getElementById('avatarStrip');
+  if(strip) strip.innerHTML = html;
+  const studentStrip = document.getElementById('studentAvatarStrip');
+  if(studentStrip) studentStrip.innerHTML = html;
+}
+function selectAvatar(a){ selectedAvatar = a; localStorage.setItem('studentAvatar', a); renderAvatars(); renderBadges(); }
+function renderStudentProfileControls(){
+  const nameInput = document.getElementById('studentNameInput');
+  const sectionSelect = document.getElementById('studentSectionSelect');
+  if(nameInput) nameInput.value = localStorage.getItem('studentName') || '';
+  if(sectionSelect){
+    const params = new URLSearchParams(location.search);
+    const defaultSections = ['11 G 1','11 G 2','11 G 3','11 G 4'];
+    const sections = teacherSections.length ? teacherSections : defaultSections;
+    sectionSelect.innerHTML = sections.map(s => `<option value="${s}">${s}</option>`).join('');
+    sectionSelect.value = params.get('section') || localStorage.getItem('studentSection') || sections[0];
+  }
+  renderAvatars();
+  renderBadges();
+}
+function saveStudentProfile(){
+  const nameInput = document.getElementById('studentNameInput');
+  const sectionSelect = document.getElementById('studentSectionSelect');
+  if(nameInput) localStorage.setItem('studentName', nameInput.value.trim());
+  if(sectionSelect) localStorage.setItem('studentSection', sectionSelect.value);
+}
+
+function currentBadge(){
+  const pct = answered ? Math.round((score/answered)*100) : 0;
+  if(answered === 0) return 'Ready to Practise';
+  if(pct >= 90) return 'Gold Scholar';
+  if(pct >= 75) return 'Silver Achiever';
+  if(pct >= 60) return 'Bronze Progress';
+  return 'Keep Practising';
+}
+function renderBadges(){
+  const badge = currentBadge();
+  const content = `<span class="badge-pill">${selectedAvatar} ${badge}</span><span class="badge-pill">Score ${score}/${answered}</span>`;
+  const el = document.getElementById('badgePreview');
+  if(el) el.innerHTML = content;
+  const studentEl = document.getElementById('studentBadgePreview');
+  if(studentEl) studentEl.innerHTML = content;
+}
+function recordLocalReport(isCorrect){
+  const params = new URLSearchParams(location.search);
+  localReports.push({
+    date: new Date().toLocaleString(),
+    teacher: params.get('teacher') || '',
+    student: localStorage.getItem('studentName') || '',
+    section: params.get('section') || localStorage.getItem('studentSection') || '',
+    grade: activeStream,
+    tab: activeTab,
+    module: DATABASE[activeStream][activeTab][activeModuleIndex].title,
+    avatar: selectedAvatar,
+    correct: isCorrect ? 'Yes' : 'No',
+    score: `${score}/${answered}`
+  });
+  localStorage.setItem('localReports', JSON.stringify(localReports));
+  renderBadges();
+}
+function downloadReportsCsv(){
+  const header = ['Date','Teacher','Student','Section','Grade','Tab','Module','Avatar','Correct','Score'];
+  const rows = localReports.map(r => [r.date,r.teacher,r.student || '',r.section,r.grade,r.tab,r.module,r.avatar,r.correct,r.score]);
+  const csv = [header, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'student-reports.csv'; a.click(); URL.revokeObjectURL(a.href);
+}
+function printCertificate(){
+  const savedName = localStorage.getItem('studentName') || '';
+  const name = prompt('Student name for certificate:', savedName) || savedName || 'Student';
+  const badge = currentBadge();
+  const w = window.open('', '_blank');
+  w.document.write(`<title>Certificate</title><div style="font-family:Georgia,serif;text-align:center;padding:60px;border:10px solid #B8932F;margin:30px"><h1>Certificate of Achievement</h1><p>This certificate is awarded to</p><h2>${name}</h2><p>for completing English practice activities.</p><h3>${selectedAvatar} ${badge}</h3><p>Score: ${score} / ${answered}</p><p>Designed by Aliya Shah</p></div>`);
+  w.document.close(); w.print();
+}
+
+window.addEventListener('DOMContentLoaded',()=>{loadTeacherAdditions(); refreshStreamButtons(); switchStream('general'); renderStudentProfileControls();});
 </script>
 </body>
 </html>
