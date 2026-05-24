@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="An interactive practice journal for Grade 11 General English — grammar, vocabulary, reading, writing, listening and speaking. Designed and Developed by Jawahar." />
+<meta name="description" content="An interactive practice journal for Grade 11 General English — grammar, vocabulary, reading, writing, listening and speaking. Designed and Developed by Aliya Shah." />
 <meta name="theme-color" content="#F4EFE5" />
 <meta name="color-scheme" content="light" />
 
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Grade 11 General / English · Term 3 · 2026" />
-<meta property="og:description" content="An interactive practice journal for Grade 11 General English — designed and created by Jawahar." />
+<meta property="og:description" content="An interactive practice journal for Grade 11 General English — designed and created by Aliya Shah." />
 <meta property="og:locale" content="en_AE" />
 <title>Grade 11 General · English · Term 3 · 2026</title>
 
@@ -103,7 +103,7 @@ footer { text-align: center; padding: 40px; border-top: 1px solid var(--rule); c
       <option value="writing">General Writing Workbox</option>
     </select>
     <textarea id="customContentInput" class="jawahar-textarea" placeholder="Enter instructions, embedded frame elements, or HTML code blocks here..."></textarea>
-    <button class="jawahar-btn" onclick="injectJawaharContent()">Deploy Element Directly</button>
+    <button class="jawahar-btn" onclick="injectAliyaContent()">Deploy Element Directly</button>
   </div>
 
   <div id="grammar" class="app-section">
@@ -157,7 +157,7 @@ footer { text-align: center; padding: 40px; border-top: 1px solid var(--rule); c
 </div>
 
 <footer>
-  <p>&copy; 2026 Jawahar. Designed & Created by Jawahar. All Rights Reserved.</p>
+  <p>&copy; 2026 Aliya Shah. Designed & Created by Aliya Shah. All Rights Reserved.</p>
 </footer>
 
 <script>
@@ -168,17 +168,17 @@ function checkGenQuiz(element, isCorrect, feedbackText) {
   feedback.className = 'feedback-box ' + (isCorrect ? 'correct' : 'incorrect');
 }
 
-function injectJawaharContent() {
+function injectAliyaContent() {
   const targetSection = document.getElementById('sectionSelector').value;
   const rawText = document.getElementById('customContentInput').value.trim();
   if(!rawText) { alert('Please insert your text or HTML layout first.'); return; }
   
-  const internalKey = 'jawahar_gen_' + targetSection + '_' + Date.now();
+  const internalKey = 'aliya_gen_' + targetSection + '_' + Date.now();
   const packageData = { id: internalKey, section: targetSection, data: rawText };
   
-  let currentItems = JSON.parse(localStorage.getItem('jawahar_gen_content') || '[]');
+  let currentItems = JSON.parse(localStorage.getItem('aliya_gen_content') || '[]');
   currentItems.push(packageData);
-  localStorage.setItem('jawahar_gen_content', JSON.stringify(currentItems));
+  localStorage.setItem('aliya_gen_content', JSON.stringify(currentItems));
   
   buildInjectedNode(packageData);
   document.getElementById('customContentInput').value = '';
@@ -191,20 +191,20 @@ function buildInjectedNode(item) {
   const wrapper = document.createElement('div');
   wrapper.className = 'injected-activity';
   wrapper.id = item.id;
-  wrapper.innerHTML = item.data + `<button class="delete-injected" onclick="removeJawaharNode('${item.id}')">&times;</button>`;
+  wrapper.innerHTML = item.data + `<button class="delete-injected" onclick="removeAliyaNode('${item.id}')">&times;</button>`;
   container.appendChild(wrapper);
 }
 
-function removeJawaharNode(id) {
+function removeAliyaNode(id) {
   if(!confirm('Are you sure you want to remove this item?')) return;
   document.getElementById(id).remove();
-  let currentItems = JSON.parse(localStorage.getItem('jawahar_gen_content') || '[]');
+  let currentItems = JSON.parse(localStorage.getItem('aliya_gen_content') || '[]');
   currentItems = currentItems.filter(i => i.id !== id);
-  localStorage.setItem('jawahar_gen_content', JSON.stringify(currentItems));
+  localStorage.setItem('aliya_gen_content', JSON.stringify(currentItems));
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  const stored = JSON.parse(localStorage.getItem('jawahar_gen_content') || '[]');
+  const stored = JSON.parse(localStorage.getItem('aliya_gen_content') || '[]');
   stored.forEach(buildInjectedNode);
 });
 </script>
