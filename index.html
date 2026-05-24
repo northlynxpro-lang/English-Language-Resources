@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Language Resources · Term 3</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ivory: #F4EFE5;
+            --ink: #14282E;
+            --teal: #1F5560;
+            --rose: #D63660;
+            --gold: #B8932F;
+            --shadow: 0 12px 32px -12px rgba(18, 56, 66, 0.25);
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "DM Sans", sans-serif;
+            background-color: var(--ivory);
+            color: var(--ink);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: "";
+            position: fixed; inset: 0;
+            pointer-events: none; z-index: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 80% 0%, rgba(221, 233, 236, 0.6), transparent 70%),
+                radial-gradient(ellipse 60% 40% at 0% 100%, rgba(214, 54, 96, 0.05), transparent 60%);
+        }
+        .portal-card {
+            position: relative;
+            z-index: 10;
+            background: #FBF7EE;
+            border: 1px solid #D4C9B0;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+        h1 {
+            font-family: "DM Serif Display", serif;
+            font-style: italic;
+            font-weight: 500;
+            font-size: 3rem;
+            margin: 0 0 10px 0;
+            line-height: 1.1;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            color: #5E747A;
+            margin-bottom: 35px;
+            letter-spacing: 0.03em;
+        }
+        .designer-credit {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+        .stream-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 480px) {
+            .stream-grid { grid-template-columns: 1fr; }
+        }
+        .portal-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 20px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid transparent;
+        }
+        .portal-btn:hover {
+            transform: translateY(-3px);
+        }
+        .btn-general {
+            background-color: var(--teal);
+            color: #F4EFE5;
+            box-shadow: 0 6px 20px -5px rgba(31, 85, 96, 0.4);
+        }
+        .btn-general:hover {
+            background-color: #123842;
+            box-shadow: 0 10px 24px -5px rgba(31, 85, 96, 0.5);
+        }
+        .btn-advanced {
+            background-color: var(--rose);
+            color: #FFF0DA;
+            box-shadow: 0 6px 20px -5px rgba(214, 54, 96, 0.4);
+        }
+        .btn-advanced:hover {
+            background-color: #A8254A;
+            box-shadow: 0 10px 24px -5px rgba(214, 54, 96, 0.5);
+        }
+        .btn-title {
+            font-family: "DM Serif Display", serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        .btn-desc {
+            font-size: 0.75rem;
+            font-weight: 400;
+            opacity: 0.85;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        footer {
+            position: relative;
+            z-index: 10;
+            margin-top: 40px;
+            font-size: 0.75rem;
+            color: #5E747A;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="portal-card">
+        <h1>English Resources</h1>
+        <div class="subtitle">Term 3 Practice & Learning Portals</div>
+        <div class="designer-credit">Designed & Created by Jawahar</div>
+        
+        <div class="stream-grid">
+            <a href="./general/" class="portal-btn btn-general">
+                <span class="btn-title">11 General</span>
+                <span class="btn-desc">Practice Journal</span>
+            </a>
+            <a href="./advanced/" class="portal-btn btn-advanced">
+                <span class="btn-title">11 Advanced</span>
+                <span class="btn-desc">Stage 8 Journal</span>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Jawahar. All Rights Reserved.
+    </footer>
+
+</body>
+</html>
