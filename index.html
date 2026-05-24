@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Language Resources · Learning Dashboard</title>
+    <title>English Language Resources · Term 3 Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
             --shadow: 0 16px 40px -16px rgba(18, 56, 66, 0.15);
             --border-radius: 16px;
         }
-
+ 
         *, *::before, *::after { box-sizing: border-box; }
         
         body {
@@ -33,7 +33,8 @@
             display: flex;
             overflow-x: hidden;
         }
-
+ 
+        /* Ambient subtle glowing background elements */
         body::before {
             content: "";
             position: fixed; inset: 0;
@@ -42,8 +43,8 @@
                 radial-gradient(circle 500px at 80% 20%, rgba(31, 85, 96, 0.05), transparent 80%),
                 radial-gradient(circle 400px at 40% 90%, rgba(214, 54, 96, 0.04), transparent 80%);
         }
-
-        /* --- LEFT COLUMN / SIDEBAR --- */
+ 
+        /* --- 1. LEFT COLUMN / SIDEBAR --- */
         .sidebar {
             width: var(--sidebar-width);
             background: #FFFFFF;
@@ -54,23 +55,24 @@
             padding: 30px 24px;
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 25px;
             overflow-y: auto;
         }
-
+ 
+        /* Avatar & Welcome Branding */
         .teacher-profile {
             text-align: center;
             padding-bottom: 25px;
             border-bottom: 1px solid #F0EAE1;
         }
-
+ 
         .avatar-container {
             width: 90px;
             height: 90px;
             margin: 0 auto 15px;
             position: relative;
         }
-
+ 
         .avatar-fallback {
             width: 100%;
             height: 100%;
@@ -86,7 +88,8 @@
             box-shadow: 0 8px 20px -6px rgba(31, 85, 96, 0.4);
             border: 3px solid #FFFFFF;
         }
-
+ 
+        /* Glowing status ring */
         .avatar-container::after {
             content: '';
             position: absolute;
@@ -96,7 +99,7 @@
             border: 2px solid #FFFFFF;
             border-radius: 50%;
         }
-
+ 
         .welcome-title {
             font-size: 0.8rem;
             text-transform: uppercase;
@@ -105,7 +108,7 @@
             font-weight: 700;
             margin: 0 0 4px 0;
         }
-
+ 
         .teacher-name {
             font-family: "DM Serif Display", serif;
             font-style: italic;
@@ -113,7 +116,7 @@
             margin: 0 0 8px 0;
             color: var(--ink);
         }
-
+ 
         .student-note {
             font-size: 0.85rem;
             color: #607175;
@@ -124,13 +127,54 @@
             border-radius: 10px;
             border: 1px dashed #E6DFD1;
         }
+ 
+        /* Feature 1: Tab Styling Setup */
+        .grade-tabs {
+            display: flex;
+            gap: 6px;
+            background: #F4EFE6;
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+        }
 
+        .tab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 8px 4px;
+            font-family: "DM Sans", sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #7A6F5D;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: #FFFFFF;
+            color: var(--ink);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .stream-panel {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stream-panel.active {
+            display: flex;
+        }
+
+        /* Navigation Links Layout */
         .nav-group {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-
+ 
         .nav-group-title {
             font-size: 0.75rem;
             text-transform: uppercase;
@@ -139,7 +183,7 @@
             font-weight: 700;
             margin-bottom: 5px;
         }
-
+ 
         .nav-link {
             display: flex;
             align-items: center;
@@ -153,26 +197,496 @@
             background: #FDFBF7;
             border: 1px solid #EFEAE0;
         }
-
+ 
         .nav-link:hover {
             transform: translateX(4px);
             color: var(--ink);
             background: #F7F4EC;
             border-color: #D6CDBC;
         }
-
+ 
         .nav-link.active-general {
             border-left: 4px solid var(--teal);
             background: var(--teal-light);
             color: var(--teal);
         }
-
+ 
         .nav-link.active-advanced {
             border-left: 4px solid var(--rose);
             background: var(--rose-light);
             color: var(--rose);
         }
-
+ 
+        /* --- 2. NO-CODE ACTIVITY PANEL (SIDEBAR) --- */
         .no-code-panel {
             background: #FAF8F5;
-            border: 1
+            border: 1px solid #E6DFD1;
+            border-radius: var(--border-radius);
+            padding: 16px;
+        }
+ 
+        .panel-heading {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--ink);
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+ 
+        .panel-heading::before {
+            content: '✨';
+        }
+ 
+        .panel-select, .panel-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #D6CDBC;
+            font-family: "DM Sans", sans-serif;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            background: #FFFFFF;
+        }
+ 
+        .panel-btn {
+            width: 100%;
+            background: var(--ink);
+            color: #FFFFFF;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+ 
+        .panel-btn:hover {
+            background: var(--teal);
+        }
+
+        /* Feature 2: Teacher Share & Result Tracking Panel Styles */
+        .share-box {
+            background: #FFFFFF;
+            border: 1px dashed #D6CDBC;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .share-box.visible {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .code-display {
+            font-family: monospace;
+            font-weight: 700;
+            background: var(--teal-light);
+            color: var(--teal);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+ 
+        /* --- MAIN VIEW CONTENT AREA --- */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 60px 5%;
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+        }
+ 
+        .dashboard-header {
+            margin-bottom: 40px;
+        }
+ 
+        .dashboard-header h1 {
+            font-family: "DM Serif Display", serif;
+            font-style: italic;
+            font-size: 3.5rem;
+            font-weight: 500;
+            margin: 0 0 10px 0;
+            line-height: 1.1;
+        }
+ 
+        .dashboard-header p {
+            font-size: 1.2rem;
+            color: #5E747A;
+            margin: 0;
+        }
+ 
+        /* Main Welcome Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+ 
+        .welcome-banner {
+            background: #FFFFFF;
+            border: 1px solid #E6DFD1;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 6px; height: 100%;
+            background: var(--gold);
+        }
+ 
+        .welcome-banner h2 {
+            font-family: "DM Serif Display", serif;
+            font-style: italic;
+            font-size: 2.2rem;
+            margin: 0 0 15px 0;
+        }
+ 
+        .welcome-banner p {
+            color: #4A595C;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin: 0 0 25px 0;
+            max-width: 750px;
+        }
+
+        /* Feature 2: Teacher Analytics Console display styles */
+        .analytics-container {
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid #F0EAE1;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .results-table th, .results-table td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #E6DFD1;
+        }
+
+        .results-table th {
+            background-color: var(--teal-light);
+            color: var(--teal);
+            font-weight: 700;
+            border-radius: 4px;
+        }
+ 
+        /* Dynamic Broadcast Board display section */
+        .broadcast-container {
+            margin-top: 20px;
+        }
+ 
+        .broadcast-card {
+            background: #FFFBF2;
+            border: 1px solid #EADFCA;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            position: relative;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+ 
+        .broadcast-card .badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            background: var(--teal-light);
+            color: var(--teal);
+        }
+ 
+        .broadcast-card.adv-badge .badge {
+            background: var(--rose-light);
+            color: var(--rose);
+        }
+ 
+        .broadcast-card p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--ink);
+        }
+ 
+        .clear-btn {
+            position: absolute;
+            top: 15px; right: 15px;
+            background: none; border: none;
+            color: #A0B0B2; font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .clear-btn:hover { color: var(--rose); }
+ 
+        footer {
+            margin-top: 60px;
+            font-size: 0.8rem;
+            color: #8CA0A3;
+            letter-spacing: 0.05em;
+            border-top: 1px solid #E6DFD1;
+            padding-top: 20px;
+        }
+ 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+ 
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; position: relative; border-right: none; border-bottom: 1px solid #E6DFD1; }
+            .main-content { margin-left: 0; padding: 40px 20px; }
+            .dashboard-header h1 { font-size: 2.6rem; }
+        }
+    </style>
+</head>
+<body>
+ 
+    <div class="sidebar">
+        <div class="teacher-profile">
+            <div class="avatar-container">
+                <div class="avatar-fallback">AS</div>
+            </div>
+            <div class="welcome-title">Welcome Back</div>
+            <h2 class="teacher-name">Aliya Shah</h2>
+            <p class="student-note">Hello Students! Select your allocated stream option below to launch your interactive English practice track portfolio.</p>
+        </div>
+ 
+        <div class="nav-group">
+            <div class="nav-group-title">Learning Spaces</div>
+            
+            <div class="grade-tabs">
+                <button class="tab-btn active" onclick="switchGrade('g11')">Grade 11</button>
+                <button class="tab-btn" onclick="switchGrade('g12')">Grade 12 (+)</button>
+            </div>
+
+            <div id="panel-g11" class="stream-panel active">
+                <a href="./general/" class="nav-link active-general">
+                    <span style="margin-right: 10px;">📓</span> 11 General Stream
+                </a>
+                <a href="./advanced/" class="nav-link active-advanced">
+                    <span style="margin-right: 10px;">💎</span> 11 Advanced Stream
+                </a>
+            </div>
+
+            <div id="panel-g12" class="stream-panel">
+                <p style="font-size: 0.8rem; color:#8CA0A3; font-style:italic; margin: 5px 0 0 5px;">Ready for Term 3 custom data structures...</p>
+                <a href="#/" class="nav-link" style="opacity: 0.6;">
+                    <span style="margin-right: 10px;">✨</span> Add Stream Access
+                </a>
+            </div>
+        </div>
+ 
+        <div class="no-code-panel">
+            <div class="panel-heading">Add Live Activity</div>
+            <p style="font-size: 0.75rem; color: #607175; margin: 0 0 10px 0;">Instantly deploy announcements or text guidelines onto this dashboard live without code.</p>
+            <select id="portalTarget" class="panel-select">
+                <option value="General Notice">General Stream Notice</option>
+                <option value="Advanced Assignment">Advanced Track Note</option>
+            </select>
+            <input type="text" id="portalText" class="panel-input" placeholder="Type instructions or link details...">
+            <button class="panel-btn" style="margin-bottom: 8px;" onclick="deployGlobalNotice()">Deploy Notice</button>
+            
+            <button class="panel-btn" style="background: transparent; color: var(--ink); border: 1px solid #D6CDBC;" onclick="generateTeacherShareCode()">🔗 Share with Peers</button>
+            
+            <div id="shareBox" class="share-box">
+                <span class="welcome-title" style="font-size:0.65rem;">Unique Workspace Token</span><br>
+                <div id="codeDisplay" class="code-display">ENG-0000</div>
+                <p style="font-size: 0.7rem; color: #607175; margin: 0 0 8px 0;">Other teachers can route student metrics using this code configuration payload.</p>
+                <button class="panel-btn" style="padding: 6px; font-size:0.75rem; background: var(--teal);" onclick="copyShareLink()">Copy Student Link</button>
+            </div>
+        </div>
+    </div>
+ 
+    <div class="main-content">
+        <div class="dashboard-header">
+            <h1>English Resources Hub</h1>
+            <p>Term 3 Practice Portfolios & Guided Frameworks</p>
+        </div>
+ 
+        <div class="content-grid">
+            <div class="welcome-banner">
+                <h2>Interactive Workspace</h2>
+                <p>Welcome to your central digital language workspace. These platforms have been customized to assist you in refining critical reading contexts, complex structural grammar rules, and analytical composition formats efficiently.</p>
+                
+                <div class="broadcast-container">
+                    <div class="nav-group-title">Live Resource Bulletin</div>
+                    <div id="noticeBoard"></div>
+                </div>
+
+                <div class="analytics-container">
+                    <div class="nav-group-title" style="color: var(--gold)">Live Shared Class Submissions</div>
+                    <p style="font-size: 0.85rem; color: #607175; margin: 4px 0 15px 0;">Tracking workspace evaluations deployed using peer integration frameworks.</p>
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Assigned Track ID</th>
+                                <th>Completion Status</th>
+                                <th>Calculated Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsTableBody">
+                            <tr>
+                                <td style="color:#8CA0A3; font-style:italic;" colspan="4">No student connections registered yet. Launch an access code link on the left to review telemetry analytics data here.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+ 
+        <footer>
+            &copy; 2026 Aliya Shah. All Rights Reserved. Designed & Created by Aliya Shah.
+        </footer>
+    </div>
+ 
+    <script>
+        // Feature 1: Tab Architecture System Switcher
+        function switchGrade(gradeId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.stream-panel').forEach(panel => panel.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById('panel-' + gradeId).classList.add('active');
+        }
+
+        // Feature 2: Teacher Dynamic Share Generator Engine Logic
+        let currentShareCode = '';
+        function generateTeacherShareCode() {
+            if(!currentShareCode) {
+                const randomId = Math.floor(1000 + Math.random() * 9000);
+                currentShareCode = 'ENG-' + randomId;
+                document.getElementById('codeDisplay').innerText = currentShareCode;
+                
+                // Optional Framework Mock Data Loading for Demonstration Purposes
+                loadMockStudentResults();
+            }
+            document.getElementById('shareBox').classList.toggle('visible');
+        }
+
+        function copyShareLink() {
+            const domain = window.location.href.split('?')[0];
+            const shareUrl = `${domain}?sessionCode=${currentShareCode}`;
+            
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert(`Unique Sharing URL copied successfully:\n${shareUrl}`);
+            }).catch(err => {
+                alert('Failed to automatically copy link. Manual URL Target ID: ' + shareUrl);
+            });
+        }
+
+        function loadMockStudentResults() {
+            const tableBody = document.getElementById('resultsTableBody');
+            tableBody.innerHTML = `
+                <tr>
+                    <td><strong>Fatima Al-Mansoori</strong></td>
+                    <td>11 General</td>
+                    <td><span style="color:#4F8C66; font-weight:600;">Submitted</span></td>
+                    <td><strong>88%</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Zayed Al-Hashmi</strong></td>
+                    <td>11 Advanced</td>
+                    <td><span style="color:#4F8C66; font-weight:600;">Submitted</span></td>
+                    <td><strong>94%</strong></td>
+                </tr>
+            `;
+        }
+
+        // No-Code Activity functions for Home Panel Layout
+        function deployGlobalNotice() {
+            const type = document.getElementById('portalTarget').value;
+            const text = document.getElementById('portalText').value.trim();
+            
+            if(!text) { alert('Please write a task notice first!'); return; }
+            
+            const itemKey = 'global_notice_' + Date.now();
+            const payload = { id: itemKey, label: type, msg: text };
+            
+            let notices = JSON.parse(localStorage.getItem('portal_notices') || '[]');
+            notices.push(payload);
+            localStorage.setItem('portal_notices', JSON.stringify(notices));
+            
+            renderNoticeCard(payload);
+            document.getElementById('portalText').value = '';
+        }
+ 
+        function renderNoticeCard(item) {
+            const board = document.getElementById('noticeBoard');
+            if(!board) return;
+            
+            // Safe execution checking for empty fallback states
+            if (board.querySelector('p[style*="italic"]')) {
+                board.innerHTML = '';
+            }
+            
+            const isAdv = item.label.includes('Advanced');
+            const card = document.createElement('div');
+            card.className = `broadcast-card ${isAdv ? 'adv-badge' : ''}`;
+            card.id = item.id;
+            
+            card.innerHTML = `
+                <span class="badge">${item.label}</span>
+                <button class="clear-btn" onclick="removeNoticeCard('${item.id}')">&times;</button>
+                <p>${item.msg}</p>
+            `;
+            board.appendChild(card);
+        }
+ 
+        function removeNoticeCard(id) {
+            document.getElementById(id).remove();
+            let notices = JSON.parse(localStorage.getItem('portal_notices') || '[]');
+            notices = notices.filter(n => n.id !== id);
+            localStorage.setItem('portal_notices', JSON.stringify(notices));
+            
+            if(notices.length === 0) {
+                showEmptyNoticeMessage();
+            }
+        }
+
+        function showEmptyNoticeMessage() {
+            document.getElementById('noticeBoard').innerHTML = `<p style="font-size:0.9rem; color:#8CA0A3; font-style:italic; margin-top:10px;">No current bulletins active. Use the left column builder to add one.</p>`;
+        }
+ 
+        // Load cached announcements on view load
+        window.addEventListener('DOMContentLoaded', () => {
+            const stored = JSON.parse(localStorage.getItem('portal_notices') || '[]');
+            if(stored.length === 0) {
+                showEmptyNoticeMessage();
+            } else {
+                document.getElementById('noticeBoard').innerHTML = '';
+                stored.forEach(renderNoticeCard);
+            }
+            
+            // Framework Logic Check: Inspect url parameters for valid shared incoming session links
+            const urlParams = new URLSearchParams(window.location.search);
+            const activeCode = urlParams.get('sessionCode');
+            if(activeCode) {
+                alert(`Loaded workspace in student-mode linked to shared access payload identifier: ${activeCode}`);
+            }
+        });
+    </script>
+</body>
+</html>
