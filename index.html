@@ -1,310 +1,431 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Language Resources · Term 3 Dashboard</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --ivory: #F9F6F0;
-            --ink: #112226;
-            --teal: #1F5560;
-            --teal-light: #EBF2F3;
-            --rose: #D63660;
-            --rose-light: #FDF0F3;
-            --gold: #B8932F;
-            --gold-light: #FFFBF2;
-            --sidebar-width: 320px;
-            --shadow: 0 16px 40px -16px rgba(18, 56, 66, 0.15);
-            --border-radius: 16px;
-        }
- 
-        *, *::before, *::after { box-sizing: border-box; }
-        
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: "DM Sans", sans-serif;
-            background-color: var(--ivory);
-            color: var(--ink);
-            min-height: 100vh;
-            display: flex;
-            overflow-x: hidden;
-        }
- 
-        body::before {
-            content: "";
-            position: fixed; inset: 0;
-            pointer-events: none; z-index: 0;
-            background:
-                radial-gradient(circle 500px at 80% 20%, rgba(31, 85, 96, 0.05), transparent 80%),
-                radial-gradient(circle 400px at 40% 90%, rgba(214, 54, 96, 0.04), transparent 80%);
-        }
- 
-        .sidebar {
-            width: var(--sidebar-width);
-            background: #FFFFFF;
-            border-right: 1px solid #E6DFD1;
-            position: fixed;
-            top: 0; bottom: 0; left: 0;
-            z-index: 20;
-            padding: 30px 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 22px;
-            overflow-y: auto;
-        }
- 
-        .teacher-profile {
-            text-align: center;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #F0EAE1;
-        }
- 
-        .avatar-container {
-            width: 90px;
-            height: 90px;
-            margin: 0 auto 15px;
-            position: relative;
-        }
- 
-        .avatar-fallback {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--teal), #123842);
-            color: #FFFFFF;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: "DM Serif Display", serif;
-            font-size: 2rem;
-            font-style: italic;
-            box-shadow: 0 8px 20px -6px rgba(31, 85, 96, 0.4);
-            border: 3px solid #FFFFFF;
-        }
- 
-        .welcome-title {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--gold);
-            font-weight: 700;
-            margin: 0 0 4px 0;
-        }
- 
-        .teacher-name {
-            font-family: "DM Serif Display", serif;
-            font-style: italic;
-            font-size: 1.6rem;
-            margin: 0 0 8px 0;
-            color: var(--ink);
-        }
- 
-        .student-note {
-            font-size: 0.85rem;
-            color: #607175;
-            line-height: 1.4;
-            margin: 0;
-            background: #FDFBF7;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px dashed #E6DFD1;
-        }
- 
-        .nav-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 10px;
-        }
- 
-        .nav-group-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: #92A1A3;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
- 
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            color: #4A595C;
-            font-weight: 600;
-            font-size: 0.95rem;
-            border-radius: 10px;
-            transition: all 0.2s ease;
-            background: #FDFBF7;
-            border: 1px solid #EFEAE0;
-        }
- 
-        .nav-link:hover {
-            transform: translateX(4px);
-            color: var(--ink);
-            background: #F7F4EC;
-            border-color: #D6CDBC;
-        }
- 
-        .nav-link.general-link { border-left: 4px solid var(--teal); }
-        .nav-link.advanced-link { border-left: 4px solid var(--rose); }
- 
-        .main-content {
-            margin-left: var(--sidebar-width);
-            flex-grow: 1;
-            padding: 50px 5%;
-            position: relative;
-            z-index: 10;
-            max-width: 1200px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
- 
-        .dashboard-header {
-            margin-bottom: 35px;
-        }
- 
-        .dashboard-header h1 {
-            font-family: "DM Serif Display", serif;
-            font-style: italic;
-            font-size: 3.2rem;
-            font-weight: 500;
-            margin: 0 0 10px 0;
-            line-height: 1.1;
-        }
- 
-        .dashboard-header p {
-            font-size: 1.15rem;
-            color: #5E747A;
-            margin: 0;
-        }
- 
-        .portal-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
- 
-        .portal-card {
-            background: #FFFFFF;
-            border: 1px solid #E6DFD1;
-            border-radius: var(--border-radius);
-            padding: 35px;
-            box-shadow: var(--shadow);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s ease;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="An interactive practice journal for Grade 11 English — grammar, vocabulary, reading, writing, listening and speaking. Designed by Aliya Shah." />
+<meta name="theme-color" content="#F4EFE5" />
+<meta name="color-scheme" content="light" />
+<title>Grade 11 English Interactive Practice Journal · Term 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ivory-g: #F4EFE5;
+  --cream-g: #FCFAF6;
+  --teal-g: #1F5560;
+  --teal-light-g: #EBF2F3;
+  --dark-g: #112226;
+  --rose-g: #D63660;
+  --gold-g: #B8932F;
+  --ok-g: #4F8C66;
+  --no-g: #B14545;
+  --shadow: 0 16px 40px -16px rgba(18, 56, 66, 0.12);
+}
 
-        .portal-card:hover {
-            transform: translateY(-4px);
-        }
- 
-        .portal-card.general-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: var(--teal); border-radius: var(--border-radius) var(--border-radius) 0 0;
-        }
+*, *::before, *::after { box-sizing: border-box; }
 
-        .portal-card.advanced-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: var(--rose); border-radius: var(--border-radius) var(--border-radius) 0 0;
-        }
- 
-        .portal-card h2 {
-            font-family: "DM Serif Display", serif;
-            font-style: italic;
-            font-size: 2.2rem;
-            margin: 0 0 10px 0;
-        }
- 
-        .portal-card p {
-            color: #4A595C;
-            font-size: 1.05rem;
-            line-height: 1.6;
-            margin: 0 0 25px 0;
-        }
+body {
+  margin: 0; padding: 0;
+  font-family: "DM Sans", sans-serif;
+  background-color: var(--ivory-g);
+  color: var(--dark-g);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
-        .action-btn {
-            display: inline-block;
-            text-align: center;
-            text-decoration: none;
-            color: #FFFFFF;
-            padding: 14px 24px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            transition: opacity 0.2s ease;
-        }
+header {
+  background: #FFFFFF;
+  border-bottom: 1px solid #E6DFD1;
+  padding: 20px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
 
-        .action-btn.general-btn { background: var(--teal); }
-        .action-btn.advanced-btn { background: var(--rose); }
-        .action-btn:hover { opacity: 0.9; }
- 
-        footer {
-            margin-top: auto;
-            padding-top: 40px;
-            border-top: 1px solid #E6DFD1;
-            font-size: 0.85rem;
-            color: #7A8B8E;
-            text-align: center;
-        }
-    </style>
+.brand {
+  display: flex;
+  flex-direction: column;
+}
+.brand h1 {
+  font-family: "DM Serif Display", serif;
+  font-style: italic;
+  font-size: 1.8rem; margin: 0;
+  color: var(--dark-g);
+}
+.brand p {
+  font-size: 0.85rem; margin: 4px 0 0 0;
+  color: var(--gold-g); letter-spacing: 0.05em; font-weight: 700; text-transform: uppercase;
+}
+
+.stream-selector {
+  display: flex;
+  background: #EEE7D9;
+  padding: 4px;
+  border-radius: 30px;
+  gap: 4px;
+}
+.stream-btn {
+  border: none; background: transparent;
+  padding: 10px 24px; font-family: "DM Sans", sans-serif;
+  font-weight: 700; font-size: 0.9rem; color: #5A5245;
+  border-radius: 25px; cursor: pointer; transition: all 0.25s ease;
+}
+.stream-btn.active[data-stream="general"] {
+  background: var(--teal-g); color: #FFFFFF;
+}
+.stream-btn.active[data-stream="advanced"] {
+  background: var(--rose-g); color: #FFFFFF;
+}
+
+.layout-container {
+  display: flex; flex: 1; position: relative;
+}
+
+/* --- SIDEBAR NAV --- */
+aside {
+  width: 280px; background: #FFFFFF;
+  border-right: 1px solid #E6DFD1;
+  padding: 30px 20px;
+  display: flex; flex-direction: column; gap: 10px;
+  position: sticky; top: 85px; height: calc(100vh - 85px);
+  overflow-y: auto;
+}
+.nav-tab-btn {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border: 1px solid transparent;
+  background: #FCFAF6; border-radius: 12px;
+  text-decoration: none; color: #4A595C;
+  font-weight: 600; font-size: 0.95rem; text-align: left;
+  cursor: pointer; transition: all 0.2s ease;
+}
+.nav-tab-btn:hover {
+  background: #F4EFE5; transform: translateX(4px);
+}
+.nav-tab-btn.active {
+  background: #FFFFFF; font-weight: 700;
+}
+body[data-active-stream="general"] .nav-tab-btn.active {
+  border-color: var(--teal-g); color: var(--teal-g); border-left: 5px solid var(--teal-g);
+}
+body[data-active-stream="advanced"] .nav-tab-btn.active {
+  border-color: var(--rose-g); color: var(--rose-g); border-left: 5px solid var(--rose-g);
+}
+
+/* --- CONTENT --- */
+main {
+  flex: 1; padding: 40px 5%;
+  max-width: 1000px; margin: 0 auto; width: 100%;
+}
+.welcome-hero {
+  background: #FFFFFF; border: 1px solid #E6DFD1;
+  border-radius: 16px; padding: 30px; margin-bottom: 30px;
+  box-shadow: var(--shadow); position: relative; overflow: hidden;
+}
+.welcome-hero::before {
+  content: ''; position: absolute; left:0; top:0; bottom:0; width: 6px;
+}
+body[data-active-stream="general"] .welcome-hero::before { background: var(--teal-g); }
+body[data-active-stream="advanced"] .welcome-hero::before { background: var(--rose-g); }
+
+.welcome-hero h2 { font-family: "DM Serif Display", serif; font-style: italic; font-size: 2rem; margin: 0 0 10px 0; }
+.welcome-hero p { color: #556265; margin: 0; line-height: 1.5; font-size: 1rem; }
+
+/* --- QUIZ BLOCKS --- */
+.card {
+  background: #FFFFFF; border: 1px solid #E6DFD1;
+  border-radius: 16px; padding: 30px; margin-bottom: 25px;
+  box-shadow: var(--shadow);
+}
+.card-header {
+  font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em;
+  font-weight: 700; margin-bottom: 12px;
+}
+body[data-active-stream="general"] .card-header { color: var(--teal-g); }
+body[data-active-stream="advanced"] .card-header { color: var(--rose-g); }
+
+.question-text { font-size: 1.15rem; font-weight: 600; margin-bottom: 20px; line-height: 1.4; }
+.options-stack { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+.option-item {
+  background: #FCFAF6; border: 1px solid #D6CDBC;
+  padding: 14px 18px; border-radius: 10px; text-align: left;
+  font-family: "DM Sans", sans-serif; font-size: 1rem;
+  cursor: pointer; transition: all 0.2s ease; width: 100%;
+}
+.option-item:hover { background: #F4EFE5; }
+.option-item.selected { background: #E6DFD1; font-weight: 600; }
+.option-item.correct { background: var(--ok-g) !important; color: white !important; border-color: var(--ok-g) !important; }
+.option-item.incorrect { background: var(--no-g) !important; color: white !important; border-color: var(--no-g) !important; }
+
+.footer-actions { display: flex; justify-content: space-between; align-items: center; }
+.check-btn {
+  background: var(--dark-g); color: white; border: none;
+  padding: 12px 28px; font-weight: 700; border-radius: 8px;
+  cursor: pointer; font-family: "DM Sans", sans-serif; transition: opacity 0.2s;
+}
+.check-btn:hover { opacity: 0.9; }
+.explanation-box { margin-top: 15px; padding: 15px; border-radius: 8px; font-size: 0.95rem; line-height: 1.4; display: none; }
+.explanation-box.visible { display: block; }
+
+footer {
+  margin-top: auto; background: #FFFFFF; border-top: 1px solid #E6DFD1;
+  padding: 25px 5%; text-align: center; font-size: 0.9rem; color: #6A6152; font-weight: 500;
+}
+</style>
 </head>
-<body>
- 
-    <div class="sidebar">
-        <div class="teacher-profile">
-            <div class="avatar-container">
-                <div class="avatar-fallback">AS</div>
-            </div>
-            <p class="welcome-title">Welcome</p>
-            <h3 class="teacher-name">Aliya Shah</h3>
-            <p class="student-note">Select your academic track to access your practice journals, interactive quizzes, and custom resource modules.</p>
-        </div>
- 
-        <div class="nav-group">
-            <p class="nav-group-title">Quick Switcher</p>
-            <a href="general.html" class="nav-link general-link">Grade 11 General Journal</a>
-            <a href="advanced.html" class="nav-link advanced-link">Grade 11 Advanced Journal</a>
-        </div>
+<body data-active-stream="general">
+
+<header>
+  <div class="brand">
+    <h1 id="dynamicTitle">Grade 11 General English</h1>
+    <p>Practice Journal &bull; Term 3 &bull; Designed by Aliya Shah</p>
+  </div>
+  <div class="stream-selector">
+    <button class="stream-btn active" data-stream="general" onclick="switchStream('general')">Grade 11 General</button>
+    <button class="stream-btn" data-stream="advanced" onclick="switchStream('advanced')">Grade 11 Advanced</button>
+  </div>
+</header>
+
+<div class="layout-container">
+  <aside id="tabSidebar">
+    </aside>
+
+  <main>
+    <div class="welcome-hero" id="heroBanner">
+      <h2 id="heroHeading">Welcome Student</h2>
+      <p id="heroDescription">Select a language framework tab on the left margin profile deck to instantly update and initialize interactive grammar matrices, listening diagnostic trees, and advanced critical analysis evaluation tools.</p>
     </div>
- 
-    <div class="main-content">
-        <header class="dashboard-header">
-            <h1>English Language Resources</h1>
-            <p>Term 3 Interactive Hub & Learning Platform</p>
-        </header>
- 
-        <div class="portal-grid">
-            <div class="portal-card general-card">
-                <div>
-                    <h2>11 General</h2>
-                    <p>Access the core interactive platform featuring streamlined grammar units, vocabulary tables, reading assignments, and specialized SEN A1 support tracks.</p>
-                </div>
-                <a href="general.html" class="action-btn general-btn">Open General Journal →</a>
-            </div>
- 
-            <div class="portal-card advanced-card">
-                <div>
-                    <h2>11 Advanced</h2>
-                    <p>Explore high-tier academic tracks focusing on complex relational linguistics, critical reading comprehension, advanced listening sequences, and writing portfolios.</p>
-                </div>
-                <a href="advanced.html" class="action-btn advanced-btn">Open Advanced Journal →</a>
-            </div>
-        </div>
- 
-        <footer>
-            &copy; 2026 Aliya Shah. All Rights Reserved. Designed & Created by Aliya Shah.
-        </footer>
+
+    <div id="quizAppStage">
+      </div>
+  </main>
+</div>
+
+<footer>
+  &copy; 2026 Aliya Shah. All Rights Reserved. Designed &amp; Created by Aliya Shah.
+</footer>
+
+<script>
+const comprehensiveDatabase = {
+  general: {
+    tabs: ["Student", "SEN A1", "Differentiation", "Mixed Practice", "Reading", "Writing", "Listening", "Speaking", "Grammar", "Vocabulary"],
+    data: {
+      "Student": [
+        { q: "Which word completes the sentence correctly: 'If the team ___ harder, they would have won the match.'", o: ["trains", "had trained", "would train", "has trained"], c: 1, e: "Third conditional uses 'if + past perfect' for imaginary past circumstances." },
+        { q: "Identify the correct formal connector: 'The experiment failed; ___, the data collected was invaluable.'", o: ["nevertheless", "because", "so", "whereas"], c: 0, e: "'Nevertheless' introduces an unexpected contrastive point beautifully." }
+      ],
+      "SEN A1": [
+        { q: "Choose the correct spelling for this everyday asset:", o: ["Chier", "Chair", "Share", "Chear"], c: 1, e: "'Chair' is the correct structural string configuration." },
+        { q: "Select the primary motion action verb from this listing set:", o: ["Sleep", "Think", "Run", "Sit"], c: 2, e: "'Run' represents a standard operational mechanical movement." }
+      ],
+      "Differentiation": [
+        { q: "Transform this sentence into simplified passive architecture: 'Ali wrote the report.'", o: ["The report is written by Ali.", "The report was written by Ali.", "Ali has written the report."], c: 1, e: "Simple past matches perfect construction using 'was/were' transformations." }
+      ],
+      "Mixed Practice": [
+        { q: "Identify the baseline subject placeholder requirement: 'Neither the system nor the devices ___ operational.'", o: ["is", "are", "was", "be"], c: 1, e: "Proximity parsing rules dictate matching verb states to the closest available noun." }
+      ],
+      "Reading": [
+        { q: "What parsing action matrix is best optimized for extracting isolated dates from standard paragraphs?", o: ["Skimming", "Critical Evaluation", "Scanning", "Extensive Review"], c: 2, e: "Scanning processes text strings directly to lock onto specific characters." }
+      ],
+      "Writing": [
+        { q: "Which variant establishes the most professional analytical formal academic baseline framework?", o: ["In this essay, I will tell you about tech.", "Technology is cool and shifts frames.", "The integration of automation systems consistently alters modern economic models."], c: 2, e: "Third person syntax establishes rigorous scholarly objectivity immediately." }
+      ],
+      "Listening": [
+        { q: "When parsing a fast presentation framework for context gist tracking, focus primarily on:", o: ["Every word variant perfectly", "The global thematic context envelope", "The pronunciation markers"], c: 1, e: "Gist optimization aims at globally decoding messages over tracking singular structural points." }
+      ],
+      "Speaking": [
+        { q: "Which framework safely generates structured presentation audience synchronization patterns?", o: ["Listen to me right now.", "Honorable judges, esteemed peers, today we evaluate...", "I think my point is best."], c: 1, e: "Traditional rhetorical addresses validate professional structures beautifully." }
+      ],
+      "Grammar": [
+        { q: "Isolate the core structural modifier error condition here: 'Running down the corridor, my bag dropped.'", o: ["Dangling Modifier", "Comma Splice", "Run-on Sentence"], c: 0, e: "The current syntax configuration implies that the physical bag itself was running down the corridor." }
+      ],
+      "Vocabulary": [
+        { q: "Choose the word closest in definition to 'Accurate':", o: ["Vague", "Precise", "Unstable", "Rapid"], c: 1, e: "'Precise' means exact and accurate in performance or execution." }
+      ]
+    }
+  },
+  advanced: {
+    tabs: ["Student", "Differentiation", "Mixed Practice", "Reading", "Writing", "Listening", "Speaking", "Grammar", "Vocabulary"],
+    data: {
+      "Student": [
+        { q: "Which sentence perfectly exemplifies structural academic hedging conventions?", o: ["The metrics prove the hypothesis is absolute truth.", "The verified data suggests a probable shift in behavioral trends.", "Automation always destroys performance output."], c: 1, e: "'Suggests' and 'probable' establish appropriate empirical caution patterns." }
+      ],
+      "Differentiation": [
+        { q: "Examine the semantic inversion pattern: 'Seldom ___ witnessed such rapid innovation.'", o: ["has the world", "the world has", "had the world been"], c: 0, e: "Negative adverbial openings mandate auxiliary structures immediately preceding target subjects." }
+      ],
+      "Mixed Practice": [
+        { q: "Select the appropriate complex modifier assignment option: 'The protocol, ___ engineered, held active parameters.'", o: ["meticulous", "meticulously", "more meticulous"], c: 1, e: "Adverbs accurately parse modifying logic pathways inside past participle verbal phrases." }
+      ],
+      "Reading": [
+        { q: "What target anchors high-end critical interpretation layers over simple explicit tracking arrays?", o: ["Counting sentence string populations", "Isolating underlying sociopolitical biases and implicit author paradigms", "Fixing vocabulary metrics"], c: 1, e: "Advanced reading maps implicit contextual framework configurations accurately." }
+      ],
+      "Writing": [
+        { q: "Identify the strongest synthesis construction pattern for academic papers:", o: ["Author A says X and Author B says Y.", "While Author A argues X, Author B counterbalances this perspective by proposing Y.", "I like Author A's idea better than B."], c: 1, e: "Subordinating logical conjunction sets map cross-functional perspectives perfectly." }
+      ],
+      "Listening": [
+        { q: "Advanced contextual listening protocols focus heavily on isolating:", o: ["Isolated character pauses", "Implicit speaker stance, nuanced irony, and secondary tonal shifts", "Basic phonetic repetitions"], c: 1, e: "Higher cognitive tracking evaluates implicit communicative intent signals above basic structural sounds." }
+      ],
+      "Speaking": [
+        { q: "Which item maintains an elevated level of professional academic discourse control during adversarial cross-examination fields?", o: ["Your point makes no structural sense.", "While I recognize that perspective, empirical evidence suggests a different correlation because...", "Let us move to another topic quickly."], c: 1, e: "Validation combined with data-driven counter-assertions retains complete argument control cleanly." }
+      ],
+      "Grammar": [
+        { q: "Isolate the proper subjunctive mood usage configuration variant:", o: ["The board requested that the metric is verified.", "The board requested that the metric be verified immediately.", "The board requested the metric to be verified."], c: 1, e: "Mandative constructions require bare root infinitives inside objective complement clauses." }
+      ],
+      "Vocabulary": [
+        { q: "Select the word that represents a system state of absolute clarity and transparency:", o: ["Opaque", "Ambiguous", "Pellucid", "Obscure"], c: 2, e: "'Pellucid' allows maximum structural clarity, making it transparently comprehensible." }
+      ]
+    }
+  }
+};
+
+let activeStream = "general";
+let activeTab = "Student";
+let selectedAnswerIdx = null;
+let activeModuleQuestions = [];
+let questionCursorIndex = 0;
+
+function switchStream(streamKey) {
+  activeStream = streamKey;
+  document.body.setAttribute("data-active-stream", streamKey);
+  
+  document.querySelectorAll(".stream-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.getAttribute("data-stream") === streamKey);
+  });
+  
+  const titleEl = document.getElementById("dynamicTitle");
+  if(streamKey === "general") {
+    titleEl.textContent = "Grade 11 General English";
+  } else {
+    titleEl.textContent = "Grade 11 Advanced English";
+  }
+  
+  activeTab = comprehensiveDatabase[streamKey].tabs[0];
+  renderSidebarTabs();
+  loadActiveTabModuleData();
+}
+
+function renderSidebarTabs() {
+  const container = document.getElementById("tabSidebar");
+  container.innerHTML = "";
+  
+  const targetTabs = comprehensiveDatabase[activeStream].tabs;
+  targetTabs.forEach(tabTitle => {
+    const btn = document.createElement("button");
+    btn.className = "nav-tab-btn";
+    if(tabTitle === activeTab) btn.classList.add("active");
+    btn.textContent = tabTitle;
+    btn.onclick = () => {
+      document.querySelectorAll(".nav-tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeTab = tabTitle;
+      loadActiveTabModuleData();
+    };
+    container.appendChild(btn);
+  });
+}
+
+function loadActiveTabModuleData() {
+  document.getElementById("heroHeading").textContent = activeTab + " Stream Dashboard";
+  document.getElementById("heroDescription").textContent = "Actively evaluating the customized " + activeStream.toUpperCase() + " tracking matrices built exclusively for the interactive practice modules.";
+  
+  activeModuleQuestions = comprehensiveDatabase[activeStream].data[activeTab] || [];
+  questionCursorIndex = 0;
+  selectedAnswerIdx = null;
+  
+  renderCurrentQuestionBlock();
+}
+
+function renderCurrentQuestionBlock() {
+  const stage = document.getElementById("quizAppStage");
+  if(activeModuleQuestions.length === 0) {
+    stage.innerHTML = `<div class="card"><p>No custom questions compiled inside this stream matrix layer yet.</p></div>`;
+    return;
+  }
+  
+  const currentItem = activeModuleQuestions[questionCursorIndex];
+  selectedAnswerIdx = null;
+  
+  let optionsHtml = "";
+  currentItem.o.forEach((optionStr, index) => {
+    optionsHtml += `<button class="option-item" data-opt-idx="${index}" onclick="selectQuizOption(${index})">${optionStr}</button>`;
+  });
+  
+  stage.innerHTML = `
+    <div class="card">
+      <div class="card-header">Module Exercise ${questionCursorIndex + 1} of ${activeModuleQuestions.length}</div>
+      <div class="question-text">${currentItem.q}</div>
+      <div class="options-stack">
+        ${optionsHtml}
+      </div>
+      <div class="explanation-box" id="explanationBox"></div>
+      <div class="footer-actions">
+        <span style="font-size:0.9rem; color:#7A7060; font-weight:600;">Status: Ready for Evaluation</span>
+        <button class="check-btn" id="actionStepBtn" onclick="evaluateSelectionState()">Verify Output Answer</button>
+      </div>
     </div>
- 
+  `;
+}
+
+function selectQuizOption(index) {
+  if(document.getElementById("explanationBox").classList.contains("visible")) return; 
+  selectedAnswerIdx = index;
+  document.querySelectorAll(".option-item").forEach(opt => {
+    opt.classList.toggle("selected", parseInt(opt.getAttribute("data-opt-idx")) === index);
+  });
+}
+
+function evaluateSelectionState() {
+  const btn = document.getElementById("actionStepBtn");
+  const explBox = document.getElementById("explanationBox");
+  const currentItem = activeModuleQuestions[questionCursorIndex];
+  
+  if(btn.textContent === "Advance Challenge") {
+    questionCursorIndex++;
+    if(questionCursorIndex >= activeModuleQuestions.length) {
+      questionCursorIndex = 0; 
+    }
+    renderCurrentQuestionBlock();
+    return;
+  }
+  
+  if(selectedAnswerIdx === null) {
+    alert("Please select a valid option from the interaction array stack before checking.");
+    return;
+  }
+  
+  document.querySelectorAll(".option-item").forEach(opt => {
+    const idx = parseInt(opt.getAttribute("data-opt-idx"));
+    if(idx === currentItem.c) {
+      opt.classList.add("correct");
+    } else if(idx === selectedAnswerIdx) {
+      opt.classList.add("incorrect");
+    }
+  });
+  
+  explBox.textContent = currentItem.e;
+  explBox.classList.add("visible");
+  
+  if(selectedAnswerIdx === currentItem.c) {
+    explBox.style.background = "#EBF5EE";
+    explBox.style.color = "var(--ok-g)";
+    explBox.style.border = "1px solid #C2E0CC";
+  } else {
+    explBox.style.background = "#FDF2F2";
+    explBox.style.color = "var(--no-g)";
+    explBox.style.border = "1px solid #F5C6C6";
+  }
+  
+  btn.textContent = "Advance Challenge";
+}
+
+// System Core Initialization Hook
+window.addEventListener("DOMContentLoaded", () => {
+  switchStream("general");
+});
+</script>
 </body>
 </html>
