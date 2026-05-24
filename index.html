@@ -3,20 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Language Resources · Term 3</title>
+    <title>English Language Resources · Term 3 Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --ivory: #F4EFE5;
-            --ink: #14282E;
+            --ivory: #F9F6F0;
+            --ink: #112226;
             --teal: #1F5560;
+            --teal-light: #EBF2F3;
             --rose: #D63660;
+            --rose-light: #FDF0F3;
             --gold: #B8932F;
-            --shadow: 0 12px 32px -12px rgba(18, 56, 66, 0.25);
+            --sidebar-width: 320px;
+            --shadow: 0 16px 40px -16px rgba(18, 56, 66, 0.15);
+            --border-radius: 16px;
         }
+
         *, *::before, *::after { box-sizing: border-box; }
+        
         body {
             margin: 0;
             padding: 0;
@@ -25,141 +31,454 @@
             color: var(--ink);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
             overflow-x: hidden;
         }
+
+        /* Ambient subtle glowing background elements */
         body::before {
             content: "";
             position: fixed; inset: 0;
             pointer-events: none; z-index: 0;
             background:
-                radial-gradient(ellipse 80% 50% at 80% 0%, rgba(221, 233, 236, 0.6), transparent 70%),
-                radial-gradient(ellipse 60% 40% at 0% 100%, rgba(214, 54, 96, 0.05), transparent 60%);
+                radial-gradient(circle 500px at 80% 20%, rgba(31, 85, 96, 0.05), transparent 80%),
+                radial-gradient(circle 400px at 40% 90%, rgba(214, 54, 96, 0.04), transparent 80%);
         }
-        .portal-card {
-            position: relative;
-            z-index: 10;
-            background: #FBF7EE;
-            border: 1px solid #D4C9B0;
-            padding: 50px 40px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            max-width: 600px;
-            width: 90%;
+
+        /* --- 1. LEFT COLUMN / SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: #FFFFFF;
+            border-right: 1px solid #E6DFD1;
+            position: fixed;
+            top: 0; bottom: 0; left: 0;
+            z-index: 20;
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            overflow-y: auto;
+        }
+
+        /* Avatar & Welcome Branding */
+        .teacher-profile {
             text-align: center;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #F0EAE1;
         }
-        h1 {
+
+        .avatar-container {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 15px;
+            position: relative;
+        }
+
+        .avatar-fallback {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--teal), #123842);
+            color: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "DM Serif Display", serif;
+            font-size: 2rem;
+            font-style: italic;
+            box-shadow: 0 8px 20px -6px rgba(31, 85, 96, 0.4);
+            border: 3px solid #FFFFFF;
+        }
+
+        /* Glowing status ring */
+        .avatar-container::after {
+            content: '';
+            position: absolute;
+            bottom: 2px; right: 2px;
+            width: 14px; height: 14px;
+            background-color: #4F8C66;
+            border: 2px solid #FFFFFF;
+            border-radius: 50%;
+        }
+
+        .welcome-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--gold);
+            font-weight: 700;
+            margin: 0 0 4px 0;
+        }
+
+        .teacher-name {
             font-family: "DM Serif Display", serif;
             font-style: italic;
+            font-size: 1.6rem;
+            margin: 0 0 8px 0;
+            color: var(--ink);
+        }
+
+        .student-note {
+            font-size: 0.85rem;
+            color: #607175;
+            line-height: 1.4;
+            margin: 0;
+            background: #FDFBF7;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px dashed #E6DFD1;
+        }
+
+        /* Navigation Links Layout */
+        .nav-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-group-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #92A1A3;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            color: #4A595C;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            background: #FDFBF7;
+            border: 1px solid #EFEAE0;
+        }
+
+        .nav-link:hover {
+            transform: translateX(4px);
+            color: var(--ink);
+            background: #F7F4EC;
+            border-color: #D6CDBC;
+        }
+
+        .nav-link.active-general {
+            border-left: 4px solid var(--teal);
+            background: var(--teal-light);
+            color: var(--teal);
+        }
+
+        .nav-link.active-advanced {
+            border-left: 4px solid var(--rose);
+            background: var(--rose-light);
+            color: var(--rose);
+        }
+
+        /* --- 2. NO-CODE ACTIVITY PANEL (SIDEBAR) --- */
+        .no-code-panel {
+            background: #FAF8F5;
+            border: 1px solid #E6DFD1;
+            border-radius: var(--border-radius);
+            padding: 16px;
+            margin-top: auto;
+        }
+
+        .panel-heading {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--ink);
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .panel-heading::before {
+            content: '✨';
+        }
+
+        .panel-select, .panel-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #D6CDBC;
+            font-family: "DM Sans", sans-serif;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            background: #FFFFFF;
+        }
+
+        .panel-btn {
+            width: 100%;
+            background: var(--ink);
+            color: #FFFFFF;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .panel-btn:hover {
+            background: var(--teal);
+        }
+
+        /* --- MAIN VIEW CONTENT AREA --- */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 60px 5%;
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+        }
+
+        .dashboard-header {
+            margin-bottom: 40px;
+        }
+
+        .dashboard-header h1 {
+            font-family: "DM Serif Display", serif;
+            font-style: italic;
+            font-size: 3.5rem;
             font-weight: 500;
-            font-size: 3rem;
             margin: 0 0 10px 0;
             line-height: 1.1;
         }
-        .subtitle {
-            font-size: 1.1rem;
+
+        .dashboard-header p {
+            font-size: 1.2rem;
             color: #5E747A;
-            margin-bottom: 35px;
-            letter-spacing: 0.03em;
+            margin: 0;
         }
-        .designer-credit {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: var(--gold);
-            font-weight: 600;
-            margin-bottom: 40px;
-        }
-        .stream-grid {
+
+        /* Main Welcome Grid */
+        .content-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 30px;
         }
-        @media (max-width: 480px) {
-            .stream-grid { grid-template-columns: 1fr; }
+
+        .welcome-banner {
+            background: #FFFFFF;
+            border: 1px solid #E6DFD1;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
         }
-        .portal-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 25px 20px;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: bold;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 1px solid transparent;
+
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 6px; height: 100%;
+            background: var(--gold);
         }
-        .portal-btn:hover {
-            transform: translateY(-3px);
-        }
-        .btn-general {
-            background-color: var(--teal);
-            color: #F4EFE5;
-            box-shadow: 0 6px 20px -5px rgba(31, 85, 96, 0.4);
-        }
-        .btn-general:hover {
-            background-color: #123842;
-            box-shadow: 0 10px 24px -5px rgba(31, 85, 96, 0.5);
-        }
-        .btn-advanced {
-            background-color: var(--rose);
-            color: #FFF0DA;
-            box-shadow: 0 6px 20px -5px rgba(214, 54, 96, 0.4);
-        }
-        .btn-advanced:hover {
-            background-color: #A8254A;
-            box-shadow: 0 10px 24px -5px rgba(214, 54, 96, 0.5);
-        }
-        .btn-title {
+
+        .welcome-banner h2 {
             font-family: "DM Serif Display", serif;
             font-style: italic;
-            font-size: 1.5rem;
-            font-weight: 500;
-            margin-bottom: 5px;
+            font-size: 2.2rem;
+            margin: 0 0 15px 0;
         }
-        .btn-desc {
-            font-size: 0.75rem;
-            font-weight: 400;
-            opacity: 0.85;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+
+        .welcome-banner p {
+            color: #4A595C;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin: 0 0 25px 0;
+            max-width: 750px;
         }
-        footer {
+
+        /* Dynamic Broadcast Board display section */
+        .broadcast-container {
+            margin-top: 20px;
+        }
+
+        .broadcast-card {
+            background: #FFFBF2;
+            border: 1px solid #EADFCA;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
             position: relative;
-            z-index: 10;
-            margin-top: 40px;
-            font-size: 0.75rem;
-            color: #5E747A;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .broadcast-card .badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 700;
             letter-spacing: 0.05em;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            background: var(--teal-light);
+            color: var(--teal);
+        }
+
+        .broadcast-card.adv-badge .badge {
+            background: var(--rose-light);
+            color: var(--rose);
+        }
+
+        .broadcast-card p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--ink);
+        }
+
+        .clear-btn {
+            position: absolute;
+            top: 15px; right: 15px;
+            background: none; border: none;
+            color: #A0B0B2; font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .clear-btn:hover { color: var(--rose); }
+
+        footer {
+            margin-top: 60px;
+            font-size: 0.8rem;
+            color: #8CA0A3;
+            letter-spacing: 0.05em;
+            border-top: 1px solid #E6DFD1;
+            padding-top: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; position: relative; border-right: none; border-bottom: 1px solid #E6DFD1; }
+            .main-content { margin-left: 0; padding: 40px 20px; }
+            .dashboard-header h1 { font-size: 2.6rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="portal-card">
-        <h1>English Resources</h1>
-        <div class="subtitle">Term 3 Practice & Learning Portals</div>
-        <div class="designer-credit">Designed & Created by Jawahar</div>
-        
-        <div class="stream-grid">
-            <a href="./general/" class="portal-btn btn-general">
-                <span class="btn-title">11 General</span>
-                <span class="btn-desc">Practice Journal</span>
+    <div class="sidebar">
+        <div class="teacher-profile">
+            <div class="avatar-container">
+                <div class="avatar-fallback">AS</div>
+            </div>
+            <div class="welcome-title">Welcome Back</div>
+            <h2 class="teacher-name">Aliya Shah</h2>
+            <p class="student-note">Hello Students! Select your allocated stream option below to launch your interactive English practice track portfolio.</p>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-group-title">Learning Spaces</div>
+            <a href="./general/" class="nav-link active-general">
+                <span style="margin-right: 10px;">📓</span> 11 General Stream
             </a>
-            <a href="./advanced/" class="portal-btn btn-advanced">
-                <span class="btn-title">11 Advanced</span>
-                <span class="btn-desc">Stage 8 Journal</span>
+            <a href="./advanced/" class="nav-link active-advanced">
+                <span style="margin-right: 10px;">💎</span> 11 Advanced Stream
             </a>
+        </div>
+
+        <div class="no-code-panel">
+            <div class="panel-heading">Add Live Activity</div>
+            <p style="font-size: 0.75rem; color: #607175; margin: 0 0 10px 0;">Instantly deploy announcements or text guidelines onto this dashboard dashboard live without code.</p>
+            <select id="portalTarget" class="panel-select">
+                <option value="General Notice">General Stream Notice</option>
+                <option value="Advanced Assignment">Advanced Track Note</option>
+            </select>
+            <input type="text" id="portalText" class="panel-input" placeholder="Type instructions or link details...">
+            <button class="panel-btn" onclick="deployGlobalNotice()">Deploy Notice</button>
         </div>
     </div>
 
-    <footer>
-        &copy; 2026 Jawahar. All Rights Reserved.
-    </footer>
+    <div class="main-content">
+        <div class="dashboard-header">
+            <h1>English Resources Hub</h1>
+            <p>Term 3 Practice Portfolios & Guided Frameworks</p>
+        </div>
 
+        <div class="content-grid">
+            <div class="welcome-banner">
+                <h2>Interactive Workspace Workspace</h2>
+                <p>Welcome to your central digital language workspace. These platforms have been customized to assist you in refining critical reading contexts, complex structural grammar rules, and analytical composition formats efficiently.</p>
+                
+                <div class="broadcast-container">
+                    <div class="nav-group-title">Live Resource Bulletin</div>
+                    <div id="noticeBoard">
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            &copy; 2026 Aliya Shah. All Rights Reserved. Designed & Created by Aliya Shah.
+        </footer>
+    </div>
+
+    <script>
+        // No-Code Activity functions for Home Panel Layout
+        function deployGlobalNotice() {
+            const type = document.getElementById('portalTarget').value;
+            const text = document.getElementById('portalText').value.trim();
+            
+            if(!text) { alert('Please write a task notice first!'); return; }
+            
+            const itemKey = 'global_notice_' + Date.now();
+            const payload = { id: itemKey, label: type, msg: text };
+            
+            let notices = JSON.parse(localStorage.getItem('portal_notices') || '[]');
+            notices.push(payload);
+            localStorage.setItem('portal_notices', JSON.stringify(notices));
+            
+            renderNoticeCard(payload);
+            document.getElementById('portalText').value = '';
+        }
+
+        function renderNoticeCard(item) {
+            const board = document.getElementById('noticeBoard');
+            if(!board) return;
+            
+            const isAdv = item.label.includes('Advanced');
+            const card = document.createElement('div');
+            card.className = `broadcast-card ${isAdv ? 'adv-badge' : ''}`;
+            card.id = item.id;
+            
+            card.innerHTML = `
+                <span class="badge">${item.label}</span>
+                <button class="clear-btn" onclick="removeNoticeCard('${item.id}')">&times;</button>
+                <p>${item.msg}</p>
+            `;
+            board.appendChild(card);
+        }
+
+        function removeNoticeCard(id) {
+            document.getElementById(id).remove();
+            let notices = JSON.parse(localStorage.getItem('portal_notices') || '[]');
+            notices = notices.filter(n => n.id !== id);
+            localStorage.setItem('portal_notices', JSON.stringify(notices));
+        }
+
+        // Load cached announcements on view load
+        window.addEventListener('DOMContentLoaded', () => {
+            const stored = JSON.parse(localStorage.getItem('portal_notices') || '[]');
+            if(stored.length === 0) {
+                document.getElementById('noticeBoard').innerHTML = `<p style="font-size:0.9rem; color:#8CA0A3; font-style:italic; margin-top:10px;">No current bulletins active. Use the left column builder to add one.</p>`;
+            } else {
+                document.getElementById('noticeBoard').innerHTML = '';
+                stored.forEach(renderNoticeCard);
+            }
+        });
+    </script>
 </body>
 </html>
