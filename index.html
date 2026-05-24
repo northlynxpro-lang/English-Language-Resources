@@ -64,6 +64,39 @@ body[data-active-stream="advanced"] .card-header{color:var(--rose)}
 .module-card h3{margin:0 0 6px;font-size:1rem}
 .module-card p{margin:0;color:var(--muted);font-size:.9rem}
 footer{margin-top:auto;background:white;border-top:1px solid var(--line);padding:24px 5%;text-align:center;color:#6A6152;font-weight:600}
+
+.teacher-panel{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:0 0 22px}
+.teacher-panel .btn{justify-content:center;text-align:center}
+.profile-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);margin-bottom:22px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}
+.profile-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;align-items:end}
+.profile-fields label{font-size:.78rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.profile-fields input,.profile-fields select,.profile-fields textarea{width:100%;margin-top:5px;border:1px solid #D6CDBC;border-radius:10px;padding:10px 12px;font:inherit;background:var(--cream)}
+.avatar-picker{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.avatar-btn{border:1px solid #D6CDBC;background:var(--cream);font-size:1.55rem;border-radius:999px;width:44px;height:44px;cursor:pointer}
+.avatar-btn.active{background:#EEE7D9;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,147,47,.18)}
+.badge-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.badge{display:inline-flex;align-items:center;gap:6px;background:#FFF7E8;border:1px solid #E6DFD1;border-radius:999px;padding:7px 12px;font-weight:800;font-size:.86rem;color:#5A5245}
+.badge.earned{background:#EBF5EE;border-color:#C2E0CC;color:var(--ok)}
+.teacher-tool-btn{background:#fff;border:1px solid var(--line);color:var(--dark);padding:11px 16px;font-weight:800;border-radius:999px;cursor:pointer}
+body[data-active-stream="advanced"] .teacher-tool-btn:hover{border-color:var(--rose);color:var(--rose)}
+body:not([data-active-stream="advanced"]) .teacher-tool-btn:hover{border-color:var(--teal);color:var(--teal)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(17,34,38,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal-backdrop.open{display:flex}
+.modal-card{background:#fff;border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.25);max-width:760px;width:100%;max-height:92vh;overflow:auto;padding:26px;border:1px solid var(--line)}
+.modal-card h2{font-family:"DM Serif Display",serif;font-style:italic;margin:0 0 10px;font-size:2rem}
+.modal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:14px 0}
+.modal-card label{display:block;font-weight:800;color:var(--muted);font-size:.82rem;text-transform:uppercase;letter-spacing:.06em}
+.modal-card input,.modal-card select,.modal-card textarea{width:100%;margin-top:5px;border:1px solid #D6CDBC;border-radius:10px;padding:10px 12px;font:inherit;background:var(--cream)}
+.modal-card textarea{min-height:95px;resize:vertical}
+.link-output{background:var(--cream);border:1px dashed var(--gold);border-radius:12px;padding:12px;word-break:break-all;font-size:.9rem;margin-top:10px}
+.report-table{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:12px}
+.report-table th,.report-table td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}
+.report-table th{color:var(--muted);text-transform:uppercase;font-size:.72rem;letter-spacing:.06em}
+.certificate-card{border:4px double var(--gold);padding:34px;text-align:center;background:#FFFDF8;border-radius:18px}
+.certificate-card h1{font-family:"DM Serif Display",serif;font-style:italic;font-size:2.6rem;margin:0;color:var(--dark)}
+.certificate-card .cert-name{font-size:1.7rem;font-weight:800;margin:18px 0;color:var(--rose)}
+@media print{body>*:not(.printable-certificate){display:none!important}.printable-certificate{display:block!important}.certificate-card{border:4px double #000}}
+
 @media (max-width:760px){
   header{position:relative;flex-direction:column;align-items:flex-start}
   .stream-selector{width:100%;overflow:auto}
@@ -80,10 +113,7 @@ footer{margin-top:auto;background:white;border-top:1px solid var(--line);padding
     <h1 id="dynamicTitle">Grade 11 General English</h1>
     <p>Practice Journal • Term 3 • Designed by Aliya Shah</p>
   </div>
-  <div class="stream-selector">
-    <button class="stream-btn active" data-stream="general" onclick="switchStream('general')">Grade 11 General</button>
-    <button class="stream-btn" data-stream="advanced" onclick="switchStream('advanced')">Grade 11 Advanced</button>
-  </div>
+  <div class="stream-selector" id="gradeSelector"></div>
 </header>
 <div class="layout">
   <aside id="tabSidebar"></aside>
@@ -96,9 +126,35 @@ footer{margin-top:auto;background:white;border-top:1px solid var(--line);padding
         <div class="progress"><span id="scoreText">Score: 0 / 0</span><div class="progress-bar"><span id="progressFill"></span></div></div>
       </div>
     </section>
+    <section class="teacher-panel" aria-label="Teacher tools">
+      <button class="btn secondary" onclick="openManager('grade')">+ Add a Grade</button>
+      <button class="btn secondary" onclick="openManager('section')">+ Add a Section</button>
+      <button class="btn secondary" onclick="openManager('activity')">+ Add an Activity</button>
+      <button class="btn" onclick="openManager('link')">Generate Teacher Link</button>
+    </section>
+    <section class="profile-card" aria-label="Student profile and rewards">
+      <div>
+        <div class="profile-fields">
+          <label>Student Name<input id="studentName" type="text" placeholder="Enter student name" oninput="saveProfile()"></label>
+          <label>Section<select id="sectionSelect" onchange="saveProfile()"></select></label>
+        </div>
+        <div class="badge-strip" id="badgeStrip"></div>
+      </div>
+      <div class="avatar-picker" id="avatarPicker" aria-label="Choose an avatar"></div>
+    </section>
     <section id="moduleList" class="module-grid"></section>
     <section id="quizStage"></section>
   </main>
+</div>
+<div class="modal-backdrop" id="managerModal" role="dialog" aria-modal="true" aria-labelledby="managerTitle">
+  <div class="modal-card">
+    <h2 id="managerTitle">Teacher Tools</h2>
+    <div id="managerBody"></div>
+    <div class="actions">
+      <span id="managerStatus"></span>
+      <button class="btn secondary" onclick="closeManager()">Close</button>
+    </div>
+  </div>
 </div>
 <footer>&copy; 2026 Aliya Shah. All Rights Reserved. Designed &amp; Created by Aliya Shah.</footer>
 <script>
@@ -213,7 +269,210 @@ function updateProgress(){
   const pct= total ? Math.min(100,(answered/total)*100) : 0;
   document.getElementById('progressFill').style.width=pct+'%';
 }
-window.addEventListener('DOMContentLoaded',()=>switchStream('general'));
+
+
+const DEFAULT_TABS = ["Student", "Differentiation", "Mixed Practice", "Reading", "Writing", "Listening", "Speaking", "Grammar", "Vocabulary"];
+const DEFAULT_SECTIONS = ["11 G 1", "11 G 2", "11 G 3", "11 G 4"];
+const AVATARS = ["🦉", "🦊", "🐬", "🦁", "🐼", "⭐", "🚀", "🌟"];
+let SETTINGS = { sections: DEFAULT_SECTIONS.slice(), profile: { name: "", section: "11 G 1", avatar: "🦉" } };
+let teacherId = "";
+
+function loadCustomData(){
+  try{
+    const savedDatabase = JSON.parse(localStorage.getItem('grade11CustomDatabase') || '{}');
+    Object.keys(savedDatabase).forEach(gradeKey => {
+      DATABASE[gradeKey] = savedDatabase[gradeKey];
+    });
+    SETTINGS = Object.assign(SETTINGS, JSON.parse(localStorage.getItem('grade11TeacherSettings') || '{}'));
+  }catch(e){ console.warn('Saved custom data could not be loaded.', e); }
+  const params = new URLSearchParams(location.search);
+  teacherId = params.get('teacher') || localStorage.getItem('teacherId') || '';
+  if(params.get('section')) SETTINGS.profile.section = params.get('section');
+}
+function saveCustomData(){
+  const custom = {};
+  Object.keys(DATABASE).forEach(key => {
+    if(!['general','advanced'].includes(key) || DATABASE[key]._custom){ custom[key] = DATABASE[key]; }
+  });
+  localStorage.setItem('grade11CustomDatabase', JSON.stringify(custom));
+  localStorage.setItem('grade11TeacherSettings', JSON.stringify(SETTINGS));
+  if(teacherId) localStorage.setItem('teacherId', teacherId);
+}
+function gradeLabel(key){
+  if(key==='general') return 'Grade 11 General';
+  if(key==='advanced') return 'Grade 11 Advanced';
+  return (DATABASE[key]._label || key).replace(/grade/i,'Grade');
+}
+function renderGradeButtons(){
+  const box=document.getElementById('gradeSelector');
+  if(!box) return;
+  box.innerHTML = Object.keys(DATABASE).map(key=>`<button class="stream-btn ${key===activeStream?'active':''}" data-stream="${key}" onclick="switchStream('${key}')">${gradeLabel(key)}</button>`).join('');
+}
+function renderProfile(){
+  const name=document.getElementById('studentName');
+  const sec=document.getElementById('sectionSelect');
+  const avatars=document.getElementById('avatarPicker');
+  if(!name || !sec || !avatars) return;
+  name.value = SETTINGS.profile.name || '';
+  sec.innerHTML = SETTINGS.sections.map(s=>`<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+  sec.value = SETTINGS.profile.section || SETTINGS.sections[0] || '';
+  avatars.innerHTML = AVATARS.map(a=>`<button class="avatar-btn ${SETTINGS.profile.avatar===a?'active':''}" onclick="selectAvatar('${a}')" title="Avatar ${a}">${a}</button>`).join('');
+  updateBadges();
+}
+function selectAvatar(a){ SETTINGS.profile.avatar=a; saveProfile(); renderProfile(); }
+function saveProfile(){
+  const name=document.getElementById('studentName'), sec=document.getElementById('sectionSelect');
+  if(name) SETTINGS.profile.name=name.value.trim();
+  if(sec) SETTINGS.profile.section=sec.value;
+  saveCustomData();
+}
+function earnedBadges(){
+  const total = answered || 0;
+  const accuracy = total ? Math.round((score/total)*100) : 0;
+  return [
+    {icon:'✅', name:'First Try', earned:total>=1},
+    {icon:'🎯', name:'80% Accuracy', earned:total>=3 && accuracy>=80},
+    {icon:'🏆', name:'Perfect Module', earned:total>0 && score===total},
+    {icon:'📘', name:'Practice Hero', earned:total>=5}
+  ];
+}
+function updateBadges(){
+  const strip=document.getElementById('badgeStrip');
+  if(!strip) return;
+  strip.innerHTML = earnedBadges().map(b=>`<span class="badge ${b.earned?'earned':''}">${b.icon} ${b.name}</span>`).join('') + ` <button class="teacher-tool-btn" onclick="openManager('certificate')">Certificate</button>`;
+}
+function saveReport(isCorrect, questionText, chosenAnswer, correctAnswer){
+  const reports = JSON.parse(localStorage.getItem('grade11Reports') || '[]');
+  reports.push({
+    date:new Date().toLocaleString(),
+    teacher:teacherId || 'Main',
+    student:SETTINGS.profile.name || 'Student',
+    avatar:SETTINGS.profile.avatar || '🦉',
+    section:SETTINGS.profile.section || '',
+    grade:gradeLabel(activeStream),
+    tab:activeTab,
+    module:DATABASE[activeStream][activeTab][activeModuleIndex].title,
+    question:questionText,
+    chosen:chosenAnswer,
+    correct:correctAnswer,
+    result:isCorrect?'Correct':'Needs review'
+  });
+  localStorage.setItem('grade11Reports', JSON.stringify(reports));
+}
+function openManager(mode){
+  const modal=document.getElementById('managerModal');
+  const body=document.getElementById('managerBody');
+  const title=document.getElementById('managerTitle');
+  const status=document.getElementById('managerStatus');
+  status.textContent='';
+  title.textContent = mode==='grade'?'Add a Grade':mode==='section'?'Add a Section':mode==='activity'?'Add an Activity':mode==='link'?'Teacher Links and Reports':'Certificate';
+  if(mode==='grade'){
+    body.innerHTML=`<p>Add a new grade without changing the existing General or Advanced activities.</p><div class="modal-grid"><label>Grade Name<input id="newGradeName" placeholder="Grade 12"></label><label>Grade Type<select id="newGradeType"><option>General</option><option>Advanced</option><option>Foundation</option></select></label></div><button class="btn" onclick="addGrade()">Save Grade</button>`;
+  } else if(mode==='section'){
+    body.innerHTML=`<p>Add a class section for teacher reports and student links.</p><div class="modal-grid"><label>Section Name<input id="newSectionName" placeholder="11 G 5"></label></div><button class="btn" onclick="addSection()">Save Section</button><h3>Current Sections</h3><p>${SETTINGS.sections.map(escapeHtml).join(', ')}</p>`;
+  } else if(mode==='activity'){
+    const tabs=Object.keys(DATABASE[activeStream]);
+    body.innerHTML=`<p>Add one carefully checked multiple-choice question to the selected tab.</p><div class="modal-grid"><label>Grade<select id="activityGrade">${Object.keys(DATABASE).map(k=>`<option value="${k}" ${k===activeStream?'selected':''}>${gradeLabel(k)}</option>`).join('')}</select></label><label>Tab<select id="activityTab">${tabs.map(t=>`<option ${t===activeTab?'selected':''}>${t}</option>`).join('')}</select></label><label>Module Title<input id="activityModule" value="Teacher Added Activities"></label></div><label>Question<textarea id="activityQuestion" placeholder="Write the question clearly."></textarea></label><div class="modal-grid"><label>Option A<input id="activityA"></label><label>Option B<input id="activityB"></label><label>Option C<input id="activityC"></label></div><div class="modal-grid"><label>Correct Option<select id="activityCorrect"><option>A</option><option>B</option><option>C</option></select></label><label>Short Explanation<input id="activityExplanation" placeholder="Explain why the answer is correct."></label></div><button class="btn" onclick="addActivity()">Save Activity</button>`;
+  } else if(mode==='link'){
+    const currentLink = buildTeacherLink();
+    const reports = JSON.parse(localStorage.getItem('grade11Reports') || '[]').filter(r=>!teacherId || r.teacher===teacherId || teacherId==='');
+    body.innerHTML=`<p>Create a unique teacher link for the selected grade and section. Reports are saved in the browser and can be exported as a CSV file.</p><div class="modal-grid"><label>Teacher Name or ID<input id="teacherNameInput" value="${escapeHtml(teacherId || 'Aliya-Shah')}"></label><label>Section<select id="teacherSectionInput">${SETTINGS.sections.map(s=>`<option value="${escapeHtml(s)}" ${s===SETTINGS.profile.section?'selected':''}>${escapeHtml(s)}</option>`).join('')}</select></label></div><button class="btn" onclick="generateTeacherLink()">Generate Link</button><div class="link-output" id="teacherLinkOutput">${escapeHtml(currentLink)}</div><div class="actions"><button class="btn secondary" onclick="copyTeacherLink()">Copy Link</button><button class="btn secondary" onclick="exportReportsCsv()">Export Reports</button><button class="btn secondary" onclick="clearReports()">Clear Local Reports</button></div><h3>Recent Reports</h3>${reports.length?reportsTable(reports.slice(-8).reverse()):'<p>No reports have been saved in this browser yet.</p>'}`;
+  } else {
+    const acc = answered ? Math.round((score/answered)*100) : 0;
+    body.innerHTML=`<div class="certificate-card"><h1>Certificate of Achievement</h1><p>This certificate is proudly presented to</p><div class="cert-name">${escapeHtml(SETTINGS.profile.avatar || '⭐')} ${escapeHtml(SETTINGS.profile.name || 'Student')}</div><p>for completing English practice in <strong>${escapeHtml(gradeLabel(activeStream))}</strong>.</p><p>Score: <strong>${score} / ${answered}</strong> | Accuracy: <strong>${acc}%</strong></p><p>Section: ${escapeHtml(SETTINGS.profile.section || '')}</p><p>Designed & Created by Aliya Shah</p></div><div class="actions"><button class="btn" onclick="window.print()">Print Certificate</button></div>`;
+  }
+  modal.classList.add('open');
+}
+function closeManager(){ document.getElementById('managerModal').classList.remove('open'); }
+function addGrade(){
+  const raw=document.getElementById('newGradeName').value.trim();
+  if(!raw){ alert('Please write a grade name.'); return; }
+  const key=raw.toLowerCase().replace(/[^a-z0-9]+/g,'').slice(0,20) || ('grade'+Date.now());
+  if(DATABASE[key]){ alert('This grade already exists.'); return; }
+  DATABASE[key]={_label:raw,_custom:true};
+  DEFAULT_TABS.forEach(t=>DATABASE[key][t]=[]);
+  saveCustomData(); activeStream=key; activeTab='Student'; activeModuleIndex=0; currentIndex=0; renderGradeButtons(); renderTabs(); renderTab(); document.getElementById('managerStatus').textContent='Grade saved.';
+}
+function addSection(){
+  const sec=document.getElementById('newSectionName').value.trim();
+  if(!sec){ alert('Please write a section name.'); return; }
+  if(!SETTINGS.sections.includes(sec)) SETTINGS.sections.push(sec);
+  SETTINGS.profile.section=sec; saveCustomData(); renderProfile(); document.getElementById('managerStatus').textContent='Section saved.';
+}
+function addActivity(){
+  const grade=document.getElementById('activityGrade').value;
+  const tab=document.getElementById('activityTab').value;
+  const title=document.getElementById('activityModule').value.trim() || 'Teacher Added Activities';
+  const q=document.getElementById('activityQuestion').value.trim();
+  const opts=['activityA','activityB','activityC'].map(id=>document.getElementById(id).value.trim());
+  const correctLetter=document.getElementById('activityCorrect').value;
+  const exp=document.getElementById('activityExplanation').value.trim();
+  if(!q || opts.some(o=>!o) || !exp){ alert('Please complete the question, three options, and explanation.'); return; }
+  DATABASE[grade][tab] = DATABASE[grade][tab] || [];
+  let mod = DATABASE[grade][tab].find(m=>m.title===title);
+  if(!mod){ mod={title,questions:[]}; DATABASE[grade][tab].push(mod); }
+  const answer=opts[{A:0,B:1,C:2}[correctLetter]];
+  mod.questions.push({q,options:opts,answer,explanation:exp});
+  saveCustomData(); activeStream=grade; activeTab=tab; activeModuleIndex=DATABASE[grade][tab].indexOf(mod); currentIndex=mod.questions.length-1; score=0; answered=0; renderGradeButtons(); renderTabs(); renderTab(); document.getElementById('managerStatus').textContent='Activity saved.';
+}
+function buildTeacherLink(){
+  const url=new URL(location.href.split('#')[0]);
+  url.searchParams.set('teacher', teacherId || 'Aliya-Shah');
+  url.searchParams.set('grade', activeStream);
+  url.searchParams.set('section', SETTINGS.profile.section || '');
+  return url.toString();
+}
+function generateTeacherLink(){
+  teacherId=document.getElementById('teacherNameInput').value.trim() || 'Teacher';
+  SETTINGS.profile.section=document.getElementById('teacherSectionInput').value;
+  saveCustomData();
+  document.getElementById('teacherLinkOutput').textContent=buildTeacherLink();
+}
+function copyTeacherLink(){
+  const text=document.getElementById('teacherLinkOutput').textContent;
+  navigator.clipboard?.writeText(text).then(()=>document.getElementById('managerStatus').textContent='Link copied.').catch(()=>alert(text));
+}
+function reportsTable(rows){
+  return `<table class="report-table"><thead><tr><th>Date</th><th>Student</th><th>Section</th><th>Grade</th><th>Skill</th><th>Result</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${escapeHtml(r.date)}</td><td>${escapeHtml(r.avatar)} ${escapeHtml(r.student)}</td><td>${escapeHtml(r.section)}</td><td>${escapeHtml(r.grade)}</td><td>${escapeHtml(r.tab)}</td><td>${escapeHtml(r.result)}</td></tr>`).join('')}</tbody></table>`;
+}
+function exportReportsCsv(){
+  const reports=JSON.parse(localStorage.getItem('grade11Reports') || '[]');
+  const header=['Date','Teacher','Student','Section','Grade','Tab','Module','Question','Chosen','Correct','Result'];
+  const rows=reports.map(r=>[r.date,r.teacher,r.student,r.section,r.grade,r.tab,r.module,r.question,r.chosen,r.correct,r.result]);
+  const csv=[header,...rows].map(row=>row.map(x=>'"'+String(x||'').replace(/"/g,'""')+'"').join(',')).join('
+');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='english-practice-reports.csv'; a.click(); URL.revokeObjectURL(a.href);
+}
+function clearReports(){ if(confirm('Clear reports saved in this browser?')){ localStorage.removeItem('grade11Reports'); openManager('link'); } }
+function escapeHtml(value){ return String(value ?? '').replace(/[&<>"']/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+
+const originalSwitchStream = switchStream;
+switchStream = function(stream){
+  originalSwitchStream(stream);
+  renderGradeButtons();
+  renderProfile();
+};
+const originalCheckAnswer = checkAnswer;
+checkAnswer = function(){
+  const modules=DATABASE[activeStream][activeTab], module=modules?.[activeModuleIndex], q=module?.questions[currentIndex];
+  const previousAnswered=answered;
+  const chosenBefore = selected===null ? null : currentOptions[selected];
+  originalCheckAnswer();
+  if(q && answered>previousAnswered){
+    saveReport(chosenBefore===q.answer, q.q, chosenBefore || '', q.answer);
+    updateBadges();
+  }
+};
+
+window.addEventListener('DOMContentLoaded',()=>{
+  loadCustomData();
+  const params=new URLSearchParams(location.search);
+  const requested=params.get('grade');
+  renderGradeButtons();
+  renderProfile();
+  switchStream(requested && DATABASE[requested] ? requested : 'general');
+});
 </script>
 </body>
 </html>
