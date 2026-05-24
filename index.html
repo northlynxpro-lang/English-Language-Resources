@@ -1,83 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESL Resources Hub</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --ivory: #F4EFE5;
-            --ink: #14282E;
-            --teal: #1F5560;
-            --gold: #B8932F;
-            --card: #FBF7EE;
-            --rule: #D4C9B0;
-            --display: "DM Serif Display", "Georgia", serif;
-            --body: "DM Sans", sans-serif;
-        }
-        body {
-            margin: 0; padding: 0; font-family: var(--body); background-color: var(--ivory); color: var(--ink);
-            min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-        }
-        body::before {
-            content: ""; position: fixed; inset: 0; z-index: -1;
-            background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(221, 233, 236, 0.6), transparent 70%);
-        }
-        .container { max-width: 900px; width: 90%; text-align: center; padding: 40px 20px; }
-        .smallcaps { font-size: .75rem; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
-        h1 { font-family: var(--display); font-style: italic; font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0 0 10px 0; font-weight: 500; }
-        .subtitle { font-size: 1.1rem; color: #5E747A; max-width: 600px; margin: 0 auto 40px auto; line-height: 1.6; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; width: 100%; }
-        .card {
-            background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 35px 25px;
-            text-align: left; box-shadow: 0 8px 24px -10px rgba(18, 56, 66, 0.14); transition: transform 0.2s, box-shadow 0.2s;
-            display: flex; flex-direction: column; justify-content: space-between;
-        }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 18px 42px -16px rgba(18, 56, 66, 0.24); border-color: var(--teal); }
-        .card-meta { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
-        .card h2 { font-family: var(--display); font-style: italic; font-size: 1.8rem; font-weight: 500; margin: 0 0 12px 0; }
-        .card p { color: #2D4A52; font-size: 0.98rem; line-height: 1.5; margin: 0 0 24px 0; }
-        .btn {
-            display: inline-flex; align-items: center; justify-content: center; padding: 11px 22px;
-            font-size: .68rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
-            color: var(--ivory); background: var(--teal); border: 1px solid var(--teal); border-radius: 999px;
-            cursor: pointer; text-decoration: none; transition: background .15s;
-        }
-        .btn:hover { background: #123842; }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Grade 11 English Portal · Term 3 · 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ivory: #F4EFE5;
+    --ink: #14282E;
+    --ink-2: #2D4A52;
+    --teal: #1F5560;
+    --gold: #B8932F;
+    --rose: #C27D7D;
+    --card: #FBF7EE;
+    --rule: #D4C9B0;
+    --display: "DM Serif Display", Georgia, serif;
+    --body: "DM Sans", sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    font-family: var(--body);
+    background-color: var(--ivory);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    overflow-x: hidden;
+    position: relative;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(221,233,236,0.6), transparent 80%);
+  }
+  .portal-container {
+    position: relative; z-index: 1;
+    max-width: 940px; width: 100%;
+    padding: 40px 24px; text-align: center;
+  }
+  .header-area { margin-bottom: 56px; }
+  .label {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--teal); margin-bottom: 16px; display: block;
+  }
+  h1 {
+    font-family: var(--display); font-style: italic; font-weight: 500;
+    font-size: clamp(2.5rem, 6vw, 4.8rem); line-height: 1.05; margin: 0 0 16px;
+  }
+  .divider {
+    height: 1px; max-width: 180px; background: var(--gold); margin: 24px auto; border: 0;
+  }
+  .subtitle {
+    font-size: clamp(1rem, 2vw, 1.2rem); color: var(--ink-2); max-width: 600px; margin: 0 auto; line-height: 1.6;
+  }
+  .stream-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 20px;
+  }
+  @media (max-width: 680px) { .stream-grid { grid-template-columns: 1fr; gap: 20px; } }
+  .stream-card {
+    background: var(--card); border: 1px solid var(--rule); border-radius: 20px;
+    padding: 44px 32px; text-decoration: none; text-align: left;
+    box-shadow: 0 8px 24px -10px rgba(18,56,66,0.12);
+    display: flex; flex-direction: column; justify-content: space-between;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s, border-color 0.25s;
+    position: relative; overflow: hidden;
+  }
+  .stream-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  }
+  .stream-card.general::before { background: var(--teal); }
+  .stream-card.advanced::before { background: var(--rose); }
+  .stream-card:hover {
+    transform: translateY(-4px); box-shadow: 0 20px 38px -12px rgba(18,56,66,0.18);
+  }
+  .stream-card.general:hover { border-color: var(--teal); }
+  .stream-card.advanced:hover { border-color: var(--rose); }
+  .card-top h2 {
+    font-family: var(--display); font-style: italic; font-weight: 500;
+    font-size: 2.2rem; margin: 0 0 12px; color: var(--ink);
+  }
+  .stream-card.general h2 { color: var(--teal); }
+  .stream-card.advanced h2 { color: var(--rose); }
+  .card-top p { font-size: 1rem; line-height: 1.55; color: var(--ink-2); margin: 0 0 24px; }
+  .card-meta {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--mute); display: flex; gap: 14px; align-items: center;
+  }
+  .bullet { color: var(--gold); }
+  .action-btn {
+    align-self: flex-start; margin-top: 12px; padding: 12px 24px;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--card); border-radius: 999px; transition: background 0.2s;
+  }
+  .general .action-btn { background: var(--teal); }
+  .general:hover .action-btn { background: var(--teal-deep); }
+  .advanced .action-btn { background: var(--rose); }
+  .advanced:hover .action-btn { background: #A86565; }
+  .portal-footer { margin-top: 64px; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rule-2); }
+</style>
 </head>
 <body>
-
-    <div class="container">
-        <div class="smallcaps">Curriculum & Learning Journals</div>
-        <h1>ESL Classroom Hub</h1>
-        <p class="subtitle">Interactive practice pathways, vocabulary tools, and resources curated for secondary English language streams.</p>
-        
-        <div class="grid">
-            <!-- CARD FOR PROJECT 1 -->
-            <div class="card">
-                <div>
-                    <div class="card-meta">Core Stream · Term 3</div>
-                    <h2>11 General</h2>
-                    <p>An interactive practice journal covering foundational grammar, core vocabulary, reading strategies, and structured listening exercises.</p>
-                </div>
-                <a href="./11-General/" class="btn">Explore Journal</a>
-            </div>
-
-            <!-- CARD FOR PROJECT 2 -->
-            <div class="card">
-                <div>
-                    <div class="card-meta">Advanced Stream · Term 3</div>
-                    <h2>11 Advanced</h2>
-                    <p>Accelerated academic English modules focusing on analytical reading, advanced composition structures, and persuasive speaking tracks.</p>
-                </div>
-                <a href="./11-Advanced/" class="btn">Explore Journal</a>
-            </div>
+  <main class="portal-container">
+    <header class="header-area">
+      <span class="label">Interactive Journals</span>
+      <h1>English Learning <span style="font-style: normal; font-weight: 400;">Hub</span></h1>
+      <hr class="divider">
+      <p class="subtitle">Welcome to your collaborative workspace. Select your academic stream below to access your custom coursework and dashboard modules.</p>
+    </header>
+    <div class="stream-grid">
+      <a href="general.html" class="stream-card general">
+        <div class="card-top">
+          <h2>11 General</h2>
+          <p>Access your primary practice journal, spelling sequences, interactive reviews, and structured language assessments.</p>
         </div>
+        <div class="card-meta">
+          <span>Track A</span> <span class="bullet">•</span> <span>Designed by A. Shah</span>
+        </div>
+      </a>
+      <a href="advanced.html" class="stream-card advanced">
+        <div class="card-top">
+          <h2>11 Advanced</h2>
+          <p>Access accelerated analytical studies, advanced critical evaluation modules, grammar diagnostics, and track portfolios.</p>
+        </div>
+        <div class="card-meta">
+          <span>Track B</span> <span class="bullet">•</span> <span>Designed by A. Shah</span>
+        </div>
+      </a>
     </div>
-
+    <footer class="portal-footer">Term 3 • Academic Session 2026</footer>
+  </main>
 </body>
 </html>
