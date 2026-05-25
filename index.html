@@ -113,6 +113,17 @@ body[data-active-stream="advanced"] .avatar-choice.active{outline-color:var(--ro
   .nav-tab-btn{margin:0}
   main{padding:24px 18px 50px}
 }
+
+/* Upgrade: bulk import, editable printable certificates, and Google Sheets status */
+.bulk-preview{margin-top:10px;padding:10px 12px;background:#fff;border:1px dashed #c9bfae;border-radius:10px;font-size:.9rem;color:#405157;white-space:pre-wrap}
+.certificate-preview{background:#fff;border:8px double #B8932F;border-radius:18px;padding:34px;text-align:center;margin-top:18px;color:var(--dark);box-shadow:0 10px 28px rgba(0,0,0,.10)}
+.certificate-preview .cert-logo{font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#1F5560;margin-bottom:10px}
+.certificate-preview h1{font-family:"DM Serif Display",serif;font-size:2.4rem;margin:8px 0;color:#123842}
+.certificate-preview .cert-student{font-family:"DM Serif Display",serif;font-size:2rem;color:#B8932F;margin:10px 0}
+.certificate-preview .cert-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:18px 0;text-align:left}
+.certificate-preview .cert-meta div{border:1px solid #e2d8c6;border-radius:12px;padding:10px;background:#FBF7EE}.certificate-preview .cert-meta b{display:block;font-size:.75rem;text-transform:uppercase;color:#536468}.cert-credit{font-size:.85rem;color:#536468;margin-top:16px}
+@media print{body.printing-certificate>*:not(#printableCertificateHost){display:none!important}#printableCertificateHost{display:block!important}.certificate-preview{box-shadow:none;border:8px double #B8932F;margin:0;min-height:90vh;display:flex;flex-direction:column;justify-content:center}.no-print{display:none!important}}
+
 </style>
 </head>
 <body data-active-stream="general">
@@ -171,6 +182,8 @@ body[data-active-stream="advanced"] .avatar-choice.active{outline-color:var(--ro
       <button class="teacher-tab-btn" onclick="document.getElementById('toolAddGrade').scrollIntoView({block:'start'})">+ Add Grade</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolAddSection').scrollIntoView({block:'start'})">+ Add Section</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolAddActivity').scrollIntoView({block:'start'})">+ Add Activity</button>
+      <button class="teacher-tab-btn" onclick="document.getElementById('toolBulkAdd').scrollIntoView({block:'start'})">Bulk Add MCQs</button>
+      <button class="teacher-tab-btn" onclick="document.getElementById('toolCertificateSettings').scrollIntoView({block:'start'})">Certificate Settings</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolTeacherLink').scrollIntoView({block:'start'})">Teacher Link</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolReports').scrollIntoView({block:'start'})">Reports</button>
     </div>
@@ -207,6 +220,33 @@ Option C"></textarea>
         <textarea id="activityExplanation" placeholder="Explain why the answer is correct."></textarea>
         <button class="btn" onclick="addActivityToTab()">Add Activity</button>
       </div>
+      <div class="teacher-box" id="toolBulkAdd">
+        <h3>Bulk Add MCQs</h3>
+        <p>Paste many questions at once. Format each question with A/B/C choices and an answer line.</p>
+        <label>Bulk questions</label>
+        <textarea id="bulkQuestionText" placeholder="1. Question text&#10;A. Option one&#10;B. Option two&#10;C. Option three&#10;Answer: B&#10;&#10;2. Next question..."></textarea>
+        <label>Module title</label>
+        <input id="bulkModuleTitle" placeholder="Example: Teacher Bulk MCQ Practice" />
+        <button class="btn secondary" onclick="previewBulkQuestions()">Preview Bulk Questions</button>
+        <button class="btn" onclick="addBulkQuestionsToTab()">Add Valid Questions</button>
+        <label class="btn secondary" style="cursor:pointer;display:flex;justify-content:center;align-items:center">Upload TXT / CSV
+          <input type="file" accept=".txt,.csv" style="display:none" onchange="loadBulkQuestionFile(this.files[0])">
+        </label>
+        <div class="bulk-preview" id="bulkPreview">No bulk questions previewed yet.</div>
+      </div>
+      <div class="teacher-box" id="toolCertificateSettings">
+        <h3>Certificate Settings</h3>
+        <p>These details are editable for each teacher. The website creator credit remains visible.</p>
+        <label>Teacher Name</label><input id="certTeacherName" placeholder="Teacher name" />
+        <label>School Name</label><input id="certSchoolName" placeholder="School name" />
+        <label>Department Name</label><input id="certDepartmentName" placeholder="English Department" />
+        <label>Certificate Title</label><input id="certTitle" placeholder="Certificate of Achievement" />
+        <label>Signature Name</label><input id="certSignatureName" placeholder="Signature name" />
+        <label>Optional Message</label><textarea id="certMessage" placeholder="Optional certificate message"></textarea>
+        <label>Logo / School Name Text</label><input id="certLogoText" placeholder="School logo text or school name" />
+        <button class="btn" onclick="saveCertificateSettings()">Save Certificate Settings</button>
+        <button class="btn secondary" onclick="resetCertificateSettings()">Reset Default</button>
+      </div>
       <div class="teacher-box" id="toolTeacherLink">
         <h3>Generate Teacher Link</h3>
         <label>Teacher name/code</label>
@@ -226,7 +266,9 @@ Option C"></textarea>
         <div id="badgePreview"></div>
         <button class="btn secondary" onclick="downloadReportsCsv()">Download Reports CSV</button>
         <button class="btn secondary" onclick="printCertificate()">Print Certificate</button>
-        <div class="teacher-report-output" id="reportStatus">Reports are stored locally in this browser.</div>
+        <label>Google Apps Script URL</label><input id="googleSheetUrl" placeholder="Paste Google Apps Script web app URL" />
+        <button class="btn secondary" onclick="saveGoogleSheetUrl()">Save Google Sheets URL</button>
+        <div class="teacher-report-output" id="reportStatus">Reports are stored locally in this browser. Add a Google Apps Script URL to send submissions to Sheets.</div>
       </div>
     </div>
   </div>
@@ -348,8 +390,17 @@ function updateProgress(){
 
 
 const DEFAULT_TABS = ['Student','SEN A1','Differentiation','Mixed Practice','Reading','Writing','Listening','Speaking','Grammar','Vocabulary'];
-const AVATARS = ['🦉','🦁','🐬','🦋','⭐','🚀','📚','🏆'];
-let selectedAvatar = localStorage.getItem('studentAvatar') || AVATARS[0];
+const AVATARS = [
+  {emoji:'🦉', name:'Reading Ranger'},
+  {emoji:'🦁', name:'Grammar Guardian'},
+  {emoji:'🐬', name:'Vocabulary Voyager'},
+  {emoji:'🦋', name:'Writing Wizard'},
+  {emoji:'⭐', name:'Speaking Star'},
+  {emoji:'🚀', name:'Listening Legend'},
+  {emoji:'📚', name:'Progress Hero'},
+  {emoji:'🏆', name:'Digital Champion'}
+];
+let selectedAvatar = localStorage.getItem('studentAvatar') || (AVATARS[0].emoji + ' ' + AVATARS[0].name);
 let teacherSections = JSON.parse(localStorage.getItem('teacherSections') || '[]');
 let localReports = JSON.parse(localStorage.getItem('localReports') || '[]');
 
@@ -403,6 +454,7 @@ function populateTeacherControls(){
   renderAvatars();
   renderBadges();
   renderStudentProfileControls();
+  populateCertificateSettings();
 }
 function populateActivityTabs(){
   const streamKey = document.getElementById('activityGradeSelect').value || activeStream;
@@ -456,7 +508,10 @@ function generateTeacherLink(){
   navigator.clipboard?.writeText(url).catch(()=>{});
 }
 function renderAvatars(){
-  const html = AVATARS.map(a => `<button class="avatar-choice ${a===selectedAvatar?'active':''}" onclick="selectAvatar('${a}')">${a}</button>`).join('');
+  const html = AVATARS.map(a => {
+    const value = a.emoji + ' ' + a.name;
+    return `<button class="avatar-choice ${value===selectedAvatar?'active':''}" onclick="selectAvatar('${value.replace(/'/g, "\'")}')">${a.emoji} ${a.name}</button>`;
+  }).join('');
   const strip = document.getElementById('avatarStrip');
   if(strip) strip.innerHTML = html;
   const studentStrip = document.getElementById('studentAvatarStrip');
@@ -486,10 +541,12 @@ function saveStudentProfile(){
 
 function currentBadge(){
   const pct = answered ? Math.round((score/answered)*100) : 0;
+  const skillBadges = {Reading:'Reading Ranger', Grammar:'Grammar Guardian', Vocabulary:'Vocabulary Voyager', Writing:'Writing Wizard', Speaking:'Speaking Star', Listening:'Listening Legend'};
+  const skillName = skillBadges[activeTab] || 'Progress Hero';
   if(answered === 0) return 'Ready to Practise';
-  if(pct >= 90) return 'Gold Scholar';
-  if(pct >= 75) return 'Silver Achiever';
-  if(pct >= 60) return 'Bronze Progress';
+  if(pct >= 90) return skillName + ' · Gold';
+  if(pct >= 75) return skillName + ' · Silver';
+  if(pct >= 60) return skillName + ' · Bronze';
   return 'Keep Practising';
 }
 function renderBadges(){
@@ -500,6 +557,14 @@ function renderBadges(){
   const studentEl = document.getElementById('studentBadgePreview');
   if(studentEl) studentEl.innerHTML = content;
 }
+
+function saveGoogleSheetUrl(){ const el=document.getElementById('googleSheetUrl'); if(el){ localStorage.setItem('googleSheetUrl', el.value.trim()); document.getElementById('reportStatus').textContent='Google Sheets URL saved.'; } }
+function sendReportToGoogleSheets(report){
+  const url = localStorage.getItem('googleSheetUrl') || '';
+  if(!url.startsWith('https://script.google.com/')) return;
+  fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(report)}).then(()=>{ const s=document.getElementById('reportStatus'); if(s) s.textContent='Latest report sent to Google Sheets.'; }).catch(()=>{ const s=document.getElementById('reportStatus'); if(s) s.textContent='Could not send to Google Sheets. Check the Apps Script URL.'; });
+}
+
 function recordLocalReport(isCorrect){
   const params = new URLSearchParams(location.search);
   localReports.push({
@@ -515,6 +580,7 @@ function recordLocalReport(isCorrect){
     score: `${score}/${answered}`
   });
   localStorage.setItem('localReports', JSON.stringify(localReports));
+  sendReportToGoogleSheets(localReports[localReports.length-1]);
   renderBadges();
 }
 function downloadReportsCsv(){
@@ -525,14 +591,70 @@ function downloadReportsCsv(){
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = 'student-reports.csv'; a.click(); URL.revokeObjectURL(a.href);
 }
+
+function escapeForHtml(value){ return String(value == null ? '' : value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+function parseBulkMcqText(text){
+  const blocks = String(text||'').replace(/\r/g,'').split(/\n\s*\n+/).map(b=>b.trim()).filter(Boolean);
+  const valid=[], errors=[];
+  blocks.forEach((block, index)=>{
+    const lines = block.split('\n').map(l=>l.trim()).filter(Boolean);
+    let qLine = lines.find(l=>/^\d+[.)]\s+/.test(l)) || lines[0] || '';
+    qLine = qLine.replace(/^\d+[.)]\s*/, '').trim();
+    const opts=[]; let answerMark=''; let answerText='';
+    lines.forEach(l=>{
+      const om=l.match(/^([A-Da-d])[.)]\s*(.+)$/); if(om) opts.push({mark:om[1].toUpperCase(), text:om[2].trim()});
+      const am=l.match(/^(Answer|Correct Answer)\s*[:\-]\s*(.+)$/i); if(am){ answerMark=am[2].trim().toUpperCase(); answerText=am[2].trim(); }
+    });
+    let ansObj = opts.find(o=>o.mark===answerMark) || opts.find(o=>o.text.toLowerCase()===answerText.toLowerCase());
+    if(!qLine || opts.length < 2 || !ansObj){ errors.push(`Question ${index+1}: missing question, choices, or valid Answer line.`); return; }
+    valid.push({q:qLine, options:opts.map(o=>o.text), answer:ansObj.text, explanation:'Correct answer: '+ansObj.text});
+  });
+  return {valid, errors};
+}
+function previewBulkQuestions(){
+  const result = parseBulkMcqText(document.getElementById('bulkQuestionText').value);
+  document.getElementById('bulkPreview').textContent = `${result.valid.length} valid question(s) found.\n${result.errors.length ? result.errors.join('\n') : 'No format errors found.'}`;
+  return result;
+}
+function addBulkQuestionsToTab(){
+  const streamKey = document.getElementById('activityGradeSelect').value;
+  const tab = document.getElementById('activityTabSelect').value;
+  const title = document.getElementById('bulkModuleTitle').value.trim() || 'Teacher Bulk MCQ Practice';
+  const result = previewBulkQuestions();
+  if(!result.valid.length){ alert('No valid MCQs found. Please check the format.'); return; }
+  const module = {title, questions:result.valid};
+  if(!DATABASE[streamKey][tab]) DATABASE[streamKey][tab] = [];
+  DATABASE[streamKey][tab].push(module);
+  saveTeacherModule(streamKey, tab, module);
+  if(streamKey === activeStream && tab === activeTab){ renderTabs(); renderTab(); }
+  alert(result.valid.length + ' questions added to ' + tab + '.');
+}
+function loadBulkQuestionFile(file){
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { document.getElementById('bulkQuestionText').value = e.target.result || ''; previewBulkQuestions(); };
+  reader.readAsText(file);
+}
+const CERT_DEFAULTS = {teacherName:'', schoolName:'', departmentName:'English Department', title:'Certificate of Achievement', signatureName:'', message:'for successful completion of English practice activities.', logoText:''};
+function getCertificateSettings(){ return {...CERT_DEFAULTS, ...JSON.parse(localStorage.getItem('certificateSettings') || '{}')}; }
+function populateCertificateSettings(){ const c=getCertificateSettings(); const map={certTeacherName:'teacherName',certSchoolName:'schoolName',certDepartmentName:'departmentName',certTitle:'title',certSignatureName:'signatureName',certMessage:'message',certLogoText:'logoText'}; Object.entries(map).forEach(([id,k])=>{ const el=document.getElementById(id); if(el) el.value=c[k]||''; }); }
+function saveCertificateSettings(){ const c={teacherName:certTeacherName.value.trim(),schoolName:certSchoolName.value.trim(),departmentName:certDepartmentName.value.trim(),title:certTitle.value.trim(),signatureName:certSignatureName.value.trim(),message:certMessage.value.trim(),logoText:certLogoText.value.trim()}; localStorage.setItem('certificateSettings', JSON.stringify(c)); alert('Certificate settings saved.'); }
+function resetCertificateSettings(){ localStorage.removeItem('certificateSettings'); populateCertificateSettings(); }
+function buildCertificateHtml(name,badge){
+  const c=getCertificateSettings(); const date=new Date().toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});
+  return `<div class="certificate-preview"><div class="cert-logo">${escapeForHtml(c.logoText || c.schoolName || 'English Language Resources')}</div><h1>${escapeForHtml(c.title || 'Certificate of Achievement')}</h1><p>This certificate is proudly awarded to</p><div class="cert-student">${escapeForHtml(name)}</div><p>${escapeForHtml(c.message || CERT_DEFAULTS.message)}</p><div class="cert-meta"><div><b>Grade / Section</b>${escapeForHtml(localStorage.getItem('studentSection')||'')}</div><div><b>Activity / Skill</b>${escapeForHtml(activeTab)}</div><div><b>Score / Percentage</b>${score}/${answered} (${answered?Math.round(score/answered*100):0}%)</div><div><b>Badge Earned</b>${escapeForHtml(badge)}</div><div><b>Date</b>${escapeForHtml(date)}</div><div><b>Teacher</b>${escapeForHtml(c.teacherName||'Teacher')}</div><div><b>School</b>${escapeForHtml(c.schoolName||'School')}</div><div><b>Department</b>${escapeForHtml(c.departmentName||'English Department')}</div></div><p><b>Signature:</b> ${escapeForHtml(c.signatureName || c.teacherName || 'Teacher')}</p><div class="cert-credit">Website created by Aliya Shah</div><button class="btn no-print" onclick="window.print()">Print Certificate</button></div>`;
+}
+
 function printCertificate(){
   const savedName = localStorage.getItem('studentName') || '';
   const name = prompt('Student name for certificate:', savedName) || savedName || 'Student';
   const badge = currentBadge();
   const w = window.open('', '_blank');
-  w.document.write(`<title>Certificate</title><div style="font-family:Georgia,serif;text-align:center;padding:60px;border:10px solid #B8932F;margin:30px"><h1>Certificate of Achievement</h1><p>This certificate is awarded to</p><h2>${name}</h2><p>for completing English practice activities.</p><h3>${selectedAvatar} ${badge}</h3><p>Score: ${score} / ${answered}</p><p>Designed by Aliya Shah</p></div>`);
-  w.document.close(); w.print();
+  w.document.write('<!DOCTYPE html><html><head><title>Certificate</title><style>body{font-family:Arial,sans-serif;padding:20px}.certificate-preview{background:#fff;border:8px double #B8932F;border-radius:18px;padding:34px;text-align:center;min-height:85vh;display:flex;flex-direction:column;justify-content:center}.cert-logo{font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#1F5560}.certificate-preview h1{font-family:Georgia,serif;font-size:42px;color:#123842}.cert-student{font-family:Georgia,serif;font-size:36px;color:#B8932F}.cert-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0;text-align:left}.cert-meta div{border:1px solid #e2d8c6;border-radius:12px;padding:10px;background:#FBF7EE}.cert-meta b{display:block;font-size:12px;text-transform:uppercase;color:#536468}.cert-credit{font-size:13px;color:#536468;margin-top:16px}.no-print{margin-top:18px;padding:10px 20px}@media print{.no-print{display:none}}<\/style></head><body>'+buildCertificateHtml(name,badge)+'</body></html>');
+  w.document.close();
+  w.focus();
 }
+
 
 window.addEventListener('DOMContentLoaded',()=>{loadTeacherAdditions(); refreshStreamButtons(); switchStream('general'); renderStudentProfileControls();});
 </script>

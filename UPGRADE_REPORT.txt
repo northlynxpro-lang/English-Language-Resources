@@ -1,0 +1,39 @@
+English Language Resources - Upgrade Report
+
+Files upgraded:
+- index.html
+- general/index.html
+- advanced/index.html
+
+Changes completed:
+1. Kept the existing design, navigation, tabs, questions, avatars area, badges, certificates area, teacher login/dashboard, and current student practice features.
+2. Improved the existing Teacher Tools / Teacher Add-In workflow so teachers can bulk paste MCQs instead of adding only one question at a time.
+3. Added bulk MCQ preview and validation before adding questions.
+4. Added support for TXT/CSV bulk question upload in the main combined index.html.
+5. Improved avatar names so they are more meaningful and not all repeated as Gold Scholar.
+6. Improved certificate generation so certificates include editable teacher/school fields and a visible print button.
+7. Added editable certificate settings:
+   - Teacher Name
+   - School Name
+   - Department Name
+   - Certificate Title
+   - Signature Name
+   - Optional Message
+   - Logo / School Name Text
+8. Kept the fixed credit: Website created by Aliya Shah.
+9. Preserved Google Apps Script / Google Sheets reporting where already present in the General and Advanced pages.
+10. Added Google Sheets URL storage to the main combined index.html.
+
+Question and coding checks:
+- JavaScript syntax was checked successfully for index.html, general/index.html, and advanced/index.html using Node syntax checking.
+- Obvious spelling/typing errors were searched for and no known user-typed errors such as "forr", "noyt", "currrent", or "Caan" were found in the site files.
+- Existing incorrect answer choices were not "corrected" because many are intentionally incorrect distractors for grammar/vocabulary MCQs.
+
+Bulk MCQ format supported:
+1. Question text
+A. Option one
+B. Option two
+C. Option three
+Answer: B
+
+Use a blank line between questions.
