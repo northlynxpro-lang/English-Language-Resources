@@ -3841,20 +3841,33 @@ quizzes.forEach(q => { if (!q.skill) q.skill = q.area.charAt(0).toUpperCase() + 
     const first = q.qs && q.qs[0];
     if (!first) return;
     const text = first[0];
-    if (q.area === 'reading' && /^Read:\s/i.test(text)) {
-      const m = text.match(/^Read:\s*([\s\S]+?)\s+(What is the main idea\?[\s\S]*|What is the best title\?[\s\S]*)$/);
-      if (m) { q.passage = m[1].trim(); first[0] = m[2].trim(); }
+
+    /* ── Reading passage extractor (universal) ──────────────────────
+       Works for any area/skill where Q0 starts with "Read:".
+       Splits at the last sentence boundary before a standalone
+       question, making the passage visible above all questions. ─── */
+    const isReadingArea = ['reading','sen','level','student'].includes(q.area);
+    if (isReadingArea && /^Read:\s/i.test(text)) {
+      const body = text.replace(/^Read:\s*/i, '');
+      const bounds = [];
+      const re = /\.\s+(?=[A-Z'\u201c])/g;
+      let mx;
+      while ((mx = re.exec(body)) !== null) bounds.push(mx.index);
+      for (let bi = bounds.length - 1; bi >= 0; bi--) {
+        const b = bounds[bi];
+        const before = body.slice(0, b + 1).trim();
+        const after  = body.slice(b + 1).trim();
+        if (after.includes('?') && after.length < 250 && before.length > 30) {
+          q.passage = before;
+          first[0]  = after;
+          break;
+        }
+      }
     }
-    if (q.area === 'sen' && q.skill === 'SEN A1 Reading' && /^Read:\s/i.test(text)) {
-      const m = text.match(/^Read:\s*([\s\S]+?)\s+(Where[\s\S]*|How[\s\S]*|What[\s\S]*)$/);
-      if (m) { q.passage = m[1].trim(); first[0] = m[2].trim(); }
-    }
-    if (q.area === 'level' && q.skill === 'Reading' && /^Read:\s/i.test(text)) {
-      const m = text.match(/^Read:\s*([\s\S]+?)\s+(What is the main idea\?[\s\S]*|What is the best title\?[\s\S]*)$/);
-      if (m) { q.passage = m[1].trim(); first[0] = m[2].trim(); }
-    }
+
+    /* ── Listening script extractor ────────────────────────────────── */
     if (q.skill === 'Listening' && /^Listening script:/i.test(text)) {
-      const m = text.match(/^Listening script:\s*["'"']([\s\S]+?)["'"']\s*([\s\S]+)$/);
+      const m = text.match(/^Listening script:\s*["'\u201c\u201d]([\s\S]+?)["'\u201c\u201d]\s*([\s\S]+)$/);
       if (m) { q.listenScript = m[1].trim(); first[0] = m[2].trim(); }
     }
   });
