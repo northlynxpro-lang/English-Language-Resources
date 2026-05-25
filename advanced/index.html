@@ -3102,51 +3102,19 @@ quizzes.forEach(q => { if (!q.skill) q.skill = q.area.charAt(0).toUpperCase() + 
 
 /* ─── Stage 4: split passage from question text ───────────── */
 (function preprocessQuizzes() {
-  // Generic helper: extract passage from "Read: <passage>. <Question?>"
-  // Finds the last sentence-boundary before a recognisable question stem.
-  function extractReadPassage(text) {
-    var body = text.replace(/^Read:\s*/i, '');
-    var Q_STARTS = [
-      'What is the main idea', 'What is the best title',
-      'What has ', 'What percentage', 'What can ', 'What do ',
-      'What does ', 'What must ', 'What detail ', 'What tension',
-      'What ', 'Which ', 'Where ', 'How ', 'Why ', 'Who ',
-      'The word ', 'The phrase ', 'The tone ', 'The overall ',
-      'The writer ', 'The text ', 'The author ', 'The speaker ',
-      'According to', 'Choose ', 'A student ', '\u201c', '"'
-    ];
-    var bestIdx = -1;
-    Q_STARTS.forEach(function(starter) {
-      var escaped = starter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      var re = new RegExp('\\.\\s+(?=' + escaped + ')', 'g');
-      var m;
-      while ((m = re.exec(body)) !== null) {
-        if (m.index > bestIdx) bestIdx = m.index;
-      }
-    });
-    if (bestIdx < 20) return null;
-    var passage  = body.slice(0, bestIdx + 1).trim();
-    var question = body.slice(bestIdx + 1).trim();
-    if (!passage || !question) return null;
-    return { passage: passage, question: question };
-  }
-
-  quizzes.forEach(function(q) {
-    var first = q.qs && q.qs[0];
+  quizzes.forEach(q => {
+    const first = q.qs && q.qs[0];
     if (!first) return;
-    var text = first[0];
+    const text = first[0];
 
-    // All reading areas in this file
-    var isReading = (q.area === 'reading') ||
-                    (q.area === 'level' && q.skill === 'Reading');
-
-    if (isReading && /^Read:\s/i.test(text) && !q.passage) {
-      var result = extractReadPassage(text);
-      if (result) { q.passage = result.passage; first[0] = result.question; }
+    // Reading: "Read: <passage> ... What is the main idea?"
+    if (q.area === 'reading' && /^Read:\s/i.test(text)) {
+      const m = text.match(/^Read:\s*([\s\S]+?)\s+(What is the main idea\?[\s\S]*)$/);
+      if (m) { q.passage = m[1].trim(); first[0] = m[2].trim(); }
     }
-
+    // Listening: "Listening script: '...' What is the main idea?"
     if (q.skill === 'Listening' && /^Listening script:/i.test(text)) {
-      var m = text.match(/^Listening script:\s*[\u201c\u2018"']([^"'\u201d\u2019]+)[\u201d\u2019"']\s*([\s\S]+)$/);
+      const m = text.match(/^Listening script:\s*[“"']([\s\S]+?)[”"']\s*(What is the main idea\?[\s\S]*)$/);
       if (m) { q.listenScript = m[1].trim(); first[0] = m[2].trim(); }
     }
   });
