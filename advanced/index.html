@@ -2185,6 +2185,9 @@ textarea { font-family: var(--body); resize: vertical; }
   h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
   .quiz, .q { page-break-inside: avoid; }
 }
+
+.certificate-tools{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:18px}.certificate .cert-logo{font-family:var(--body);font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);margin-bottom:8px}.certificate .cert-credit{font-size:.82rem;color:var(--mute);margin-top:18px}.certificate .cert-message{max-width:760px;margin:14px auto;color:var(--mute)}
+
 </style>
 </head>
 
@@ -2518,19 +2521,18 @@ textarea { font-family: var(--body); resize: vertical; }
         <span class="smallcaps accent">Sigil</span>
         <h3 style="margin-top:6px;">Choose your avatar.</h3>
         <div class="avatar-grid" id="avatarGrid">
-          <button type="button" class="avatar-card" data-avatar="🦅 Eagle" onclick="selectAvatar(this)" aria-label="Eagle">
-            <span class="av-emoji" aria-hidden="true">🦅</span><span class="av-name">Eagle</span></button>
-          <button type="button" class="avatar-card" data-avatar="🐬 Dolphin" onclick="selectAvatar(this)" aria-label="Dolphin">
-            <span class="av-emoji" aria-hidden="true">🐬</span><span class="av-name">Dolphin</span></button>
-          <button type="button" class="avatar-card" data-avatar="🦁 Lion" onclick="selectAvatar(this)" aria-label="Lion">
-            <span class="av-emoji" aria-hidden="true">🦁</span><span class="av-name">Lion</span></button>
-          <button type="button" class="avatar-card" data-avatar="⭐ Scholar" onclick="selectAvatar(this)" aria-label="Scholar">
-            <span class="av-emoji" aria-hidden="true">⭐</span><span class="av-name">Scholar</span></button>
+          <button type="button" class="avatar-card" data-avatar="🦅 Reading Ranger" onclick="selectAvatar(this)" aria-label="Reading Ranger">
+            <span class="av-emoji" aria-hidden="true">🦅</span><span class="av-name">Reading Ranger</span></button>
+          <button type="button" class="avatar-card" data-avatar="🐬 Vocabulary Voyager" onclick="selectAvatar(this)" aria-label="Vocabulary Voyager">
+            <span class="av-emoji" aria-hidden="true">🐬</span><span class="av-name">Vocabulary Voyager</span></button>
+          <button type="button" class="avatar-card" data-avatar="🦁 Grammar Guardian" onclick="selectAvatar(this)" aria-label="Grammar Guardian">
+            <span class="av-emoji" aria-hidden="true">🦁</span><span class="av-name">Grammar Guardian</span></button>
+          <button type="button" class="avatar-card" data-avatar="⭐ Speaking Star" onclick="selectAvatar(this)" aria-label="Speaking Star">
+            <span class="av-emoji" aria-hidden="true">⭐</span><span class="av-name">Speaking Star</span></button>
           <button type="button" class="avatar-card" data-avatar="🚀 Innovator" onclick="selectAvatar(this)" aria-label="Innovator">
             <span class="av-emoji" aria-hidden="true">🚀</span><span class="av-name">Innovator</span></button>
         </div>
       </div>
-
       <hr class="divider" style="margin-top:36px;">
 
       <span class="smallcaps">My Progress</span>
@@ -2823,7 +2825,30 @@ textarea { font-family: var(--body); resize: vertical; }
           <div id="activityExchangeLibrary" class="report">No uploaded activities yet.</div>
         </div>
 
+
+
+      
         <hr class="divider" style="margin-top:36px;">
+
+        <span class="smallcaps">Certificate Settings</span>
+        <h3 style="margin-top:6px;">Editable certificate details.</h3>
+        <p class="muted">Teachers can personalize certificates while keeping the creator credit visible.</p>
+        <div class="formrow">
+          <label>Teacher Name<input id="certTeacherName" placeholder="Teacher name"></label>
+          <label>School Name<input id="certSchoolName" placeholder="School name"></label>
+          <label>Department Name<input id="certDepartmentName" placeholder="English Department"></label>
+          <label>Certificate Title<input id="certTitle" placeholder="Certificate of Achievement"></label>
+          <label>Signature Name<input id="certSignatureName" placeholder="Signature name"></label>
+          <label>Logo / School Name Text<input id="certLogoText" placeholder="Logo text or school name"></label>
+        </div>
+        <label class="field-label">Optional Message</label>
+        <textarea id="certMessage" class="custom-answer" placeholder="Optional message for the certificate"></textarea>
+        <div class="btn-row">
+          <button class="btn primary" onclick="saveCertificateSettings()">Save Certificate Settings</button>
+          <button class="btn ghost" onclick="resetCertificateSettings()">Reset Default</button>
+          <button class="btn gold" onclick="generateCertificate()">Preview Student Certificate</button>
+        </div>
+<hr class="divider" style="margin-top:36px;">
 
         <span class="smallcaps">Rankings</span>
         <h3 style="margin-top:6px;">Automatic class leaderboard.</h3>
@@ -3485,7 +3510,7 @@ function selectAvatar(btn) {
   updateStudentReport();
 }
 function restoreAvatar() {
-  const avatar = localStorage.getItem('g11a_avatar') || '⭐ Scholar';
+  const avatar = localStorage.getItem('g11a_avatar') || '⭐ Speaking Star';
   document.querySelectorAll('.avatar-card').forEach(b => {
     if (b.dataset.avatar === avatar) b.classList.add('selected');
   });
@@ -3543,10 +3568,10 @@ const getCompletion = () => total ? Math.round(answered / total * 100) : 0;
 function getBadge() {
   const p = getPercent(), c = getCompletion();
   if (c < 20)  return 'Starter';
-  if (p >= 90) return 'Gold — Stage 8';
-  if (p >= 75) return 'Silver — Advanced';
-  if (p >= 60) return 'Bronze — Progress';
-  return 'Keep practising';
+  if (p >= 90) return 'Advanced Excellence Badge';
+  if (p >= 75) return 'Analytical Thinker Badge';
+  if (p >= 60) return 'Advanced Progress Badge';
+  return 'Keep Practising Badge';
 }
 function generateAutoFeedback() {
   const p = getPercent();
@@ -3561,7 +3586,7 @@ function updateStudentReport() {
   const name   = $('studentName')?.value          || 'Not entered';
   const cls    = $('studentClass')?.value         || 'Not entered';
   const code   = $('studentTeacherCode')?.value   || 'No code';
-  const avatar = localStorage.getItem('g11a_avatar') || '⭐ Scholar';
+  const avatar = localStorage.getItem('g11a_avatar') || '⭐ Speaking Star';
   el.innerHTML =
     `<b>Avatar:</b> ${escHtml(avatar)}<br>` +
     `<b>Nickname:</b> ${escHtml(name)}<br>` +
@@ -3581,7 +3606,7 @@ function buildProgressPayload() {
     teacherCode: ($('studentTeacherCode').value || 'GENERAL').toUpperCase(),
     studentName: $('studentName').value.trim(),
     studentClass: $('studentClass').value.trim(),
-    avatar: localStorage.getItem('g11a_avatar') || '⭐ Scholar',
+    avatar: localStorage.getItem('g11a_avatar') || '⭐ Speaking Star',
     answered, correct, total,
     percent: getPercent(),
     completion: getCompletion(),
@@ -3812,7 +3837,7 @@ function downloadStudentReport() {
   const name   = ($('studentName') && $('studentName').value.trim())          || 'Not entered';
   const cls    = ($('studentClass') && $('studentClass').value.trim())         || 'Not entered';
   const code   = (($('studentTeacherCode') && $('studentTeacherCode').value) || 'No code').toUpperCase();
-  const avatar = localStorage.getItem('g11a_avatar') || '⭐ Scholar';
+  const avatar = localStorage.getItem('g11a_avatar') || '⭐ Speaking Star';
 
   const breakdown = getSkillBreakdown();
   const skillKeys = Object.keys(breakdown).sort();
@@ -4036,8 +4061,13 @@ function renderCustomPanels() {
         <textarea id="${area}CustomQuestion" class="custom-answer" placeholder="Type your activity or question here"></textarea>
         <label class="field-label" style="margin-top:10px;">Choices (for MCQ — one per line; first line is the correct answer)</label>
         <textarea id="${area}CustomChoices" class="custom-answer" placeholder="Correct answer&#10;Choice B&#10;Choice C"></textarea>
+        <label class="field-label" style="margin-top:10px;">Bulk MCQ Paste</label>
+        <textarea id="${area}BulkQuestions" class="custom-answer" placeholder="1. Question text&#10;A. Option one&#10;B. Option two&#10;C. Option three&#10;Answer: A&#10;&#10;2. Next question..."></textarea>
+        <div id="${area}BulkPreview" class="status">Paste many MCQs, preview, then add them together.</div>
         <div class="btn-row">
           <button class="btn primary" onclick="addCustomActivity('${area}')">Add Activity</button>
+          <button class="btn" onclick="previewBulkCustomActivities('${area}')">Preview Bulk</button>
+          <button class="btn primary" onclick="addBulkCustomActivities('${area}')">Add Bulk MCQs</button>
           <button class="btn ghost" onclick="exportCustomActivities()">Export All</button>
           <label class="btn ghost" style="cursor:pointer;">Import JSON
             <input class="file-input" type="file" accept=".json" style="display:none;" onchange="importCustomActivities(this.files[0])">
@@ -4328,11 +4358,76 @@ function playText(text) {
 }
 
 /* ─── CERTIFICATE ─────────────────────────────────── */
+
+function parseBulkCustomMcqs(text) {
+  const blocks = String(text || '').replace(/\r/g, '').split(/\n\s*\n+/).map(b => b.trim()).filter(Boolean);
+  const valid = [], errors = [];
+  blocks.forEach((block, index) => {
+    const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+    let qLine = (lines.find(l => /^\d+[.)]\s+/.test(l)) || lines[0] || '').replace(/^\d+[.)]\s*/, '').trim();
+    const opts = []; let answerMark = ''; let answerText = '';
+    lines.forEach(l => {
+      const om = l.match(/^([A-Da-d])[.)]\s*(.+)$/); if (om) opts.push({mark: om[1].toUpperCase(), text: om[2].trim()});
+      const am = l.match(/^(Answer|Correct Answer)\s*[:\-]\s*(.+)$/i); if (am) { answerMark = am[2].trim().toUpperCase(); answerText = am[2].trim(); }
+    });
+    const ans = opts.find(o => o.mark === answerMark) || opts.find(o => o.text.toLowerCase() === answerText.toLowerCase());
+    if (!qLine || opts.length < 2 || !ans) { errors.push('Question ' + (index + 1) + ': missing question, choices or valid Answer line.'); return; }
+    const orderedChoices = [ans.text].concat(opts.filter(o => o.text !== ans.text).map(o => o.text));
+    valid.push({ question: qLine, choices: orderedChoices });
+  });
+  return { valid, errors };
+}
+function previewBulkCustomActivities(area) {
+  const result = parseBulkCustomMcqs(($(area + 'BulkQuestions') && $(area + 'BulkQuestions').value) || '');
+  const box = $(area + 'BulkPreview');
+  if (box) box.textContent = result.valid.length + ' valid MCQ(s) found.' + (result.errors.length ? '\n' + result.errors.join('\n') : '\nNo format errors found.');
+  return result;
+}
+function addBulkCustomActivities(area) {
+  const result = previewBulkCustomActivities(area);
+  if (!result.valid.length) { alert('No valid MCQs found. Please check the format.'); return; }
+  const arr = getCustomActivities();
+  const baseTitle = ($(area + 'CustomTitle') && $(area + 'CustomTitle').value.trim()) || 'Bulk MCQ Practice';
+  result.valid.forEach((item, i) => {
+    arr.push({ id: 'c' + Date.now() + '_' + i, area, title: baseTitle + ' ' + (i + 1), type: 'mcq', question: item.question, choices: item.choices, answer: item.choices[0], teacherCode: (typeof currentTeacherCode === 'function' ? currentTeacherCode() : ''), time: new Date().toLocaleString() });
+  });
+  saveCustomActivities(arr);
+  const input = $(area + 'BulkQuestions'); if (input) input.value = '';
+  renderCustomActivities();
+  alert(result.valid.length + ' MCQs added.');
+}
+const CERT_DEFAULTS = { teacherName: '', schoolName: '', departmentName: 'English Department', title: 'Certificate of Achievement', signatureName: '', message: 'for successful completion of English practice activities.', logoText: '' };
+function getCertificateSettings() { return Object.assign({}, CERT_DEFAULTS, JSON.parse(localStorage.getItem('g11a_certificate_settings') || '{}')); }
+function populateCertificateSettings() {
+  const c = getCertificateSettings();
+  const map = { certTeacherName:'teacherName', certSchoolName:'schoolName', certDepartmentName:'departmentName', certTitle:'title', certSignatureName:'signatureName', certMessage:'message', certLogoText:'logoText' };
+  Object.keys(map).forEach(id => { const el = $(id); if (el) el.value = c[map[id]] || ''; });
+}
+function saveCertificateSettings() {
+  const c = {
+    teacherName: ($('certTeacherName') && $('certTeacherName').value.trim()) || '',
+    schoolName: ($('certSchoolName') && $('certSchoolName').value.trim()) || '',
+    departmentName: ($('certDepartmentName') && $('certDepartmentName').value.trim()) || '',
+    title: ($('certTitle') && $('certTitle').value.trim()) || 'Certificate of Achievement',
+    signatureName: ($('certSignatureName') && $('certSignatureName').value.trim()) || '',
+    message: ($('certMessage') && $('certMessage').value.trim()) || CERT_DEFAULTS.message,
+    logoText: ($('certLogoText') && $('certLogoText').value.trim()) || ''
+  };
+  localStorage.setItem('g11a_certificate_settings', JSON.stringify(c));
+  alert('Certificate settings saved.');
+}
+function resetCertificateSettings() { localStorage.removeItem('g11a_certificate_settings'); populateCertificateSettings(); }
+function printCertificateOnly() {
+  const cert = document.querySelector('#certificateArea .certificate');
+  if (!cert) { alert('Please create a certificate first.'); return; }
+  printAsPDF('Certificate', cert.outerHTML);
+}
+
 function generateCertificate() {
   const box = $('certificateArea'); if (!box) return;
   const name   = ($('studentName') && $('studentName').value.trim())          || '';
   const cls    = ($('studentClass') && $('studentClass').value.trim())         || '';
-  const avatar = localStorage.getItem('g11a_avatar') || '⭐ Scholar';
+  const avatar = localStorage.getItem('g11a_avatar') || '⭐ Speaking Star';
   if (!name || !cls) { alert('Please enter your nickname and class first.'); return; }
   const date = new Date().toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
   box.innerHTML =
