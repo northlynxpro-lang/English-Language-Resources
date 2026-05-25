@@ -75,6 +75,17 @@
                  0 2px 6px -2px rgba(18, 56, 66, 0.07);
   --shadow-2:    0 18px 42px -16px rgba(18, 56, 66, 0.24),
                  0 4px 10px -4px rgba(18, 56, 66, 0.12);
+
+  /* ── Aliya Shah Brand Palette ── */
+  --as-ivory:      #F9F5EF;
+  --as-champagne:  #EDE0C8;
+  --as-rose:       #C2917A;
+  --as-mauve:      #9B7B8B;
+  --as-plum:       #4A2C3D;
+  --as-gold:       #B8932F;
+  --as-charcoal:   #2C2C2C;
+  --as-pearl:      #FDFAF5;
+  --as-rule:       #D9CCBA;
 }
 
 /* RESET ─────────────────────────────────────────────────── */
@@ -2541,7 +2552,7 @@ textarea { font-family: var(--body); resize: vertical; }
 <!-- Print-only header (filled by JS before printing) -->
 <div class="print-header" aria-hidden="true">
   <div class="ph-brand">
-    <span class="ph-brand-mark">Grade 11 General · English · Term 3 · 2026</span>
+    <span class="ph-brand-mark">Aliya Shah · English Language Teacher · Grade 11 General · Term 3 · 2026</span>
     <span class="ph-rule"></span>
     <span class="ph-section-kicker" id="phSectionKicker">—</span>
   </div>
@@ -2577,8 +2588,8 @@ textarea { font-family: var(--body); resize: vertical; }
 
 <!-- Print-only footer -->
 <div class="print-footer" aria-hidden="true">
-  <span class="pf-left">Designed by Aliya Shah, English Teacher · Grade 11 General</span>
-  <span class="pf-right">Term 3 · 2026</span>
+  <span class="pf-left">Aliya Shah · English Language Teacher &nbsp;|&nbsp; Grade 11 General · Term 3 · 2026</span>
+  <span class="pf-right"><a href="https://www.aliyashah13.com/">www.aliyashah13.com</a> &nbsp;·&nbsp; © 2026 Aliya Shah. All rights reserved.</span>
 </div>
 
 <!-- ═══ TOP BAR ═══════════════════════════════════════════ -->
@@ -2588,6 +2599,7 @@ textarea { font-family: var(--body); resize: vertical; }
       <div class="brand">
         Grade <span class="br-num">11</span> · <em>General</em>
       </div>
+      <div style="font-size:.7rem;letter-spacing:.06em;color:var(--mute);margin-top:2px;"><a href="https://www.aliyashah13.com/" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;font-weight:600;">aliyashah13.com</a></div>
     </div>
 
     <div class="issue-plate">
@@ -2620,6 +2632,10 @@ textarea { font-family: var(--body); resize: vertical; }
       <span class="ch-num">04</span><span class="ch-name">Reading</span></button>
     <button class="chapter" data-page-link="writing" onclick="showPage('writing')">
       <span class="ch-num">05</span><span class="ch-name">Writing</span></button>
+    <button class="chapter" data-page-link="listening" onclick="showPage('listening')">
+      <span class="ch-num">05b</span><span class="ch-name">Listening</span></button>
+    <button class="chapter" data-page-link="speaking" onclick="showPage('speaking')">
+      <span class="ch-num">05c</span><span class="ch-name">Speaking</span></button>
     <button class="chapter" data-page-link="mixed" onclick="showPage('mixed')">
       <span class="ch-num">06</span><span class="ch-name">Mixed</span></button>
     <button class="chapter" data-page-link="diff" onclick="showPage('diff')">
@@ -2694,7 +2710,7 @@ textarea { font-family: var(--body); resize: vertical; }
       <span class="ov-bar"></span>
       <span class="num" id="ovScore">0 / 0</span>
     </div>
-    <span>Designed by Aliya Shah, English Teacher</span>
+    <span><a href="https://www.aliyashah13.com/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;font-style:italic;">Aliya Shah</a> · English Teacher</span>
   </div>
 </div>
 
@@ -2708,7 +2724,7 @@ textarea { font-family: var(--body); resize: vertical; }
         <div class="cover-meta">
           <span class="smallcaps">Issue · Term 3 / 2026</span>
           <span class="meta-rule" aria-hidden="true"></span>
-          <span class="smallcaps">Designed by Aliya Shah, English Teacher</span>
+          <span class="smallcaps"><a href="https://www.aliyashah13.com/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Aliya Shah</a> · English Language Teacher</span>
         </div>
 
         <h1 id="cover-title">
@@ -2832,8 +2848,8 @@ textarea { font-family: var(--body); resize: vertical; }
 
       <footer class="bottom-bar">
         <span>Term 3 — 2026</span>
-        <span class="bb-mid"><em>Aliya Shah · English Practice</em></span>
-        <span class="bb-right">Designed by Aliya Shah, English Teacher</span>
+        <span class="bb-mid"><em><a href="https://www.aliyashah13.com/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Aliya Shah</a> · English Practice</em></span>
+        <span class="bb-right">© 2026 Aliya Shah · <a href="https://www.aliyashah13.com/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">aliyashah13.com</a></span>
       </footer>
     </div>
   </section>
@@ -3188,7 +3204,45 @@ textarea { font-family: var(--body); resize: vertical; }
     </div>
   </section>
 
-  <!-- ─── TEACHER ─────────────────────────── -->
+  <!-- ─── LISTENING ─────────────────────────── -->
+  <section id="listening" class="page" aria-labelledby="listening-title">
+    <div class="content">
+      <header class="opener">
+        <div class="opener-grid">
+          <div class="opener-num gold">05b</div>
+          <div class="opener-body">
+            <span class="smallcaps accent">Section 05b · Practice</span>
+            <h1 id="listening-title"><em>Listening.</em></h1>
+            <p class="dek">Practise comprehension, detail, inference and main idea skills using scripted listening passages aligned to Term 3 topics.</p>
+          </div>
+        </div>
+      </header>
+      <div id="listeningCustomPanel"></div>
+      <div id="listeningQuizzes"></div>
+      <div id="listeningCustomActivities"></div>
+    </div>
+  </section>
+
+  <!-- ─── SPEAKING ─────────────────────────── -->
+  <section id="speaking" class="page" aria-labelledby="speaking-title">
+    <div class="content">
+      <header class="opener">
+        <div class="opener-grid">
+          <div class="opener-num gold">05c</div>
+          <div class="opener-body">
+            <span class="smallcaps accent">Section 05c · Practice</span>
+            <h1 id="speaking-title"><em>Speaking.</em></h1>
+            <p class="dek">Practise formal discussion language, presentation phrases, expressing opinions, and academic speaking skills.</p>
+          </div>
+        </div>
+      </header>
+      <div id="speakingCustomPanel"></div>
+      <div id="speakingQuizzes"></div>
+      <div id="speakingCustomActivities"></div>
+    </div>
+  </section>
+
+    <!-- ─── TEACHER ─────────────────────────── -->
   <section id="teacher" class="page" aria-labelledby="teacher-title">
     <div class="content">
       <header class="opener">
@@ -3633,8 +3687,151 @@ const quizzes = [
     ['A problem needs a ___.','solution','cafeteria','tenant'],
     ['Could you tell me where the office ___?','is','are','am'],
     ['A student budget is about ___.','money','weather','music']
+  ]},
+  {area:'grammar',title:'13. Present Perfect Continuous',qs:[
+    ['Scientists ___ the effects of urban pollution for over twenty years.','have been studying','study','studied'],
+    ['She ___ in the dormitory since the beginning of term.','has been living','is living','lived'],
+    ['The city council ___ a new recycling programme this year.','has launched','has been launched','is launching since']
+  ]},
+  {area:'grammar',title:'14. Passive Modals — Environmental Context',qs:[
+    ['Carbon emissions ___ reduced if cities invest in public transport.','can be','can','are able'],
+    ['Plastic waste ___ recycled more efficiently with new technology.','could be','could','is able to'],
+    ['The new environmental regulations ___ introduced before the end of the year.','must be','must','should']
+  ]},
+  {area:'grammar',title:'15. Verb Patterns — Campus Life',qs:[
+    ['Most students in the dormitory enjoy ___ their coursework in the common room.','completing','to complete','complete'],
+    ['The university decided ___ a new student services centre on campus.','to build','building','build'],
+    ['The student budget did not allow her ___ a furnished apartment off campus.','to rent','renting','rent']
+  ]},
+  {area:'grammar',title:'16. Reported Speech — Academic Context',qs:[
+    ['Direct: \"I have been studying for three hours.\" Reported: She said she ___ for three hours.','had been studying','has been studying','was studying'],
+    ['Direct: \"We will move to campus next week.\" Reported: They said they ___ to campus the following week.','would move','will move','moved'],
+    ['Direct: \"Students who cite their sources avoid plagiarism.\" Reported: The teacher said that students who cited their sources ___ plagiarism.','avoided','avoid','are avoiding']
+  ]},
+  {area:'vocabulary',title:'21. Live and Learn: Academic Life Vocabulary',qs:[
+    ['\"Identification\" in the context of a student card means ___.','a document that proves who you are','a timetable for lectures','a receipt for tuition fees'],
+    ['To \"memorise\" something means to ___.','learn it so well you can recall it without looking','write it in a notebook','discuss it with a classmate'],
+    ['A \"concept\" is best described as ___.','an abstract idea or principle','a set of written instructions','a physical object in a laboratory'],
+    ['To \"observe\" in a science context means to ___.','watch and study carefully','write a conclusion','copy from a textbook'],
+    ['A \"symbol\" is ___.','a sign or image that represents something else','a synonym for a full sentence','a type of academic qualification']
+  ]},
+  {area:'vocabulary',title:'22. Bright Lights, Big City: Housing and Urban Vocabulary',qs:[
+    ['If a student\'s apartment is \"cramped\", it means the space is ___.','too small and uncomfortable','luxurious and spacious','located far from campus'],
+    ['A \"tenant\" is someone who ___.','rents a property from a landlord','owns and manages a building','inspects buildings for safety'],
+    ['\"Utilities\" in the context of renting an apartment are ___.','essential services such as water, electricity, and gas','pieces of furniture included in the apartment','the legal documents signed when renting'],
+    ['To \"commute\" means to ___.','travel regularly between home and work or study','move permanently to a new city','search for accommodation online'],
+    ['The \"pros and cons\" of a decision are its ___.','advantages and disadvantages','costs and deadlines','rules and regulations']
+  ]},
+  {area:'reading',skill:'Reading',title:'Reading Practice 3: Planet Under Stress',qs:[
+    ['Read: Cities around the world face growing environmental challenges. Air pollution, traffic congestion, and waste disposal affect millions of urban residents every day. Governments and planners work on sustainable solutions such as expanding public transport, increasing green spaces, and encouraging recycling. However, experts warn that real progress requires both government action and individual behaviour change. Citizens who reduce energy use and choose public transport can make a measurable difference. Without collective effort, even the most ambitious policies may fall short. What is the main idea?','Cities need both government action and individual effort to solve environmental problems','Governments alone can solve all environmental issues','Air pollution is the only serious problem facing modern cities'],
+    ['Which sustainable solution does the text mention?','Expanding public transport networks','Building more private car parks','Reducing the number of recycling programmes'],
+    ['The word \'collective\' most likely means ___.','shared by everyone','only one person\'s','very expensive'],
+    ['What can be inferred about environmental policies?','They may not succeed without changes in people\'s behaviour','They have already solved all urban pollution problems','They are only effective in small cities'],
+    ['The tone of this text is mostly ___.','informative and cautionary','angry and pessimistic','humorous and relaxed']
+  ]},
+  {area:'reading',skill:'Reading',title:'Reading Practice 4: The Role of Online Education',qs:[
+    ['Read: Online education has grown rapidly, offering students greater flexibility and access to a wider range of courses. Digital platforms allow learners to study at their own pace and revisit recorded lessons. This can be especially beneficial for students who work part-time or have other commitments. However, some students struggle to stay motivated without face-to-face interaction, and technical problems can disrupt learning. Educators agree that online courses work best when they include regular feedback, clear deadlines, and discussion. The most successful students are self-disciplined and manage their time effectively. What is the best title for this text?','Online Education: Benefits, Challenges, and Success Factors','Why Traditional Classrooms Are Better Than Online Learning','A Guide to Choosing the Right University Course'],
+    ['Which type of student benefits MOST from online learning?','Students who also work part-time or have other commitments','Students who prefer large lecture-style classes','Students who struggle with technology'],
+    ['\'Stay motivated\' most likely means ___.','keep the desire to continue working','find a suitable online platform','attend face-to-face classes regularly'],
+    ['What tone does the writer use when discussing challenges?','Balanced — acknowledging problems without dismissing benefits','Strongly negative — arguing online learning should be stopped','Enthusiastic — celebrating every aspect of online education'],
+    ['What can we predict about a student who lacks self-discipline in an online course?','They are likely to struggle with managing deadlines and staying on track','They will automatically receive extra support from teachers','They will find online learning easier than classroom learning']
+  ]},
+  {area:'reading',skill:'Reading',title:'Reading Practice 5: A City That\'s Doing Something Right',qs:[
+    ['Read: Copenhagen is often cited as one of the world\'s most sustainable cities. City leaders have invested heavily in cycling infrastructure with over 400 km of dedicated cycling lanes. More than 62% of residents commute by bicycle daily, reducing traffic and carbon emissions significantly. The city aims to be carbon-neutral by 2025 through offshore wind energy and district heating. Copenhagen\'s success shows that bold, long-term investment in sustainable infrastructure can transform both the environment and quality of life. What has Copenhagen invested heavily in?','Cycling infrastructure with over 400 km of dedicated lanes','Building hundreds of new private car parks','Expanding its international airport'],
+    ['What percentage of Copenhagen residents cycle to work each day?','More than 62 per cent','Less than 20 per cent','Exactly 50 per cent'],
+    ['\'Carbon-neutral\' most likely means ___.','producing no net carbon emissions','removing all cars from city roads','increasing the use of fossil fuels'],
+    ['What can be predicted about other cities that follow Copenhagen\'s model?','They are likely to see improvements in environment and quality of life','They would immediately become carbon-neutral in one year','They would need to reduce cycling infrastructure first'],
+    ['The overall message of this text is that ___.','long-term investment in sustainable infrastructure can genuinely improve cities','only wealthy European cities can afford sustainable solutions','cycling is the only solution to urban pollution']
+  ]},
+  {area:'mixed',title:'22. Mixed Term 3 Review — Stage 7',qs:[
+    ['If more residents ___ public transport, carbon emissions would decrease significantly.','used','use','had used'],
+    ['The researcher explained that the data ___ collected from twelve different universities.','had been','has been','was been'],
+    ['Could you tell me where the student services office ___?','is','is it','does it'],
+    ['The apartment was ___ than the dormitory, but much closer to campus.','more expensive','most expensive','expensiver'],
+    ['Students ___ submit their assignments before the deadline, or they will lose marks.','must','must to','should to'],
+    ['She has been ___ the effects of overpopulation on urban infrastructure for her dissertation.','researching','research','researched']
   ]}
-];
+,
+  {area:'listening',skill:'Listening',title:'Listening Practice 1: Campus Life',passage:'Rania is a first-year student. She lives in a dormitory on campus. Every morning, she walks to class. She uses the library to study. She enjoys learning new vocabulary. Her favourite subject is English. She finds grammar helpful for writing. She practises listening every day to improve her understanding.',qs:[
+    ['Where does Rania live?','In a dormitory on campus','In a house off campus','With her parents in a flat'],
+    ['What does she do every morning?','Walk to class','Drive to university','Take a bus to campus'],
+    ['Which skill does she practise every day?','Listening','Drawing','Cooking'],
+    ['What does she use the library for?','To study','To sleep','To eat lunch'],
+    ['What is her favourite subject?','English','Maths','Science'],
+    ['What does she find helpful for writing?','Grammar','Painting','Sports']
+  ]},
+  {area:'listening',skill:'Listening',title:'Listening Practice 2: Academic Integrity',passage:'Academic integrity means being honest in your schoolwork. Students should write their own ideas and not copy from others. When you use information from a book or website, you must cite the source. Plagiarism is when you copy someone else\'s work without giving credit. It is important to paraphrase, which means writing ideas in your own words.',qs:[
+    ['What does academic integrity mean?','Being honest in your schoolwork','Getting the highest marks in class','Memorising everything in your textbook'],
+    ['What must you do when you use information from a source?','Cite the source','Delete it','Read it again'],
+    ['What is plagiarism?','Copying someone else\'s work without giving credit','Writing your own ideas carefully','Reading a book many times'],
+    ['What does \'paraphrase\' mean?','Writing ideas in your own words','Copying the exact words from a text','Taking notes in a lecture'],
+    ['Why is academic integrity important?','It builds trust and improves writing skills','It makes exams easier to pass','It helps you copy faster'],
+    ['Which word in the passage means the same as \'use as a reference\'?','Cite','Delete','Memorise']
+  ]},
+  {area:'listening',skill:'Listening',title:'Listening Practice 3: City and Environment',passage:'Many cities face serious environmental challenges. Air pollution and traffic are major problems. Governments are building more public transport to help. Citizens can also help by recycling and saving energy. Small changes in daily habits can make a big difference to the environment.',qs:[
+    ['What problems do many cities face?','Air pollution and traffic','Heavy rain and flooding','Power cuts and water shortages'],
+    ['What are governments building to help?','More public transport','Larger car parks','More factories'],
+    ['How can citizens help the environment?','By recycling and saving energy','By driving more often','By using more plastic'],
+    ['What can make a big difference to the environment?','Small changes in daily habits','Buying new cars','Building more factories'],
+    ['The tone of this text is mostly ___.','Informative and positive','Angry and negative','Humorous and relaxed'],
+    ['What is the main message of this text?','Everyone can help protect the environment','Only governments can solve pollution','Cities have no environmental problems']
+  ]},
+  {area:'listening',skill:'Listening',title:'Listening Practice 4: Student Housing Choices',passage:'Many students choose between living on campus or off campus. On-campus housing is convenient because students are close to their classes and facilities. Off-campus housing may be cheaper, but students need to commute to university. Students should consider their budget, transport options, and personal preferences when making this decision.',qs:[
+    ['What are the two main housing options?','On campus or off campus','Private villa or shared house','Hotel or hostel'],
+    ['Why is on-campus housing convenient?','Students are close to classes and facilities','It is always cheaper than off campus','Meals are always included'],
+    ['Why might students choose off-campus housing?','It may be cheaper','It is closer to university','It includes all meals'],
+    ['What should students consider when choosing housing?','Budget, transport, and personal preferences','Only the price of the rent','The colour of the building'],
+    ['The word \'convenient\' in this context means ___.','Easy and practical to use','Very expensive and large','Far away from university'],
+    ['What must off-campus students do to reach university?','Commute','Cook their own meals','Apply for a scholarship']
+  ]},
+  {area:'listening',skill:'Listening',title:'Listening Practice 5: Online Learning Strategies',passage:'Online learning is now common in many schools and universities. To succeed in online courses, students should manage their time carefully. They should have a quiet place to study and minimise distractions. It also helps to review your notes after each lesson and ask questions when you do not understand. Regular practice is the key to success.',qs:[
+    ['What has become common in many schools?','Online learning','Field trips abroad','Face-to-face exams only'],
+    ['What should students manage carefully?','Their time','Their clothing','Their social media'],
+    ['What kind of place should students study in?','A quiet place','A busy cafe','A crowded library'],
+    ['What should students do after each lesson?','Review their notes','Delete their notes','Go to sleep immediately'],
+    ['What is the key to success according to the text?','Regular practice','Studying only the night before','Copying from classmates'],
+    ['Which word in the text means \'reduce\'?','Minimise','Review','Succeed']
+  ]},
+  {area:'speaking',skill:'Speaking',title:'Speaking Practice 1: Giving Opinions Politely',qs:[
+    ['Which sentence expresses an opinion politely?','In my opinion, online learning can be very useful for busy students.','I am right and you are totally wrong about this topic.','This idea is stupid and I do not want to discuss it.'],
+    ['Which phrase best introduces a personal view?','I believe that academic integrity is important for all students.','I do not know anything about this topic.','Maybe, perhaps, I am not sure at all.'],
+    ['Which response shows you are listening to the other speaker?','That is a good point. I also think we need to consider the cost.','Stop talking. It is my turn now.','I was not listening at all.'],
+    ['Which sentence adds another point to a discussion?','In addition, students should also consider the transport options.','No, I disagree with everything you said.','This topic is finished now.'],
+    ['Which phrase shows contrast in a discussion?','However, some students prefer face-to-face lessons.','Because students like learning online.','For example, online learning is popular.'],
+    ['Which sentence ends a discussion point well?','To summarise, there are advantages and disadvantages to both options.','And then, and also, and furthermore...','I do not have a conclusion.']
+  ]},
+  {area:'speaking',skill:'Speaking',title:'Speaking Practice 2: Presentations and Structure',qs:[
+    ['Which is the best opening for a presentation about plagiarism?','Good morning. Today I will explain what plagiarism is and why it must be avoided.','Hey guys! So I am going to talk about copying stuff.','I do not really know what to say today.'],
+    ['Which sentence clearly states the purpose of a presentation?','The aim of my presentation is to explain the causes of urban pollution.','I will talk about something related to cities, I think.','Cities are places where many people live and work.'],
+    ['Which phrase is best for moving to the next point?','Moving on, I will now discuss the solutions to this problem.','Umm, so yeah, now I want to say something else.','Stop. New topic. Different thing now.'],
+    ['Which sentence gives a supporting example?','For instance, Copenhagen has reduced carbon emissions through cycling infrastructure.','I think there might be some examples somewhere.','Examples are things that support your points.'],
+    ['Which phrase signals a conclusion?','In conclusion, we have seen that environmental action requires both individual and collective effort.','That is all I have. Goodbye.','Conclusion means the end part of a presentation.'],
+    ['Which sentence shows appropriate formal language?','I believe these findings demonstrate the importance of sustainable urban planning.','Basically, cities need to be better because pollution is bad.','So yeah, the data shows stuff about cities.']
+  ]},
+  {area:'speaking',skill:'Speaking',title:'Speaking Practice 3: Describing and Comparing',qs:[
+    ['Which sentence correctly compares two options?','Living on campus is more convenient than living off campus, but it can be more expensive.','Campus is good. Off campus is also good. Both are different.','I prefer campus because campus is campus.'],
+    ['Which phrase introduces a contrast?','On the other hand, off-campus housing gives students more independence.','Because students like housing options very much.','For example, housing is an important topic.'],
+    ['Which sentence correctly describes a place?','The library is a quiet, well-equipped space where students can study and access resources.','The library is a place. It has books. Students go there.','Libraries exist in many universities around the world.'],
+    ['Which sentence expresses a preference with a reason?','I prefer studying in the library because it is quiet and free from distractions.','I like the library. It is nice. I go there.','Libraries are preferred by many students who study there.'],
+    ['Which phrase signals you are about to give a reason?','This is important because online learning offers students greater flexibility.','I have a reason but I cannot remember it now.','Reasons are things that explain why something happens.'],
+    ['Which sentence makes a clear comparison between past and present?','In the past, students only studied in classrooms; today, many learn online as well.','Students studied before and also now they study too.','The past was different from the present in many ways.']
+  ]},
+  {area:'speaking',skill:'Speaking',title:'Speaking Practice 4: Academic Discussion Phrases',qs:[
+    ['Which phrase best asks for clarification?','Could you explain what you mean by that, please?','What? Say it again. I did not hear.','I disagree with your entire statement.'],
+    ['Which phrase politely challenges an idea?','While I understand your point, I think we should also consider the environmental impact.','You are completely wrong and your idea is bad.','I do not agree with anything you just said.'],
+    ['Which response builds on a partner\'s idea?','That is a valid point. I would also add that time management is equally important.','Yes. OK. Moving on to a different topic now.','I disagree. Everything you said is incorrect.'],
+    ['Which phrase shows you have understood?','I see your point. So you are suggesting that online learning should be more structured?','Hmm, yeah, OK, I guess so, maybe.','I was not really listening. Could you start again?'],
+    ['Which phrase signals a personal example?','In my own experience, studying in the library has helped me focus much better.','Someone somewhere might have had an experience once.','Examples from real life are called personal experiences.'],
+    ['Which phrase is best for summarising what was said?','To sum up, both housing options have advantages and it depends on individual needs.','Basically everything has good and bad things. The end.','Summarising is when you repeat everything you said again.']
+  ]},
+  {area:'speaking',skill:'Speaking',title:'Speaking Practice 5: Pronunciation and Fluency',qs:[
+    ['Which pronunciation feature helps a listener understand the most important word?','Word stress — emphasising the most important syllable in a word','Speaking as quickly as possible','Whispering all your words very quietly'],
+    ['What does \'intonation\' mean in spoken English?','The rise and fall of the voice to show meaning or feeling','The spelling of difficult academic words','The grammar rules used in a formal sentence'],
+    ['Which sentence is spoken with the best pace for a presentation?','Slow down for key points and speed up for less important information.','Rush through everything as fast as possible so you finish early.','Speak so slowly that the audience falls asleep.'],
+    ['What should you do if you make a mistake while speaking?','Correct yourself calmly and continue — this is natural in spoken language.','Stop speaking completely and sit down.','Repeat the mistake three more times loudly.'],
+    ['Which phrase helps you gain thinking time politely?','That is an interesting question. Let me think for a moment.','Umm, err, I have no idea what to say.','I refuse to answer that question.'],
+    ['What does \'pace\' mean in the context of speaking?','The speed at which you speak','The words you choose to use','The grammar structures you select']
+  ]}];
 
 quizzes.forEach(q => { if (!q.skill) q.skill = q.area.charAt(0).toUpperCase() + q.area.slice(1); });
 
@@ -3881,6 +4078,8 @@ const SECTION_NAMES_PRINT = {
   writing: 'Writing',
   mixed:   'Mixed Review',
   level:   'Level Test',
+  listening: 'Listening',
+  speaking: 'Speaking',
   sen:     'SEN A1 Support',
   teacher: 'Teacher'
 };
@@ -3922,7 +4121,7 @@ window.addEventListener('beforeprint', () => {
 
 /* ─── RENDER QUIZZES ─────────────────────────────── */
 function render() {
-  ['grammar','vocab','reading','writing','mixed','level','sen'].forEach(area => {
+  ['grammar','vocab','reading','writing','listening','speaking','mixed','level','sen'].forEach(area => {
     const box = $(area + 'Quizzes'); if (!box) return;
     const list = quizzes.filter(q => q.area === area);
     list.forEach((quiz, qi) => {
@@ -4105,7 +4304,7 @@ function restoreProgress() {
 
 /* ─── PER-SECTION PROGRESS CHIPS ─────────────────── */
 function injectSectionProgressChips() {
-  ['grammar','vocab','reading','writing','mixed','level','sen'].forEach(area => {
+  ['grammar','vocab','reading','writing','listening','speaking','mixed','level','sen'].forEach(area => {
     const section = document.getElementById(area);
     if (!section) return;
     const opener = section.querySelector('.opener');
@@ -4585,9 +4784,9 @@ function printAsPDF(title, bodyHTML) {
     '</div>';
   const foot =
     '<div class="pdf-foot">' +
-      '<span>Designed by Aliya Shah, English Teacher</span>' +
-      '<em>English Practice</em>' +
-      '<span>' + new Date().toLocaleDateString(undefined, { day:'numeric', month:'short', year:'numeric' }) + '</span>' +
+      '<span>Aliya Shah · English Language Teacher</span>' +
+      '<em>www.aliyashah13.com</em>' +
+      '<span>&copy; 2026 Aliya Shah. All rights reserved.</span>' +
     '</div>';
   doc.open();
   doc.write(
@@ -4795,7 +4994,7 @@ function generateCertificate() {
       '<div><b>Department</b>' + escHtml(settings.departmentName || 'English Department') + '</div>' +
     '</div>' +
     '<div class="cert-sig">' + escHtml(settings.signatureName || settings.teacherName || 'Teacher') + '<small>Signature</small></div>' +
-    '<div class="cert-credit">Website created by Aliya Shah</div>' +
+    '<div class="cert-credit">Designed &amp; authored by Aliya Shah &middot; English Language Teacher<br><span style="font-size:11px;">www.aliyashah13.com &middot; &copy; 2026 Aliya Shah. All rights reserved.</span></div>' +
     '<div class="certificate-tools"><button class="btn gold" onclick="printCertificateOnly()">Print Certificate</button></div>' +
     '</div>';
   box.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -5252,7 +5451,7 @@ function downloadTeacherOwnCSV() { downloadTeacherRankingsCSV(); }
 /* ─── CUSTOM ACTIVITIES (per-section teacher add-in) ───── */
 function renderCustomPanels() {
   const teacher = isTeacherLoggedIn();
-  ['grammar','vocab','reading','writing','mixed','level','sen'].forEach(area => {
+  ['grammar','vocab','reading','writing','listening','speaking','mixed','level','sen'].forEach(area => {
     const box = $(area + 'CustomPanel'); if (!box) return;
     if (!teacher) { box.innerHTML = ''; return; }
     const areaName = area.charAt(0).toUpperCase() + area.slice(1);
@@ -5325,7 +5524,7 @@ function renderCustomActivities() {
   const studentCode = (($('studentTeacherCode') && $('studentTeacherCode').value) || localStorage.getItem('g11g_student_teacher_code') || '').trim();
   const activeCode  = currentTeacherCode();
 
-  ['grammar','vocab','reading','writing','mixed','level','sen'].forEach(area => {
+  ['grammar','vocab','reading','writing','listening','speaking','mixed','level','sen'].forEach(area => {
     const box = $(area + 'CustomActivities'); if (!box) return;
     const arr = getCustomActivities().filter(a => {
       if (a.area !== area) return false;
@@ -5686,5 +5885,41 @@ window.addEventListener('storage', updateTeacherDashboard);
 setInterval(updateTimerDisplay, 1000);
 document.addEventListener('DOMContentLoaded', render);
 </script>
+
+<!-- ── Aliya Shah Site Footer ────────────────────────────────────── -->
+<style>
+.as-site-footer {
+  background: var(--as-pearl, #FDFAF5);
+  border-top: 1px solid var(--as-rule, #D9CCBA);
+  padding: 38px 5% 30px;
+  text-align: center;
+  color: var(--as-charcoal, #2C2C2C);
+}
+.as-site-footer .as-fn { font-family: "DM Serif Display", Georgia, serif; font-style: italic; font-size: 1.2rem; color: var(--as-plum, #4A2C3D); margin-bottom: 3px; }
+.as-site-footer .as-fr { font-size: .75rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--as-mauve, #9B7B8B); margin-bottom: 12px; }
+.as-site-footer hr { width: 40px; height: 1px; background: var(--as-champagne, #EDE0C8); border: none; margin: 14px auto; }
+.as-site-footer .as-fu { display: inline-block; font-size: .8rem; font-weight: 600; color: var(--as-rose, #C2917A); text-decoration: none; letter-spacing: .04em; border-bottom: 1px solid transparent; transition: .18s; }
+.as-site-footer .as-fu:hover { border-bottom-color: var(--as-rose, #C2917A); }
+.as-site-footer .as-fc { margin-top: 10px; font-size: .72rem; color: #8a7d70; line-height: 1.65; }
+.as-site-footer .as-fe { margin-top: 6px; font-size: .68rem; color: #a8998a; font-style: italic; line-height: 1.5; }
+</style>
+<footer class="as-site-footer">
+  <div style="max-width:600px;margin:0 auto;">
+    <div class="as-monogram" aria-hidden="true">AS</div>
+    <div class="as-fn">Aliya Shah</div>
+    <div class="as-fr">English Language Teacher</div>
+    <div class="as-ornament" aria-hidden="true">
+      <span class="as-ornament-line"></span>
+      <span class="as-ornament-gem"></span>
+      <span class="as-ornament-line"></span>
+    </div>
+    <a class="as-fu" href="https://www.aliyashah13.com/" target="_blank" rel="noopener">www.aliyashah13.com</a>
+    <div class="as-fc">
+      © 2026 Aliya Shah. All rights reserved.<br>
+      <span style="font-size:.67rem;color:#b09e8e;">This educational resource is designed and authored by Aliya Shah, English Language Teacher.</span>
+    </div>
+    <div class="as-fe">This resource is intended for educational use. Unauthorised copying, redistribution, commercial reuse, or removal of branding is not permitted without written permission from Aliya Shah.</div>
+  </div>
+</footer>
 </body>
 </html>
