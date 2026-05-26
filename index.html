@@ -452,6 +452,562 @@ body[data-active-stream="g12a"] .writing-save-btn{background:var(--g12a)}
 body[data-active-stream="advanced"] .writing-save-btn{background:var(--rose)}
 .writing-saved-msg{font-size:.82rem;color:var(--ok);font-weight:700;margin-left:10px;opacity:0;transition:opacity .3s}
 
+/* ══════════════════════════════════════════════════════════════
+   DESIGN UPGRADE 2.0 — ENGLISH LANGUAGE PRACTICE HUB
+   By Aliya Shah · All stream palettes, homepage portal, UI polish
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Stream-specific full-page palette variables ── */
+body[data-active-stream="g9g"]  { --s-accent:#4CAF82; --s-mid:#E8F5EE; --s-light:#F0FAF5; --s-text:#1a4733; --s-btn:#4CAF82; --s-hero-bg:linear-gradient(135deg,#E8F5EE 0%,#F5FDF9 100%); }
+body[data-active-stream="g9a"]  { --s-accent:#26A69A; --s-mid:#E0F5F4; --s-light:#F0FAFA; --s-text:#0d3b38; --s-btn:#26A69A; --s-hero-bg:linear-gradient(135deg,#E0F5F4 0%,#F5FDFC 100%); }
+body[data-active-stream="g10g"] { --s-accent:#42A5CC; --s-mid:#E0F4FB; --s-light:#F0FAFD; --s-text:#0d3044; --s-btn:#42A5CC; --s-hero-bg:linear-gradient(135deg,#E0F4FB 0%,#F5FAFD 100%); }
+body[data-active-stream="g10a"] { --s-accent:#7E57C2; --s-mid:#EDE7F6; --s-light:#F5F0FD; --s-text:#311b7a; --s-btn:#7E57C2; --s-hero-bg:linear-gradient(135deg,#EDE7F6 0%,#FAF7FF 100%); }
+body[data-active-stream="general"] { --s-accent:#D63660; --s-mid:#FDEEF3; --s-light:#FFF7FA; --s-text:#4a1025; --s-btn:#D63660; --s-hero-bg:linear-gradient(135deg,#FDEEF3 0%,#FFF9FB 100%); }
+body[data-active-stream="advanced"] { --s-accent:#7C3AED; --s-mid:#EDE9FF; --s-light:#F7F5FF; --s-text:#2d1b6b; --s-btn:#7C3AED; --s-hero-bg:linear-gradient(135deg,#EDE9FF 0%,#FAF8FF 100%); }
+body[data-active-stream="g12g"] { --s-accent:#1A4C8B; --s-mid:#E1EDFA; --s-light:#F0F6FD; --s-text:#0d2a50; --s-btn:#1A4C8B; --s-hero-bg:linear-gradient(135deg,#E1EDFA 0%,#F5F9FE 100%); }
+body[data-active-stream="g12a"] { --s-accent:#2E7D52; --s-mid:#E0F2EA; --s-light:#F0FAF5; --s-text:#0d3320; --s-btn:#2E7D52; --s-hero-bg:linear-gradient(135deg,#E0F2EA 0%,#F5FCF8 100%); }
+
+/* Apply stream hero background to main practice area */
+body[data-active-stream] .hero { background: var(--s-hero-bg, #fff); }
+
+/* ── Improved base body and layout styling ── */
+body { background:#F6F2EC; }
+.layout { background: transparent; }
+
+/* ── Enhanced header ── */
+header {
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  padding: 14px 5%;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(0,0,0,.06);
+}
+.header-nav-actions { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+#backToHomeBtn {
+  display: none;
+  border: 1.5px solid var(--line);
+  background: var(--cream);
+  color: var(--dark);
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: .82rem;
+  cursor: pointer;
+  transition: .18s;
+  white-space: nowrap;
+}
+#backToHomeBtn:hover { background: var(--ivory); transform: translateX(-2px); }
+#backToHomeBtn::before { content: "← "; }
+
+/* ── HOMEPAGE PORTAL STYLES ── */
+#homePage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+#practiceApp { display: none; }
+
+/* ── Homepage Hero Banner ── */
+.hp-hero {
+  background: linear-gradient(135deg, var(--as-plum,#4A2C3D) 0%, #6B3A52 45%, #8B5A6E 100%);
+  padding: 52px 5% 48px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.hp-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10z'/%3E%3C/g%3E%3C/svg%3E") repeat;
+  pointer-events: none;
+}
+.hp-hero-inner { max-width: 820px; margin: 0 auto; position: relative; }
+.hp-hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: .72rem; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: rgba(255,255,255,.85);
+  margin-bottom: 18px;
+  backdrop-filter: blur(4px);
+}
+.hp-hero-badge::before { content: "✦"; opacity: .7; }
+.hp-hero h1 {
+  font-family: "DM Serif Display", serif;
+  font-style: italic;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  margin: 0 0 14px; color: #fff;
+  line-height: 1.15;
+}
+.hp-hero-subtitle {
+  font-size: clamp(.88rem, 1.5vw, 1.05rem);
+  line-height: 1.65;
+  color: rgba(255,255,255,.82);
+  max-width: 600px;
+  margin: 0 0 22px;
+}
+.hp-hero-sig {
+  font-size: .82rem; color: rgba(255,255,255,.65);
+  font-style: italic; margin: 0;
+}
+.hp-hero-sig a { color: rgba(255,255,255,.75); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.3); transition: .2s; }
+.hp-hero-sig a:hover { color: #fff; }
+
+/* ── Features strip ── */
+.hp-features {
+  background: rgba(255,255,255,.08);
+  border-top: 1px solid rgba(255,255,255,.12);
+  margin-top: 28px;
+  padding-top: 20px;
+  display: flex; flex-wrap: wrap; gap: 14px 28px;
+}
+.hp-feat-item {
+  display: flex; align-items: center; gap: 7px;
+  font-size: .78rem; font-weight: 600;
+  color: rgba(255,255,255,.78); letter-spacing: .04em;
+}
+.hp-feat-item::before { font-size: 1rem; }
+
+/* ── Grade cards grid ── */
+.hp-grades-section {
+  padding: 44px 5% 60px;
+  flex: 1;
+  background: #F6F2EC;
+}
+.hp-section-heading {
+  font-family: "DM Serif Display", serif;
+  font-style: italic;
+  font-size: 1.55rem;
+  color: var(--dark);
+  margin: 0 0 6px;
+}
+.hp-section-sub {
+  font-size: .85rem;
+  color: var(--muted);
+  margin: 0 0 28px;
+}
+.hp-grades-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+  max-width: 1100px;
+}
+
+/* ── Individual grade card ── */
+.hp-grade-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 24px 22px 22px;
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 20px rgba(0,0,0,.06);
+  cursor: pointer;
+  transition: transform .22s, box-shadow .22s, border-color .22s;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hp-grade-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: var(--card-accent, #ccc);
+  border-radius: 20px 20px 0 0;
+}
+.hp-grade-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(0,0,0,.13);
+  border-color: var(--card-accent, #ccc);
+}
+.hp-card-icon {
+  width: 46px; height: 46px;
+  border-radius: 12px;
+  background: var(--card-light, #f5f5f5);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+.hp-card-meta {
+  display: flex; align-items: center;
+  justify-content: space-between;
+}
+.hp-card-grade-label {
+  font-size: .68rem; font-weight: 800;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--card-accent, #888);
+}
+.hp-card-stream-badge {
+  font-size: .65rem; font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--card-light, #f0f0f0);
+  color: var(--card-accent, #555);
+  text-transform: uppercase; letter-spacing: .1em;
+}
+.hp-card-title {
+  font-family: "DM Serif Display", serif;
+  font-size: 1.2rem;
+  color: var(--dark);
+  margin: 0;
+  line-height: 1.25;
+}
+.hp-card-desc {
+  font-size: .8rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+}
+.hp-card-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--card-accent, #333);
+  color: #fff;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  border: none;
+  cursor: pointer;
+  transition: opacity .18s, transform .18s;
+  width: 100%;
+  text-align: left;
+}
+.hp-card-btn:hover { opacity: .88; transform: translateX(2px); }
+.hp-card-btn::after { content: "→"; font-size: 1rem; }
+
+/* ── Stream-specific card colors ── */
+.hp-grade-card[data-stream="g9g"]      { --card-accent:#4CAF82; --card-light:#E8F5EE; }
+.hp-grade-card[data-stream="g9a"]      { --card-accent:#26A69A; --card-light:#E0F5F4; }
+.hp-grade-card[data-stream="g10g"]     { --card-accent:#42A5CC; --card-light:#E0F4FB; }
+.hp-grade-card[data-stream="g10a"]     { --card-accent:#7E57C2; --card-light:#EDE7F6; }
+.hp-grade-card[data-stream="general"]  { --card-accent:#D05070; --card-light:#FDEEF3; }
+.hp-grade-card[data-stream="advanced"] { --card-accent:#7C3AED; --card-light:#EDE9FF; }
+.hp-grade-card[data-stream="g12g"]     { --card-accent:#1A4C8B; --card-light:#E1EDFA; }
+.hp-grade-card[data-stream="g12a"]     { --card-accent:#2E7D52; --card-light:#E0F2EA; }
+
+/* ── Homepage support section ── */
+.hp-support {
+  background: #fff;
+  border-top: 1px solid var(--line);
+  padding: 36px 5%;
+}
+.hp-support-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+.hp-support-item {
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.hp-support-icon {
+  font-size: 1.3rem; flex-shrink: 0; margin-top: 2px;
+}
+.hp-support-text h4 {
+  margin: 0 0 3px;
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--dark);
+}
+.hp-support-text p {
+  margin: 0;
+  font-size: .75rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* ── Improved sidebar nav ── */
+aside {
+  width: 270px;
+  background: #fff;
+  border-right: 1px solid var(--line);
+  padding: 20px 14px;
+  position: sticky;
+  top: 71px;
+  height: calc(100vh - 71px);
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.nav-tab-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid transparent;
+  background: var(--cream);
+  border-radius: 12px;
+  margin-bottom: 7px;
+  text-align: left;
+  font-weight: 700;
+  color: #344a50;
+  cursor: pointer;
+  transition: .18s;
+  font-size: .86rem;
+}
+.nav-tab-btn:hover { transform: translateX(3px); background: #EDEAE4; }
+.nav-tab-btn.active {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,.07);
+}
+.nav-tab-btn small {
+  font-size: .72rem; font-weight: 700;
+  background: var(--line);
+  padding: 2px 7px;
+  border-radius: 999px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+/* Stream-coloured nav active state */
+body[data-active-stream] .nav-tab-btn.active {
+  border-color: var(--s-accent);
+  border-left: 4px solid var(--s-accent);
+  color: var(--s-text);
+}
+body[data-active-stream] .nav-tab-btn.active small {
+  background: var(--s-mid);
+  color: var(--s-text);
+}
+
+/* ── Improved hero card ── */
+.hero {
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.07);
+  margin-bottom: 20px;
+  border: 1px solid var(--line);
+}
+.hero:before {
+  width: 5px;
+  background: var(--s-accent, var(--teal));
+}
+.hero h2 {
+  font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+}
+.toolbar select {
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: .88rem;
+  border-color: var(--line);
+  transition: border-color .2s;
+}
+.toolbar select:focus {
+  border-color: var(--s-accent, var(--teal));
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0,0,0,.05);
+}
+
+/* ── Improved progress bar ── */
+.progress-bar span { background: var(--s-accent, var(--teal)); }
+.progress { font-size: .85rem; color: var(--muted); font-weight: 600; }
+
+/* ── Improved student tools card ── */
+.student-tools-card {
+  border-radius: 16px;
+  padding: 16px 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  margin-bottom: 20px;
+}
+.student-tools-card label {
+  font-size: .72rem;
+}
+.student-tools-card input,
+.student-tools-card select {
+  border-radius: 9px;
+  padding: 10px 12px;
+  border-color: var(--line);
+  font-size: .86rem;
+  transition: border-color .2s;
+}
+.student-tools-card input:focus,
+.student-tools-card select:focus {
+  border-color: var(--s-accent, var(--teal));
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0,0,0,.04);
+}
+
+/* ── Improved option buttons ── */
+.option-item {
+  padding: 13px 18px;
+  border-radius: 11px;
+  font-size: .93rem;
+  border-width: 1.5px;
+  transition: .16s;
+}
+.option-item:hover:not(.correct):not(.incorrect) {
+  background: var(--s-mid, #F4EFE5);
+  border-color: var(--s-accent, #ccc);
+  transform: translateX(3px);
+}
+.option-item.selected {
+  background: var(--s-mid, #E6DFD1) !important;
+  border-color: var(--s-accent, #ccc) !important;
+  font-weight: 700;
+}
+
+/* ── Improved primary button ── */
+.btn {
+  padding: 11px 22px;
+  border-radius: 10px;
+  font-size: .88rem;
+  font-weight: 800;
+  letter-spacing: .02em;
+  transition: opacity .16s, transform .14s;
+  background: var(--s-btn, var(--dark));
+}
+.btn:hover { opacity: .88; transform: translateY(-1px); }
+.btn.secondary {
+  background: #EEE7D9;
+  color: var(--dark);
+}
+.btn.secondary:hover { background: #E5DDCF; }
+
+/* ── Improved card header ── */
+.card-header {
+  font-size: .72rem;
+  color: var(--s-accent, var(--teal));
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ── Improved module cards ── */
+.module-card {
+  border-radius: 16px;
+  padding: 18px;
+  border: 1.5px solid var(--line);
+  transition: .18s;
+}
+.module-card:hover {
+  border-color: var(--s-accent, #ccc);
+  box-shadow: 0 6px 20px rgba(0,0,0,.09);
+  transform: translateY(-2px);
+  background: var(--s-light, #fff);
+}
+.module-card h3 { font-size: .95rem; color: var(--dark); margin: 0 0 5px; }
+.module-card p {
+  font-size: .78rem;
+  color: var(--muted);
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ── Stream header banner (shown inside practice app) ── */
+.stream-header-banner {
+  background: var(--s-hero-bg, linear-gradient(135deg, #f8f5ef 0%,#fff 100%));
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px 22px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.stream-header-banner .shb-icon {
+  font-size: 1.6rem; flex-shrink: 0;
+}
+.stream-header-banner .shb-name {
+  font-family: "DM Serif Display", serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--s-text, var(--dark));
+  margin: 0 0 2px;
+}
+.stream-header-banner .shb-desc {
+  font-size: .78rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ── Badge pill improvements ── */
+.badge-pill {
+  background: var(--s-mid, #EEE7D9);
+  color: var(--s-text, var(--dark));
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: .78rem;
+  font-weight: 800;
+  margin: 3px 4px 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── Print certificate button ── */
+.student-tools-card .btn.secondary[onclick*="printCertificate"] {
+  background: var(--s-mid, #EEE7D9);
+  border: 1.5px solid var(--s-accent, var(--line));
+  color: var(--s-text, var(--dark));
+}
+
+/* ── Improved teacher tools button ── */
+.teacher-tools-btn {
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: .82rem;
+}
+.sidebar-tools .teacher-tools-btn {
+  width: 100%;
+  background: var(--s-mid, #F4EFE5);
+  border-color: var(--s-accent, var(--line));
+  color: var(--s-text, var(--dark));
+  margin-bottom: 10px;
+}
+
+/* ── TTS player stream colour ── */
+body[data-active-stream] .tts-btn-play { background: var(--s-accent); }
+
+/* ── Writing task prompt border ── */
+body[data-active-stream] .writing-task-card .prompt { border-left-color: var(--s-accent); }
+body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
+
+/* ── Smooth fade-in for practice app ── */
+@keyframes hp-fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+#practiceApp.visible { animation: hp-fadeIn .35s ease forwards; }
+#homePage .hp-grade-card { animation: hp-fadeIn .4s ease both; }
+.hp-grade-card:nth-child(1) { animation-delay:.05s; }
+.hp-grade-card:nth-child(2) { animation-delay:.1s; }
+.hp-grade-card:nth-child(3) { animation-delay:.15s; }
+.hp-grade-card:nth-child(4) { animation-delay:.2s; }
+.hp-grade-card:nth-child(5) { animation-delay:.25s; }
+.hp-grade-card:nth-child(6) { animation-delay:.3s; }
+.hp-grade-card:nth-child(7) { animation-delay:.35s; }
+.hp-grade-card:nth-child(8) { animation-delay:.4s; }
+
+/* ── Mobile responsive: homepage ── */
+@media (max-width: 760px) {
+  .hp-hero { padding: 36px 5% 32px; }
+  .hp-hero h1 { font-size: 1.6rem; }
+  .hp-grades-grid { grid-template-columns: 1fr; }
+  .hp-support-inner { grid-template-columns: 1fr 1fr; }
+  #backToHomeBtn { font-size: .78rem; padding: 7px 12px; }
+  .stream-selector { max-width: 100%; overflow-x: auto; }
+}
+@media (max-width: 480px) {
+  .hp-support-inner { grid-template-columns: 1fr; }
+  .hp-features { flex-direction: column; gap: 10px; }
+}
+
 </style>
 </head>
 <body data-active-stream="general">
@@ -463,18 +1019,129 @@ body[data-active-stream="advanced"] .writing-save-btn{background:var(--rose)}
       <p id="headerSubtitle">Practice Journal &nbsp;·&nbsp; <a href="https://www.aliyashah13.com/" target="_blank" rel="noopener" style="color:var(--as-rose,#C2917A);text-decoration:none;font-weight:700;">Aliya Shah</a></p>
     </div>
   </div>
-  <div class="stream-selector" role="navigation" aria-label="Select grade and stream">
-    <button class="stream-btn" data-stream="g9g" onclick="switchStream('g9g')">G9 General</button>
-    <button class="stream-btn" data-stream="g9a" onclick="switchStream('g9a')">G9 Advanced</button>
-    <button class="stream-btn" data-stream="g10g" onclick="switchStream('g10g')">G10 General</button>
-    <button class="stream-btn" data-stream="g10a" onclick="switchStream('g10a')">G10 Advanced</button>
-    <button class="stream-btn active" data-stream="general" onclick="switchStream('general')">G11 General</button>
-    <button class="stream-btn" data-stream="advanced" onclick="switchStream('advanced')">G11 Advanced</button>
-    <button class="stream-btn" data-stream="g12g" onclick="switchStream('g12g')">G12 General</button>
-    <button class="stream-btn" data-stream="g12a" onclick="switchStream('g12a')">G12 Advanced</button>
+  <div class="header-nav-actions">
+    <button id="backToHomeBtn" onclick="showHomePage()" title="Back to grade selection">Home</button>
+    <div class="stream-selector" role="navigation" aria-label="Select grade and stream">
+      <button class="stream-btn" data-stream="g9g" onclick="switchStream('g9g')">G9 General</button>
+      <button class="stream-btn" data-stream="g9a" onclick="switchStream('g9a')">G9 Advanced</button>
+      <button class="stream-btn" data-stream="g10g" onclick="switchStream('g10g')">G10 General</button>
+      <button class="stream-btn" data-stream="g10a" onclick="switchStream('g10a')">G10 Advanced</button>
+      <button class="stream-btn active" data-stream="general" onclick="switchStream('general')">G11 General</button>
+      <button class="stream-btn" data-stream="advanced" onclick="switchStream('advanced')">G11 Advanced</button>
+      <button class="stream-btn" data-stream="g12g" onclick="switchStream('g12g')">G12 General</button>
+      <button class="stream-btn" data-stream="g12a" onclick="switchStream('g12a')">G12 Advanced</button>
+    </div>
+    <button class="teacher-tools-btn" onclick="openTeacherTools()">Teacher Tools</button>
   </div>
-  <button class="teacher-tools-btn" onclick="openTeacherTools()">Teacher Tools</button>
 </header>
+<div id="homePage">
+  <!-- ── Homepage Hero ── -->
+  <section class="hp-hero">
+    <div class="hp-hero-inner">
+      <div class="hp-hero-badge">Interactive English Practice Hub</div>
+      <h1>English Language<br>Practice Resources</h1>
+      <p class="hp-hero-subtitle">
+        Interactive exam practice, skill-building activities, badges, certificates,
+        and instant feedback for English language learners in Grades 9–12.
+      </p>
+      <p class="hp-hero-sig">Designed &amp; authored by <strong><a href="https://www.aliyashah13.com/" target="_blank" rel="noopener">Aliya Shah</a></strong> · English Language Teacher</p>
+      <div class="hp-features">
+        <span class="hp-feat-item">📖 Reading &amp; Writing</span>
+        <span class="hp-feat-item">🎧 Listening &amp; Speaking</span>
+        <span class="hp-feat-item">📝 Grammar &amp; Vocabulary</span>
+        <span class="hp-feat-item">🏆 Badges &amp; Certificates</span>
+        <span class="hp-feat-item">📊 Teacher Reports</span>
+        <span class="hp-feat-item">♿ SEN/A1 Support</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Grade Selection Cards ── -->
+  <section class="hp-grades-section">
+    <h2 class="hp-section-heading">Choose Your Grade &amp; Stream</h2>
+    <p class="hp-section-sub">Select your grade and learning stream to open your personalised practice page.</p>
+    <div class="hp-grades-grid">
+
+      <div class="hp-grade-card" data-stream="g9g" onclick="selectGradeAndShow('g9g')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g9g')" aria-label="Open Grade 9 General practice">
+        <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 9</span><span class="hp-card-stream-badge">General</span></div>
+        <div class="hp-card-icon">📗</div>
+        <h3 class="hp-card-title">Grade 9 General</h3>
+        <p class="hp-card-desc">B1.1 level. Cultural celebrations, sleep &amp; the brain, Wh-questions, past simple &amp; continuous, vocabulary &amp; SEN support.</p>
+        <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
+      </div>
+
+      <div class="hp-grade-card" data-stream="g9a" onclick="selectGradeAndShow('g9a')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g9a')" aria-label="Open Grade 9 Advanced practice">
+        <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 9</span><span class="hp-card-stream-badge">Advanced</span></div>
+        <div class="hp-card-icon">📘</div>
+        <h3 class="hp-card-title">Grade 9 Advanced</h3>
+        <p class="hp-card-desc">B1.2 level. Architecture &amp; culture, dining customs, passive voice, comparatives, and discussion language skills.</p>
+        <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
+      </div>
+
+      <div class="hp-grade-card" data-stream="g10g" onclick="selectGradeAndShow('g10g')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g10g')" aria-label="Open Grade 10 General practice">
+        <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 10</span><span class="hp-card-stream-badge">General</span></div>
+        <div class="hp-card-icon">📐</div>
+        <h3 class="hp-card-title">Grade 10 General</h3>
+        <p class="hp-card-desc">B1.2 level. Architecture through history, homes &amp; society, passives, comparatives, and presentation skills.</p>
+        <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
+      </div>
+
+      <div class="hp-grade-card" data-stream="g10a" onclick="selectGradeAndShow('g10a')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g10a')" aria-label="Open Grade 10 Advanced practice">
+        <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 10</span><span class="hp-card-stream-badge">Advanced</span></div>
+        <div class="hp-card-icon">🌐</div>
+        <h3 class="hp-card-title">Grade 10 Advanced</h3>
+        <p class="hp-card-desc">B1.2–B2.1 level. Intercultural communication, conditionals, reported speech, and formal academic essay writing.</p>
+        <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
+      </div>
+
+      <div class="hp-grade-card" data-stream="general" onclick="selectGradeAndShow('general')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('general')" aria-label="Open Grade 11 General practice">
+        <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 11</span><span class="hp-card-stream-badge">General</span></div>
+        <div class="hp-card-icon">🎓</div>
+        <h3 class="hp-card-title">Grade 11 General</h3>
+        <p class="hp-card-desc">B2 level. Academic integrity, student housing, city &amp; environment, mixed practice, and SEN A1 differentiated support.</p>
+        <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
+      </div>
+
+      <div class="hp-grade-card" data-stream="advanced" onclick="selectGradeAndShow('advanced')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('advanced')" aria-label="Open Grade 11 Advanced practice">
+        <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 11</span><span class="hp-card-stream-badge">Advanced</span></div>
+        <div class="hp-card-icon">🦋</div>
+        <h3 class="hp-card-title">Grade 11 Advanced</h3>
+        <p class="hp-card-desc">B2 level. Cyberbullying, architecture, Silk Road, language development, third conditional &amp; academic writing skills.</p>
+        <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
+      </div>
+
+      <div class="hp-grade-card" data-stream="g12g" onclick="selectGradeAndShow('g12g')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g12g')" aria-label="Open Grade 12 General practice">
+        <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 12</span><span class="hp-card-stream-badge">General</span></div>
+        <div class="hp-card-icon">🏛️</div>
+        <h3 class="hp-card-title">Grade 12 General</h3>
+        <p class="hp-card-desc">B2.1 level. Universal language debate, architecture past &amp; present, third conditional &amp; comparative essays.</p>
+        <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
+      </div>
+
+      <div class="hp-grade-card" data-stream="g12a" onclick="selectGradeAndShow('g12a')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g12a')" aria-label="Open Grade 12 Advanced practice">
+        <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 12</span><span class="hp-card-stream-badge">Advanced</span></div>
+        <div class="hp-card-icon">🔬</div>
+        <h3 class="hp-card-title">Grade 12 Advanced</h3>
+        <p class="hp-card-desc">B2.2 level. Sapir-Whorf hypothesis, avian flu, alternative therapy, future perfect continuous &amp; academic essay.</p>
+        <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Support Features Strip ── -->
+  <section class="hp-support">
+    <div class="hp-support-inner">
+      <div class="hp-support-item"><span class="hp-support-icon">🎯</span><div class="hp-support-text"><h4>Self-Paced Practice</h4><p>Work independently at your own pace with instant feedback on every answer.</p></div></div>
+      <div class="hp-support-item"><span class="hp-support-icon">📊</span><div class="hp-support-text"><h4>Exam Preparation</h4><p>Focused MCQ practice aligned with exam-style questions across all four language skills.</p></div></div>
+      <div class="hp-support-item"><span class="hp-support-icon">🏅</span><div class="hp-support-text"><h4>Badges &amp; Certificates</h4><p>Earn achievement badges and print personalised certificates as you complete activities.</p></div></div>
+      <div class="hp-support-item"><span class="hp-support-icon">👩‍🏫</span><div class="hp-support-text"><h4>Teacher Monitoring</h4><p>Teachers can add activities, generate class links, and download progress reports.</p></div></div>
+      <div class="hp-support-item"><span class="hp-support-icon">🌱</span><div class="hp-support-text"><h4>Differentiated Learning</h4><p>Working Towards, Working At, and Working Beyond tiers support every learner.</p></div></div>
+    </div>
+  </section>
+</div><!-- /#homePage -->
+
+<div id="practiceApp">
 <div class="layout">
   <aside id="tabSidebar"><div class="sidebar-tools"><button class="teacher-tools-btn" onclick="openTeacherTools()">Teacher Tools</button></div></aside>
   <main>
@@ -523,6 +1190,7 @@ body[data-active-stream="advanced"] .writing-save-btn{background:var(--rose)}
     <section id="quizStage"></section>
   </main>
 </div>
+</div><!-- /#practiceApp -->
 
 <div class="teacher-modal" id="teacherModal" aria-hidden="true">
   <div class="teacher-panel" role="dialog" aria-modal="true" aria-labelledby="teacherToolsTitle">
@@ -701,6 +1369,10 @@ function switchStream(stream) {
   activeTab=Object.keys(DATABASE[stream])[0];
   activeModuleIndex=0; currentIndex=0; score=0; answered=0;
   renderTabs(); renderTab();
+  // Update stream banner if visible
+  if(document.getElementById('practiceApp') && document.getElementById('practiceApp').style.display !== 'none') {
+    updateStreamBanner(stream);
+  }
 }
 function renderTabs(){
   const side=document.getElementById('tabSidebar');
@@ -1449,7 +2121,59 @@ function printCertificate(){
 }
 
 
-window.addEventListener('DOMContentLoaded',()=>{loadTeacherAdditions(); refreshStreamButtons(); switchStream('general'); renderStudentProfileControls();});
+
+// ── Homepage Navigation Functions ──────────────────────────
+function selectGradeAndShow(stream) {
+  switchStream(stream);
+  document.getElementById('homePage').style.display = 'none';
+  const app = document.getElementById('practiceApp');
+  app.style.display = 'flex';
+  app.style.flexDirection = 'column';
+  app.classList.add('visible');
+  document.getElementById('backToHomeBtn').style.display = 'inline-flex';
+  // Update stream header banner
+  updateStreamBanner(stream);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showHomePage() {
+  document.getElementById('homePage').style.display = 'flex';
+  document.getElementById('homePage').style.flexDirection = 'column';
+  const app = document.getElementById('practiceApp');
+  app.style.display = 'none';
+  app.classList.remove('visible');
+  document.getElementById('backToHomeBtn').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+const STREAM_META = {
+  g9g:     { icon:'📗', name:'Grade 9 General',   desc:'B1.1 · Cultural celebrations, sleep & the brain, past simple & continuous' },
+  g9a:     { icon:'📘', name:'Grade 9 Advanced',  desc:'B1.2 · Architecture & culture, dining customs, passive voice & comparatives' },
+  g10g:    { icon:'📐', name:'Grade 10 General',  desc:'B1.2 · Architecture through history, homes & society, passives & comparatives' },
+  g10a:    { icon:'🌐', name:'Grade 10 Advanced', desc:'B1.2–B2.1 · Intercultural communication, conditionals & academic writing' },
+  general: { icon:'🎓', name:'Grade 11 General',  desc:'B2 · Academic integrity, student housing, city & environment, SEN A1 support' },
+  advanced:{ icon:'🦋', name:'Grade 11 Advanced', desc:'B2 · Cyberbullying, Silk Road, architecture, third conditional & academic writing' },
+  g12g:    { icon:'🏛️', name:'Grade 12 General',  desc:'B2.1 · Universal language, architecture past & present, third conditional' },
+  g12a:    { icon:'🔬', name:'Grade 12 Advanced', desc:'B2.2 · Sapir-Whorf hypothesis, avian flu, future perfect & academic essays' }
+};
+
+function updateStreamBanner(stream) {
+  const existing = document.getElementById('streamHeaderBanner');
+  if (existing) existing.remove();
+  const meta = STREAM_META[stream];
+  if (!meta) return;
+  const main = document.querySelector('#practiceApp main');
+  if (!main) return;
+  const banner = document.createElement('div');
+  banner.id = 'streamHeaderBanner';
+  banner.className = 'stream-header-banner';
+  banner.innerHTML = '<span class="shb-icon">' + meta.icon + '</span>' +
+    '<div><p class="shb-name">' + meta.name + ' — English Practice</p>' +
+    '<p class="shb-desc">' + meta.desc + '</p></div>';
+  main.insertBefore(banner, main.firstChild);
+}
+
+window.addEventListener('DOMContentLoaded',()=>{loadTeacherAdditions(); refreshStreamButtons(); renderStudentProfileControls(); /* Show homepage by default */ document.getElementById('homePage').style.display='flex'; document.getElementById('homePage').style.flexDirection='column'; document.getElementById('practiceApp').style.display='none'; });
 </script>
 </body>
 </html>
