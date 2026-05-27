@@ -2161,22 +2161,7 @@ function printCertificate(){
   const name = prompt('Student name for certificate:', savedName) || savedName || 'Student';
   const badge = currentBadge();
   const w = window.open('', '_blank');
-  w.document.write('<!DOCTYPE html><html><head><title>Certificate</title><style>body{font-family:Arial,sans-serif;padding:20px}.certificate-preview{background:#fff;border:8px double #B8932F;border-radius:18px;padding:34px;text-align:center;min-height:85vh;display:flex;flex-direction:column;justify-content:center}.cert-logo{font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#1F5560}.certificate-preview h1{font-family:Georgia,serif;font-size:42px;color:#123842}.cert-student{font-family:Georgia,serif;font-size:36px;color:#B8932F}.cert-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0;text-align:left}.cert-meta div{border:1px solid #e2d8c6;border-radius:12px;padding:10px;background:#FBF7EE}.cert-meta b{display:block;font-size:12px;text-transform:uppercase;color:#536468}.cert-credit{font-size:13px;color:#536468;margin-top:16px}.no-print{margin-top:18px;padding:10px 20px}@media print{.no-print{display:none}}<\/style></head><body>'+buildCertificateHtml(name,badge)+'
-<!-- ── Teacher Password Modal (Fix 2) ──────────────────────────────────────── -->
-<div class="pw-modal" id="teacherPwModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="pwModalTitle">
-  <div class="pw-box">
-    <h3 id="pwModalTitle">&#128274; Teacher Access</h3>
-    <p>This area is for teachers only.<br>Please enter the teacher password to continue.</p>
-    <input type="password" id="teacherPwInput" placeholder="Enter password"
-      onkeydown="if(event.key==='Enter')checkTeacherPw()"
-      autocomplete="off" aria-label="Teacher password" />
-    <div class="pw-error" id="teacherPwError" role="alert"></div>
-    <button class="btn" onclick="checkTeacherPw()">Unlock Teacher Tools</button>
-    <button class="btn secondary" onclick="closeTeacherPw()">Cancel</button>
-  </div>
-</div>
-
-</body></html>');
+  w.document.write('<!DOCTYPE html><html><head><title>Certificate</title><style>body{font-family:Arial,sans-serif;padding:20px}.certificate-preview{background:#fff;border:8px double #B8932F;border-radius:18px;padding:34px;text-align:center;min-height:85vh;display:flex;flex-direction:column;justify-content:center}.cert-logo{font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#1F5560}.certificate-preview h1{font-family:Georgia,serif;font-size:42px;color:#123842}.cert-student{font-family:Georgia,serif;font-size:36px;color:#B8932F}.cert-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0;text-align:left}.cert-meta div{border:1px solid #e2d8c6;border-radius:12px;padding:10px;background:#FBF7EE}.cert-meta b{display:block;font-size:12px;text-transform:uppercase;color:#536468}.cert-credit{font-size:13px;color:#536468;margin-top:16px}.no-print{margin-top:18px;padding:10px 20px}@media print{.no-print{display:none}}<\/style></head><body>'+buildCertificateHtml(name,badge)+'</body></html>');
   w.document.close();
   w.focus();
 }
@@ -2236,5 +2221,19 @@ function updateStreamBanner(stream) {
 
 window.addEventListener('DOMContentLoaded',()=>{loadTeacherAdditions(); refreshStreamButtons(); renderStudentProfileControls(); /* Show homepage by default */ document.getElementById('homePage').style.display='flex'; document.getElementById('homePage').style.flexDirection='column'; document.getElementById('practiceApp').style.display='none'; });
 </script>
+<!-- ── Teacher Password Modal (Fix 2) ──────────────────────────────────────── -->
+<div class="pw-modal" id="teacherPwModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="pwModalTitle">
+  <div class="pw-box">
+    <h3 id="pwModalTitle">&#128274; Teacher Access</h3>
+    <p>This area is for teachers only.<br>Please enter the teacher password to continue.</p>
+    <input type="password" id="teacherPwInput" placeholder="Enter password"
+      onkeydown="if(event.key==='Enter')checkTeacherPw()"
+      autocomplete="off" aria-label="Teacher password" />
+    <div class="pw-error" id="teacherPwError" role="alert"></div>
+    <button class="btn" onclick="checkTeacherPw()">Unlock Teacher Tools</button>
+    <button class="btn secondary" onclick="closeTeacherPw()">Cancel</button>
+  </div>
+</div>
+
 </body>
 </html>
