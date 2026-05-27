@@ -1214,6 +1214,9 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
       <button class="teacher-tab-btn" onclick="document.getElementById('toolAddActivity').scrollIntoView({block:'start'})">+ Add Activity</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolBulkAdd').scrollIntoView({block:'start'})">Bulk Add MCQs</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolCertificateSettings').scrollIntoView({block:'start'})">Certificate Settings</button>
+      <button class="teacher-tab-btn" onclick="document.getElementById('toolPrintCertificate').scrollIntoView({block:'start'})">Print Certificate</button>
+      <button class="teacher-tab-btn" onclick="document.getElementById('toolAssignBadges').scrollIntoView({block:'start'})">Assign Badges</button>
+      <button class="teacher-tab-btn" onclick="document.getElementById('toolResources').scrollIntoView({block:'start'})">Resources</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolTeacherLink').scrollIntoView({block:'start'})">Teacher Link</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolReports').scrollIntoView({block:'start'})">Reports</button>
     </div>
@@ -1331,14 +1334,87 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
         <p>Students can choose an avatar before practising.</p>
         <div class="student-strip" id="avatarStrip"></div>
       </div>
+      <!-- ── Print Certificate (Teacher) ── -->
+      <div class="teacher-box" id="toolPrintCertificate">
+        <h3>Print Certificate for Student</h3>
+        <p style="font-size:.8rem;color:#a8998a;margin:0 0 10px;">Select the grade and enter the student name, then click Print Certificate. Certificate settings (teacher name, school, etc.) are saved in the Certificate Settings section above.</p>
+        <label>Grade / Stream</label>
+        <select id="certGradeSelect"></select>
+        <label>Student Name</label>
+        <input id="certStudentName" placeholder="Enter student name" />
+        <label>Badge / Achievement</label>
+        <select id="certBadgeSelect">
+          <option value="Excellent">⭐ Excellent</option>
+          <option value="Very Good">🥈 Very Good</option>
+          <option value="Good Effort">🥉 Good Effort</option>
+          <option value="Improvement">📈 Improvement</option>
+          <option value="Participation">🤝 Participation</option>
+          <option value="Reading Star">📖 Reading Star</option>
+          <option value="Writing Star">✍️ Writing Star</option>
+          <option value="Grammar Star">📝 Grammar Star</option>
+          <option value="Vocabulary Star">💬 Vocabulary Star</option>
+        </select>
+        <button class="btn" style="margin-top:10px" onclick="printCertificateForStudent()">🖨️ Print / Download Certificate</button>
+      </div>
+
+      <!-- ── Assign Badges ── -->
+      <div class="teacher-box" id="toolAssignBadges">
+        <h3>Assign Badge to Student</h3>
+        <p style="font-size:.8rem;color:#a8998a;margin:0 0 10px;">Manually assign a badge and save a note for a student. This is stored locally in this browser.</p>
+        <label>Student Name</label>
+        <input id="badgeStudentName" placeholder="Student name" />
+        <label>Badge</label>
+        <select id="manualBadgeSelect">
+          <option value="⭐ Excellent">⭐ Excellent</option>
+          <option value="🥈 Very Good">🥈 Very Good</option>
+          <option value="🥉 Good Effort">🥉 Good Effort</option>
+          <option value="📈 Improvement">📈 Improvement</option>
+          <option value="🤝 Participation">🤝 Participation</option>
+          <option value="📖 Reading Star">📖 Reading Star</option>
+          <option value="✍️ Writing Star">✍️ Writing Star</option>
+          <option value="📝 Grammar Star">📝 Grammar Star</option>
+          <option value="💬 Vocabulary Star">💬 Vocabulary Star</option>
+        </select>
+        <label>Note (optional)</label>
+        <input id="badgeNoteInput" placeholder="e.g. Term 1 achievement" />
+        <button class="btn" style="margin-top:8px" onclick="assignBadgeManually()">Assign Badge</button>
+        <div id="manualBadgeList" style="margin-top:12px;max-height:180px;overflow-y:auto;font-size:.82rem;"></div>
+        <button class="btn secondary" style="margin-top:6px;font-size:.75rem" onclick="clearManualBadges()">Clear All Badges</button>
+      </div>
+
+      <!-- ── Worksheets / Resources ── -->
+      <div class="teacher-box" id="toolResources">
+        <h3>Worksheets &amp; Resources</h3>
+        <p style="font-size:.8rem;color:#a8998a;margin:0 0 10px;">Add a link to any worksheet or resource (Google Docs, Google Slides, PDF, Word, or any URL). Links are stored in this browser. Students cannot see this section.</p>
+        <label>Resource Title</label>
+        <input id="resourceTitle" placeholder="e.g. Term 2 Reading Worksheet" />
+        <label>Resource Link</label>
+        <input id="resourceUrl" placeholder="Paste link here (Google Docs, PDF, Slides, etc.)" />
+        <label>Grade / Stream (optional)</label>
+        <select id="resourceGradeSelect"></select>
+        <label>Format</label>
+        <select id="resourceFormat">
+          <option value="Google Docs">Google Docs</option>
+          <option value="Google Slides">Google Slides</option>
+          <option value="PDF">PDF</option>
+          <option value="Word Document">Word Document</option>
+          <option value="External Link">External Link</option>
+          <option value="Printable Text">Printable Text</option>
+        </select>
+        <button class="btn" style="margin-top:8px" onclick="addResourceLink()">Add Resource</button>
+        <div id="resourceList" style="margin-top:12px;max-height:220px;overflow-y:auto;font-size:.82rem;"></div>
+        <button class="btn secondary" style="margin-top:6px;font-size:.75rem" onclick="clearAllResources()">Clear All Resources</button>
+      </div>
+
+      <!-- ── Reports ── -->
       <div class="teacher-box" id="toolReports">
-        <h3>Reports, Badges & Certificates</h3>
+        <h3>Reports &amp; Google Sheets</h3>
         <div id="badgePreview"></div>
         <button class="btn secondary" onclick="downloadReportsCsv()">Download Reports CSV</button>
-        <button class="btn secondary" onclick="printCertificate()">Print Certificate</button>
         <label>Google Apps Script URL</label><input id="googleSheetUrl" placeholder="Paste Google Apps Script web app URL" />
         <button class="btn secondary" onclick="saveGoogleSheetUrl()">Save Google Sheets URL</button>
         <div class="teacher-report-output" id="reportStatus">Reports are stored locally in this browser. Add a Google Apps Script URL to send submissions to Sheets.</div>
+        <p style="font-size:.75rem;color:#a8998a;margin-top:8px;">💡 If you use Google Apps Script, add a <code>teacherId</code> and <code>teacherName</code> column to your sheet to capture the teacher link identifier. The submit function already includes this field if a teacher URL parameter is present.</p>
       </div>
     </div>
   </div>
@@ -1686,18 +1762,47 @@ function closeTeacherTools(){
   document.getElementById('teacherModal').setAttribute('aria-hidden','true');
 }
 function populateTeacherControls(){
+  // Helper to build grade options using STREAM_NAMES for friendly labels
+  const ALL_GRADES = [
+    {k:'g9g', label:'Grade 9 General'},
+    {k:'g9a', label:'Grade 9 Advanced'},
+    {k:'g10g', label:'Grade 10 General'},
+    {k:'g10a', label:'Grade 10 Advanced'},
+    {k:'general', label:'Grade 11 General'},
+    {k:'advanced', label:'Grade 11 Advanced'},
+    {k:'g12g', label:'Grade 12 General'},
+    {k:'g12a', label:'Grade 12 Advanced'}
+  ];
+  function gradeOptions(selectedKey){
+    return ALL_GRADES.map(g => `<option value="${g.k}"${g.k===selectedKey?' selected':''}>${g.label}</option>`).join('');
+  }
+
   const gradeSelect = document.getElementById('activityGradeSelect');
-  gradeSelect.innerHTML = Object.keys(DATABASE).map(k => `<option value="${k}">${k.replace(/-/g,' ').replace(/\b\w/g, c => c.toUpperCase())}</option>`).join('');
-  gradeSelect.value = activeStream;
-  gradeSelect.onchange = populateActivityTabs;
-  populateActivityTabs();
+  if(gradeSelect){
+    gradeSelect.innerHTML = ALL_GRADES.map(g => `<option value="${g.k}">${g.label}</option>`).join('');
+    gradeSelect.value = activeStream;
+    gradeSelect.onchange = populateActivityTabs;
+    populateActivityTabs();
+  }
+
   const secSelect = document.getElementById('teacherSectionSelect');
   const sections = teacherSections.length ? teacherSections : ['11 G 1','11 G 2','11 G 3','11 G 4'];
-  secSelect.innerHTML = sections.map(s => `<option value="${s}">${s}</option>`).join('');
+  if(secSelect) secSelect.innerHTML = sections.map(s => `<option value="${s}">${s}</option>`).join('');
+
+  // Populate cert grade dropdown (Issue 1)
+  const certGrSel = document.getElementById('certGradeSelect');
+  if(certGrSel) certGrSel.innerHTML = gradeOptions(activeStream);
+
+  // Populate resource grade dropdown
+  const resGrSel = document.getElementById('resourceGradeSelect');
+  if(resGrSel) resGrSel.innerHTML = '<option value="">All Grades</option>' + gradeOptions(activeStream);
+
   renderAvatars();
   renderBadges();
   renderStudentProfileControls();
   populateCertificateSettings();
+  renderManualBadgeList();
+  renderResourceList();
 }
 function populateActivityTabs(){
   const streamKey = document.getElementById('activityGradeSelect').value || activeStream;
@@ -1744,10 +1849,15 @@ function addActivityToTab(){
   alert('Activity added successfully.');
 }
 function generateTeacherLink(){
-  const teacher = encodeURIComponent(document.getElementById('teacherCode').value.trim() || 'teacher');
+  const teacherRaw = document.getElementById('teacherCode').value.trim() || 'teacher';
+  const teacher = encodeURIComponent(teacherRaw);
   const section = encodeURIComponent(document.getElementById('teacherSectionSelect').value || 'section');
-  const url = `${location.origin}${location.pathname}?teacher=${teacher}&section=${section}&grade=${encodeURIComponent(activeStream)}`;
-  document.getElementById('teacherLinkOutput').textContent = url;
+  // Generate a unique teacher ID: teacherName + short hash
+  const teacherId = teacherRaw.replace(/\s+/g,'_') + '_' + Math.random().toString(36).substring(2,7).toUpperCase();
+  const gradeKey = document.getElementById('activityGradeSelect') ? document.getElementById('activityGradeSelect').value : activeStream;
+  const url = `${location.origin}${location.pathname}?teacher=${teacher}&section=${section}&grade=${encodeURIComponent(gradeKey)}&teacherId=${encodeURIComponent(teacherId)}`;
+  const output = document.getElementById('teacherLinkOutput');
+  output.innerHTML = `<a href="${escapeForHtml(url)}" target="_blank" rel="noopener" style="word-break:break-all;color:#1F5560">${escapeForHtml(url)}</a><br><small style="color:#a8998a">Teacher ID: ${escapeForHtml(teacherId)} — Copy and share this link with your students.</small>`;
   navigator.clipboard?.writeText(url).catch(()=>{});
 }
 function renderAvatars(){
@@ -1822,9 +1932,10 @@ function recordLocalReport(isCorrect){
   localReports.push({
     date: new Date().toLocaleString(),
     teacher: params.get('teacher') || '',
+    teacherId: params.get('teacherId') || '',
     student: localStorage.getItem('studentName') || '',
     section: params.get('section') || localStorage.getItem('studentSection') || '',
-    grade: activeStream,
+    grade: STREAM_NAMES[activeStream] || activeStream,
     tab: activeTab,
     module: DATABASE[activeStream][activeTab][activeModuleIndex].title,
     avatar: selectedAvatar,
@@ -2072,9 +2183,10 @@ function getCertificateSettings(){ return {...CERT_DEFAULTS, ...JSON.parse(local
 function populateCertificateSettings(){ const c=getCertificateSettings(); const map={certTeacherName:'teacherName',certSchoolName:'schoolName',certDepartmentName:'departmentName',certTitle:'title',certSignatureName:'signatureName',certMessage:'message',certLogoText:'logoText'}; Object.entries(map).forEach(([id,k])=>{ const el=document.getElementById(id); if(el) el.value=c[k]||''; }); }
 function saveCertificateSettings(){ const c={teacherName:certTeacherName.value.trim(),schoolName:certSchoolName.value.trim(),departmentName:certDepartmentName.value.trim(),title:certTitle.value.trim(),signatureName:certSignatureName.value.trim(),message:certMessage.value.trim(),logoText:certLogoText.value.trim()}; localStorage.setItem('certificateSettings', JSON.stringify(c)); alert('Certificate settings saved.'); }
 function resetCertificateSettings(){ localStorage.removeItem('certificateSettings'); populateCertificateSettings(); }
-function buildCertificateHtml(name,badge){
+function buildCertificateHtml(name,badge,gradeOverride){
   const c=getCertificateSettings(); const date=new Date().toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});
-  return `<div class="certificate-preview"><div class="cert-logo">${escapeForHtml(c.logoText || c.schoolName || 'English Language Resources')}</div><h1>${escapeForHtml(c.title || 'Certificate of Achievement')}</h1><p>This certificate is proudly awarded to</p><div class="cert-student">${escapeForHtml(name)}</div><p>${escapeForHtml(c.message || CERT_DEFAULTS.message)}</p><div class="cert-meta"><div><b>Grade / Section</b>${escapeForHtml(localStorage.getItem('studentSection')||'')}</div><div><b>Activity / Skill</b>${escapeForHtml(activeTab)}</div><div><b>Score / Percentage</b>${score}/${answered} (${answered?Math.round(score/answered*100):0}%)</div><div><b>Badge Earned</b>${escapeForHtml(badge)}</div><div><b>Date</b>${escapeForHtml(date)}</div><div><b>Teacher</b>${escapeForHtml(c.teacherName||'Teacher')}</div><div><b>School</b>${escapeForHtml(c.schoolName||'School')}</div><div><b>Department</b>${escapeForHtml(c.departmentName||'English Department')}</div></div><p><b>Signature:</b> ${escapeForHtml(c.signatureName || c.teacherName || 'Teacher')}</p><div class="cert-credit">Designed &amp; authored by Aliya Shah &middot; English Language Teacher<br><span style=\"font-size:11px;\">www.aliyashah13.com &middot; &copy; 2026 Aliya Shah. All rights reserved.</span></div><button class="btn no-print" onclick="window.print()">Print Certificate</button></div>`;
+  const gradeLabel = gradeOverride || STREAM_NAMES[activeStream] || localStorage.getItem('studentSection') || '';
+  return `<div class="certificate-preview"><div class="cert-logo">${escapeForHtml(c.logoText || c.schoolName || 'English Language Resources')}</div><h1>${escapeForHtml(c.title || 'Certificate of Achievement')}</h1><p>This certificate is proudly awarded to</p><div class="cert-student">${escapeForHtml(name)}</div><p>${escapeForHtml(c.message || CERT_DEFAULTS.message)}</p><div class="cert-meta"><div><b>Grade / Stream</b>${escapeForHtml(gradeLabel)}</div><div><b>Activity / Skill</b>${escapeForHtml(activeTab)}</div><div><b>Score / Percentage</b>${score}/${answered} (${answered?Math.round(score/answered*100):0}%)</div><div><b>Badge Earned</b>${escapeForHtml(badge)}</div><div><b>Date</b>${escapeForHtml(date)}</div><div><b>Teacher</b>${escapeForHtml(c.teacherName||'Teacher')}</div><div><b>School</b>${escapeForHtml(c.schoolName||'School')}</div><div><b>Department</b>${escapeForHtml(c.departmentName||'English Department')}</div></div><p><b>Signature:</b> ${escapeForHtml(c.signatureName || c.teacherName || 'Teacher')}</p><div class="cert-credit">Designed &amp; authored by Aliya Shah &middot; English Language Teacher<br><span style=\"font-size:11px;\">www.aliyashah13.com &middot; &copy; 2026 Aliya Shah. All rights reserved.</span></div><button class="btn no-print" onclick="window.print()">Print Certificate</button></div>`;
 }
 
 
@@ -2166,7 +2278,104 @@ function printCertificate(){
   w.focus();
 }
 
+// ── Teacher: Print Certificate for Specific Student (Issue 1 & Issue 3.3) ──
+function printCertificateForStudent(){
+  const gradeEl = document.getElementById('certGradeSelect');
+  const nameEl = document.getElementById('certStudentName');
+  const badgeEl = document.getElementById('certBadgeSelect');
+  const gradeKey = gradeEl ? gradeEl.value : activeStream;
+  const gradeLabel = STREAM_NAMES[gradeKey] || gradeKey;
+  const name = (nameEl && nameEl.value.trim()) ? nameEl.value.trim() : (prompt('Student name for certificate:') || 'Student');
+  const badge = badgeEl ? badgeEl.value : currentBadge();
+  const certStyles = 'body{font-family:Arial,sans-serif;padding:20px}.certificate-preview{background:#fff;border:8px double #B8932F;border-radius:18px;padding:34px;text-align:center;min-height:85vh;display:flex;flex-direction:column;justify-content:center}.cert-logo{font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#1F5560}.certificate-preview h1{font-family:Georgia,serif;font-size:42px;color:#123842}.cert-student{font-family:Georgia,serif;font-size:36px;color:#B8932F}.cert-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0;text-align:left}.cert-meta div{border:1px solid #e2d8c6;border-radius:12px;padding:10px;background:#FBF7EE}.cert-meta b{display:block;font-size:12px;text-transform:uppercase;color:#536468}.cert-credit{font-size:13px;color:#536468;margin-top:16px}.no-print{margin-top:18px;padding:10px 20px}@media print{.no-print{display:none}}';
+  const w = window.open('', '_blank');
+  w.document.write('<!DOCTYPE html><html><head><title>Certificate — ' + name + '<\/title><style>' + certStyles + '<\/style><\/head><body>' + buildCertificateHtml(name, badge, gradeLabel) + '<\/body><\/html>');
+  w.document.close();
+  w.focus();
+}
 
+// ── Teacher: Assign Badge Manually (Issue 3.4) ──
+function assignBadgeManually(){
+  const nameEl = document.getElementById('badgeStudentName');
+  const badgeEl = document.getElementById('manualBadgeSelect');
+  const noteEl = document.getElementById('badgeNoteInput');
+  const name = nameEl ? nameEl.value.trim() : '';
+  if(!name){ alert('Please enter a student name.'); return; }
+  const badge = badgeEl ? badgeEl.value : '⭐ Excellent';
+  const note = noteEl ? noteEl.value.trim() : '';
+  const badges = JSON.parse(localStorage.getItem('manualBadges') || '[]');
+  badges.unshift({ name, badge, note, date: new Date().toLocaleDateString() });
+  localStorage.setItem('manualBadges', JSON.stringify(badges));
+  if(nameEl) nameEl.value = '';
+  if(noteEl) noteEl.value = '';
+  renderManualBadgeList();
+}
+function renderManualBadgeList(){
+  const el = document.getElementById('manualBadgeList');
+  if(!el) return;
+  const badges = JSON.parse(localStorage.getItem('manualBadges') || '[]');
+  if(!badges.length){ el.innerHTML = '<em style="color:#a8998a;">No badges assigned yet.</em>'; return; }
+  el.innerHTML = badges.map((b,i) =>
+    '<div style="border:1px solid #e2d8c6;border-radius:8px;padding:7px 10px;margin:4px 0;background:#fbf7ee;display:flex;justify-content:space-between;align-items:center">' +
+    '<span><b>'+escapeForHtml(b.badge)+'</b> → '+escapeForHtml(b.name)+(b.note?' <em style="color:#a8998a">('+escapeForHtml(b.note)+')</em>':'')+' <span style="color:#a8998a;font-size:.75rem">'+escapeForHtml(b.date)+'</span></span>' +
+    '<button onclick="removeManualBadge('+i+')" style="background:none;border:none;cursor:pointer;color:#c66;font-size:.85rem">✕</button>' +
+    '</div>'
+  ).join('');
+}
+function removeManualBadge(i){
+  const badges = JSON.parse(localStorage.getItem('manualBadges') || '[]');
+  badges.splice(i, 1);
+  localStorage.setItem('manualBadges', JSON.stringify(badges));
+  renderManualBadgeList();
+}
+function clearManualBadges(){
+  if(!confirm('Clear all manually assigned badges?')) return;
+  localStorage.removeItem('manualBadges');
+  renderManualBadgeList();
+}
+
+// ── Teacher: Add Worksheet / Resource Link (Issue 3.2) ──
+function addResourceLink(){
+  const titleEl = document.getElementById('resourceTitle');
+  const urlEl = document.getElementById('resourceUrl');
+  const gradeEl = document.getElementById('resourceGradeSelect');
+  const fmtEl = document.getElementById('resourceFormat');
+  const title = titleEl ? titleEl.value.trim() : '';
+  const url = urlEl ? urlEl.value.trim() : '';
+  if(!title || !url){ alert('Please enter a title and a link.'); return; }
+  const grade = gradeEl ? (gradeEl.value ? (STREAM_NAMES[gradeEl.value] || gradeEl.value) : 'All Grades') : 'All Grades';
+  const fmt = fmtEl ? fmtEl.value : 'External Link';
+  const resources = JSON.parse(localStorage.getItem('teacherResources') || '[]');
+  resources.unshift({ title, url, grade, fmt, date: new Date().toLocaleDateString() });
+  localStorage.setItem('teacherResources', JSON.stringify(resources));
+  if(titleEl) titleEl.value = '';
+  if(urlEl) urlEl.value = '';
+  renderResourceList();
+}
+function renderResourceList(){
+  const el = document.getElementById('resourceList');
+  if(!el) return;
+  const resources = JSON.parse(localStorage.getItem('teacherResources') || '[]');
+  if(!resources.length){ el.innerHTML = '<em style="color:#a8998a;">No resources added yet. Paste any link (Google Docs, PDF, Slides, etc.) above.</em>'; return; }
+  el.innerHTML = resources.map((r,i) =>
+    '<div style="border:1px solid #e2d8c6;border-radius:8px;padding:7px 10px;margin:4px 0;background:#fbf7ee;display:flex;justify-content:space-between;align-items:center">' +
+    '<span><a href="'+escapeForHtml(r.url)+'" target="_blank" rel="noopener" style="font-weight:700;color:#1F5560;text-decoration:none">'+escapeForHtml(r.title)+'</a>' +
+    '<span style="color:#a8998a;font-size:.75rem"> · '+escapeForHtml(r.fmt)+' · '+escapeForHtml(r.grade)+' · '+escapeForHtml(r.date)+'</span></span>' +
+    '<button onclick="removeResource('+i+')" style="background:none;border:none;cursor:pointer;color:#c66;font-size:.85rem">✕</button>' +
+    '</div>'
+  ).join('');
+}
+function removeResource(i){
+  const resources = JSON.parse(localStorage.getItem('teacherResources') || '[]');
+  resources.splice(i, 1);
+  localStorage.setItem('teacherResources', JSON.stringify(resources));
+  renderResourceList();
+}
+function clearAllResources(){
+  if(!confirm('Clear all saved resources?')) return;
+  localStorage.removeItem('teacherResources');
+  renderResourceList();
+}
 
 // ── Homepage Navigation Functions ──────────────────────────
 function selectGradeAndShow(stream) {
