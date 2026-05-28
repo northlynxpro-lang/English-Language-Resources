@@ -127,11 +127,8 @@ footer::before {
 .as-footer-url:hover{color:var(--as-plum,#4A2C3D);border-bottom-color:var(--as-plum,#4A2C3D);}
 .as-footer-copy{margin-top:14px;font-size:.73rem;color:#8a7d70;line-height:1.7;}
 .as-footer-edu{margin-top:10px;font-size:.67rem;color:#b09e8e;font-style:italic;line-height:1.6;max-width:580px;margin-left:auto;margin-right:auto;}
-/* ── AI Worksheet Converter: full-width grid span ── */
-#toolBulkAdd { grid-column: 1 / -1; }
-#toolBulkAdd .as-paste-area { min-height: 130px; }
-@media (max-width: 600px) { #toolBulkAdd { grid-column: 1; } }
-</style>
+/* print: branded page footer */
+@media print {
   footer{display:none!important}
   .as-print-footer{display:flex!important;justify-content:space-between;align-items:center;border-top:0.5pt solid #c8bba6;padding:6pt 0 0;margin-top:20pt;font-size:7.5pt;color:#666;font-family:"DM Sans",Arial,sans-serif;letter-spacing:.06em;}
   .as-print-footer a{color:#666;text-decoration:none;}
@@ -1215,7 +1212,7 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
       <button class="teacher-tab-btn" onclick="document.getElementById('toolAddGrade').scrollIntoView({block:'start'})">+ Add Grade</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolAddSection').scrollIntoView({block:'start'})">+ Add Section</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolAddActivity').scrollIntoView({block:'start'})">+ Add Activity</button>
-      <button class="teacher-tab-btn" onclick="document.getElementById('toolBulkAdd').scrollIntoView({block:'start'})">🤖 AI Worksheet Converter</button>
+      <button class="teacher-tab-btn" onclick="document.getElementById('toolBulkAdd').scrollIntoView({block:'start'})">Bulk Add MCQs</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolCertificateSettings').scrollIntoView({block:'start'})">Certificate Settings</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolPrintCertificate').scrollIntoView({block:'start'})">Print Certificate</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolAssignBadges').scrollIntoView({block:'start'})">Assign Badges</button>
@@ -1282,73 +1279,49 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
         <textarea id="activityExplanation" placeholder="Explain why the answer is correct."></textarea>
         <button class="btn" onclick="addActivityToTab()">Add Activity</button>
       </div>
-      <div class="teacher-box" id="toolBulkAdd" style="grid-column:1/-1;">
+      <div class="teacher-box" id="toolBulkAdd">
         <h3>🤖 AI Worksheet Converter</h3>
-        <p style="font-size:.85rem;color:var(--muted);margin:0 0 14px;">Upload a Word worksheet or paste any text — AI will automatically turn it into interactive MCQs, True/False/Not Given, and/or Fill in the Blanks activities. No need to format questions manually.</p>
+        <p>Upload a Word worksheet or paste any text. Choose question types and AI will generate interactive questions automatically — no manual formatting needed.</p>
 
-        <!-- Grade / Tab / Title row -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;">
-          <div>
-            <label>Grade / Stream</label>
-            <select id="bulkGradeSelect" onchange="populateBulkTabs()"></select>
-          </div>
-          <div>
-            <label>Skill Tab</label>
-            <select id="bulkTabSelect"></select>
-          </div>
-          <div>
-            <label>Module / Activity Title</label>
-            <input id="bulkModuleTitle" placeholder="e.g. Reading Worksheet Term 2" />
-          </div>
-        </div>
-
-        <!-- Question type selector -->
-        <label>Question Types to Generate</label>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px;">
-          <label style="display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--dark);">
-            <input type="checkbox" id="genMCQ" checked style="width:auto;min-width:0;padding:0;border:0;background:none;"> 📝 MCQ
+        <label>Question types to generate</label>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 14px;">
+          <label style="display:inline-flex;align-items:center;gap:5px;font-weight:600;font-size:.85rem;text-transform:none;letter-spacing:0;color:var(--dark);cursor:pointer;">
+            <input type="checkbox" id="genMCQ" checked style="width:auto;padding:0;border:0;background:none;min-width:0;"> 📝 MCQ
           </label>
-          <label style="display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--dark);">
-            <input type="checkbox" id="genTF" checked style="width:auto;min-width:0;padding:0;border:0;background:none;"> ✔✘ True / False / Not Given
+          <label style="display:inline-flex;align-items:center;gap:5px;font-weight:600;font-size:.85rem;text-transform:none;letter-spacing:0;color:var(--dark);cursor:pointer;">
+            <input type="checkbox" id="genTF" checked style="width:auto;padding:0;border:0;background:none;min-width:0;"> ✔✘ True / False / Not Given
           </label>
-          <label style="display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--dark);">
-            <input type="checkbox" id="genFill" checked style="width:auto;min-width:0;padding:0;border:0;background:none;"> ___ Fill in the Blanks
+          <label style="display:inline-flex;align-items:center;gap:5px;font-weight:600;font-size:.85rem;text-transform:none;letter-spacing:0;color:var(--dark);cursor:pointer;">
+            <input type="checkbox" id="genFill" checked style="width:auto;padding:0;border:0;background:none;min-width:0;"> ___ Fill in the Blanks
           </label>
         </div>
 
-        <!-- Upload area -->
-        <label>Upload Worksheet (Word, PDF, TXT, Image)</label>
+        <!-- Upload area — IDs kept identical to original so drag-drop setup still works -->
+        <label>Upload File</label>
         <div class="as-file-upload-area" id="bulkDropZone">
           <input type="file" id="bulkFileInput"
             accept=".txt,.csv,.pdf,.doc,.docx,.jpg,.jpeg,.png"
             onchange="loadBulkQuestionFile(this.files[0])"
-            aria-label="Upload worksheet file">
+            aria-label="Upload file for bulk MCQ import">
           <div class="as-file-upload-icon">📂</div>
           <div class="as-file-upload-label">Click to upload or drag &amp; drop</div>
-          <div class="as-file-upload-types">Word (.docx), PDF, TXT, CSV, JPG, PNG — text extracted automatically</div>
+          <div class="as-file-upload-types">Word (.docx), PDF, CSV, JPG, PNG, TXT — text extracted automatically</div>
         </div>
         <div class="as-file-status" id="bulkFileStatus">No file selected</div>
 
-        <!-- Paste area -->
         <label style="margin-top:12px;">Or paste worksheet content directly</label>
-        <textarea class="as-paste-area" id="bulkQuestionText"
-          placeholder="Paste your worksheet, reading passage, vocabulary list, grammar notes, or any text here. AI will read it and create questions automatically.&#10;&#10;You can also paste pre-formatted MCQs in this format:&#10;1. Question text&#10;A. Option one  B. Option two  C. Option three&#10;Answer: A"></textarea>
+        <textarea class="as-paste-area" id="bulkQuestionText" placeholder="Paste your worksheet, reading passage, vocabulary list, or any text here. AI will generate questions from it automatically.&#10;&#10;You can also paste pre-formatted MCQs:&#10;1. Question text&#10;A. Option one&#10;B. Option two  C. Option three&#10;Answer: A"></textarea>
 
-        <!-- Action buttons -->
-        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
-          <button class="btn" style="flex:2;min-width:160px;" onclick="aiConvertWorksheet()">🤖 Generate Questions with AI</button>
-          <button class="btn secondary" style="flex:1;min-width:130px;" onclick="previewBulkQuestions()">📋 Preview Manual Format</button>
+        <label style="margin-top:10px;">Module title</label>
+        <input id="bulkModuleTitle" placeholder="Example: Reading Worksheet Term 2" />
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+          <button class="btn" style="flex:2;min-width:150px;" onclick="aiConvertWorksheet()">🤖 Generate with AI</button>
+          <button class="btn secondary" style="flex:1;min-width:110px;" onclick="previewBulkQuestions()">Preview Manual Format</button>
         </div>
-
-        <!-- Status line -->
-        <div id="bulkAiStatus" style="margin-top:10px;font-size:.83rem;font-weight:600;color:#1F5560;min-height:20px;line-height:1.5;"></div>
-
-        <!-- Preview of generated questions -->
-        <div class="bulk-preview" id="bulkPreview" style="display:none;margin-top:10px;background:transparent;border:none;padding:0;white-space:normal;"></div>
-
-        <!-- Add button — shown only after questions are ready -->
-        <div id="bulkAddBtnArea" style="display:none;margin-top:12px;">
-          <button class="btn" style="width:100%;" onclick="addBulkQuestionsToTab()">✅ Add All Generated Questions to Activity</button>
+        <div id="bulkAiStatus" style="margin-top:8px;font-size:.83rem;font-weight:600;color:#1F5560;min-height:18px;"></div>
+        <div class="bulk-preview" id="bulkPreview" style="white-space:normal;"></div>
+        <div id="bulkAddBtnArea" style="display:none;margin-top:8px;">
+          <button class="btn" style="width:100%;" onclick="addBulkQuestionsToTab()">✅ Add All Generated Questions</button>
         </div>
       </div>
       <div class="teacher-box" id="toolCertificateSettings">
@@ -1366,19 +1339,13 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
       </div>
       <div class="teacher-box" id="toolTeacherLink">
         <h3>Generate Teacher Link</h3>
-        <p style="font-size:.78rem;color:#a8998a;margin:0 0 10px;">Fill in your details, then click Generate. Share the unique link with your students. Results will go to your own Google Sheet.</p>
-        <label>Your Teacher Name</label>
-        <input id="teacherCode" placeholder="Example: Ms Aliya or MrSmith" />
-        <label>School / Department (optional)</label>
-        <input id="teacherSchoolName" placeholder="Example: Al Noor Academy" />
+        <label>Teacher name/code</label>
+        <input id="teacherCode" placeholder="Example: MsAliya" />
         <label>Grade / Stream</label>
         <select id="teacherLinkGradeSelect"></select>
-        <label>Section / Class</label>
+        <label>Section</label>
         <select id="teacherSectionSelect"></select>
-        <label>Your Google Apps Script URL (optional)</label>
-        <input id="teacherOwnScriptUrl" placeholder="Paste your Apps Script web app URL here" style="font-size:.78rem;" />
-        <p style="font-size:.73rem;color:#a8998a;margin:4px 0 10px;">Leave blank to use the default admin Apps Script URL. If you have your own Google Sheet, paste your web app URL above.</p>
-        <button class="btn" onclick="generateTeacherLink()">Generate Teacher Link</button>
+        <button class="btn" onclick="generateTeacherLink()">Generate Link</button>
         <div class="teacher-link-output" id="teacherLinkOutput">Your link will appear here.</div>
       </div>
       <div class="teacher-box">
@@ -1462,38 +1429,11 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
       <div class="teacher-box" id="toolReports">
         <h3>Reports &amp; Google Sheets</h3>
         <div id="badgePreview"></div>
-        <button class="btn secondary" onclick="downloadReportsCsv()">⬇ Download Reports CSV</button>
-        <label style="margin-top:12px;">Your Google Apps Script URL</label>
-        <input id="googleSheetUrl" placeholder="Paste Google Apps Script web app URL" />
-        <button class="btn secondary" onclick="saveGoogleSheetUrl()">Save URL</button>
-        <div class="teacher-report-output" id="reportStatus">Reports are stored locally in this browser. Paste your Apps Script URL above to send submissions to your Google Sheet.</div>
-        <p style="font-size:.75rem;color:#a8998a;margin-top:6px;">💡 Each teacher's generated link includes their own <code>scriptUrl</code> — student submissions are automatically routed to the correct Google Sheet.</p>
-        <button class="btn secondary" style="margin-top:8px;" onclick="retryOfflineSubmissions()">🔄 Retry Offline Submissions</button>
-        <div id="offlineCountMsg" style="font-size:.78rem;color:#a8998a;margin-top:4px;"></div>
-      </div>
-
-      <!-- ── Teacher Dashboard ── -->
-      <div class="teacher-box" id="toolDashboard" style="grid-column:1/-1;">
-        <h3>📊 Teacher Dashboard — Student Results</h3>
-        <p style="font-size:.8rem;color:#a8998a;margin:0 0 12px;">Showing locally stored submissions from this browser. Use the CSV download above to export all data.</p>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;align-items:flex-end;">
-          <div>
-            <label style="font-size:.72rem;font-weight:800;color:#536468;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px;">Filter by Grade</label>
-            <select id="dashGradeFilter" onchange="renderDashboard()" style="padding:8px 10px;border:1px solid #D6CDBC;border-radius:8px;font:inherit;font-size:.82rem;">
-              <option value="">All Grades</option>
-            </select>
-          </div>
-          <div>
-            <label style="font-size:.72rem;font-weight:800;color:#536468;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px;">Filter by Skill</label>
-            <select id="dashSkillFilter" onchange="renderDashboard()" style="padding:8px 10px;border:1px solid #D6CDBC;border-radius:8px;font:inherit;font-size:.82rem;">
-              <option value="">All Skills</option>
-            </select>
-          </div>
-          <button class="btn secondary" onclick="renderDashboard()" style="margin-bottom:0;">Refresh</button>
-          <button class="btn secondary" onclick="clearAllLocalReports()" style="margin-bottom:0;background:#fff5f5;border-color:#e8c0c0;color:#c55;">Clear All Local Reports</button>
-        </div>
-        <div id="dashSummary" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;"></div>
-        <div id="dashTable" style="overflow-x:auto;font-size:.8rem;"></div>
+        <button class="btn secondary" onclick="downloadReportsCsv()">Download Reports CSV</button>
+        <label>Google Apps Script URL</label><input id="googleSheetUrl" placeholder="Paste Google Apps Script web app URL" />
+        <button class="btn secondary" onclick="saveGoogleSheetUrl()">Save Google Sheets URL</button>
+        <div class="teacher-report-output" id="reportStatus">Reports are stored locally in this browser. Add a Google Apps Script URL to send submissions to Sheets.</div>
+        <p style="font-size:.75rem;color:#a8998a;margin-top:8px;">💡 If you use Google Apps Script, add a <code>teacherId</code> and <code>teacherName</code> column to your sheet to capture the teacher link identifier. The submit function already includes this field if a teacher URL parameter is present.</p>
       </div>
     </div>
   </div>
@@ -1694,7 +1634,6 @@ function renderQuestion(){
     '<div id="submitStatusMsg" style="margin-top:8px;font-size:.85rem;font-weight:600;color:#1F5560;"></div>' +
     '</div>';
   if (activeTab === 'Listening') { setTimeout(()=>injectTTSPlayer(DATABASE[activeStream][activeTab], activeModuleIndex), 10); }
-  setTimeout(injectFeedbackWidget, 80);
 }
 function chooseOption(i){
   if(locked) return;
@@ -1773,29 +1712,8 @@ const AVATARS = [
 let selectedAvatar = localStorage.getItem('studentAvatar') || (AVATARS[0].emoji + ' ' + AVATARS[0].name);
 let teacherSections = JSON.parse(localStorage.getItem('teacherSections') || '[]');
 let localReports = JSON.parse(localStorage.getItem('localReports') || '[]');
-// ── DEFAULT / ADMIN Apps Script URL ─────────────────────────────────────────
-// This is the one place where the admin Apps Script URL is stored.
-// Other teachers can supply their own URL via the Teacher Link system.
-// NOTE: Password protection in a static HTML file is front-end only and does
-//       not prevent a determined user from reading the source. Do not rely on
-//       it for truly sensitive data. It is sufficient to keep students out of
-//       the teacher panel during normal classroom use.
-const DEFAULT_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyX8E5Rkc9OxAU9oIYmYnBRwYO0ZfGJQ_IheRs8FdtsdEiNMi519ewWx6aAI44z0xEZvg/exec';
-
-// ── Resolve which Apps Script URL to use for this session ────────────────────
-// Priority: URL param ?scriptUrl= → sessionStorage → localStorage teacher URL → admin default
-function getActiveScriptUrl() {
-  const params = new URLSearchParams(location.search);
-  const urlParam = params.get('scriptUrl');
-  if (urlParam && urlParam.startsWith('https://script.google.com/')) {
-    return decodeURIComponent(urlParam);
-  }
-  const session = sessionStorage.getItem('teacherScriptUrl') || '';
-  if (session && session.startsWith('https://script.google.com/')) return session;
-  const stored = localStorage.getItem('googleSheetUrl') || '';
-  if (stored && stored.startsWith('https://script.google.com/')) return stored;
-  return DEFAULT_APPS_SCRIPT_URL;
-}
+// ── Google Sheets URL ── Paste your Apps Script Web App URL here ──────────────
+const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwqgNQ3t7prIdMo2JJhbFF5S9DDVvhjlxzkSj82OTMyGr6awOVILeMruHhAEVcihOqL/exec';
 
 function loadTeacherAdditions(){
   const saved = JSON.parse(localStorage.getItem('teacherAdditions') || '{}');
@@ -1890,52 +1808,18 @@ function populateTeacherControls(){
   const sections = teacherSections.length ? teacherSections : ['11 G 1','11 G 2','11 G 3','11 G 4'];
   if(secSelect) secSelect.innerHTML = sections.map(s => `<option value="${s}">${s}</option>`).join('');
 
+  // Populate teacher link grade dropdown — all 8 streams
+  const tlGradeSel = document.getElementById('teacherLinkGradeSelect');
+  if(tlGradeSel) tlGradeSel.innerHTML = ALL_GRADES.map(g => `<option value="${g.k}">${g.label}</option>`).join('');
+
   // Populate cert grade dropdown (Issue 1)
   const certGrSel = document.getElementById('certGradeSelect');
   if(certGrSel) certGrSel.innerHTML = gradeOptions(activeStream);
 
-  // Populate Bulk Add / AI Converter grade dropdown
-  const bulkGradeSel = document.getElementById('bulkGradeSelect');
-  if (bulkGradeSel) {
-    const existing = bulkGradeSel.value;
-    bulkGradeSel.innerHTML = ALL_GRADES.map(g => `<option value="${g.k}">${g.label}</option>`).join('');
-    if (existing && ALL_GRADES.find(g => g.k === existing)) bulkGradeSel.value = existing;
-    else bulkGradeSel.value = activeStream;
-    populateBulkTabs();
-  }
+  // Populate resource grade dropdown
+  const resGrSel = document.getElementById('resourceGradeSelect');
+  if(resGrSel) resGrSel.innerHTML = '<option value="">All Grades</option>' + gradeOptions(activeStream);
 
-  // Populate Teacher Link grade dropdown (Task 3 fix — all 8 streams)
-  const tlGradeSel = document.getElementById('teacherLinkGradeSelect');
-  if (tlGradeSel) {
-    const existing = tlGradeSel.value;
-    tlGradeSel.innerHTML = ALL_GRADES.map(g => `<option value="${g.k}">${g.label}</option>`).join('');
-    if (existing && ALL_GRADES.find(g => g.k === existing)) tlGradeSel.value = existing;
-    else tlGradeSel.value = activeStream;
-  }
-
-  // Populate Dashboard filters
-  const dashGrade = document.getElementById('dashGradeFilter');
-  if (dashGrade) {
-    dashGrade.innerHTML = '<option value="">All Grades</option>' + ALL_GRADES.map(g => `<option value="${g.label}">${g.label}</option>`).join('');
-  }
-  const dashSkill = document.getElementById('dashSkillFilter');
-  if (dashSkill) {
-    const skills = [...new Set(localReports.map(r => r.skill || r.tab).filter(Boolean))];
-    dashSkill.innerHTML = '<option value="">All Skills</option>' + skills.map(s => `<option value="${s}">${s}</option>`).join('');
-  }
-
-  // Pre-fill teacher's stored URL
-  const gsu = document.getElementById('googleSheetUrl');
-  if (gsu && !gsu.value) gsu.value = localStorage.getItem('googleSheetUrl') || '';
-
-  // Show offline submission count
-  const offlineEl = document.getElementById('offlineCountMsg');
-  if (offlineEl) {
-    const offline = JSON.parse(localStorage.getItem('offlineSubmissions') || '[]');
-    offlineEl.textContent = offline.length ? `${offline.length} offline submission(s) waiting to retry.` : '';
-  }
-
-  renderDashboard();
   renderAvatars();
   renderBadges();
   renderStudentProfileControls();
@@ -1990,25 +1874,13 @@ function addActivityToTab(){
 function generateTeacherLink(){
   const teacherRaw = document.getElementById('teacherCode').value.trim() || 'teacher';
   const teacher = encodeURIComponent(teacherRaw);
-  const school = encodeURIComponent((document.getElementById('teacherSchoolName') ? document.getElementById('teacherSchoolName').value.trim() : ''));
   const section = encodeURIComponent(document.getElementById('teacherSectionSelect').value || 'section');
-  // Use the dedicated grade dropdown in the Teacher Link section
-  const gradeEl = document.getElementById('teacherLinkGradeSelect') || document.getElementById('activityGradeSelect');
-  const gradeKey = gradeEl ? gradeEl.value : activeStream;
-  // Teacher's own Apps Script URL (optional)
-  const ownScriptEl = document.getElementById('teacherOwnScriptUrl');
-  const ownScript = ownScriptEl ? ownScriptEl.value.trim() : '';
-  // Generate a stable teacherId from name + random suffix
+  // Generate a unique teacher ID: teacherName + short hash
   const teacherId = teacherRaw.replace(/\s+/g,'_') + '_' + Math.random().toString(36).substring(2,7).toUpperCase();
-  let url = `${location.origin}${location.pathname}?teacher=${teacher}&section=${section}&grade=${encodeURIComponent(gradeKey)}&teacherId=${encodeURIComponent(teacherId)}`;
-  if (school) url += `&school=${school}`;
-  if (ownScript && ownScript.startsWith('https://script.google.com/')) {
-    url += `&scriptUrl=${encodeURIComponent(ownScript)}`;
-  }
+  const gradeKey = document.getElementById('teacherLinkGradeSelect') ? document.getElementById('teacherLinkGradeSelect').value : activeStream;
+  const url = `${location.origin}${location.pathname}?teacher=${teacher}&section=${section}&grade=${encodeURIComponent(gradeKey)}&teacherId=${encodeURIComponent(teacherId)}`;
   const output = document.getElementById('teacherLinkOutput');
-  output.innerHTML = `<a href="${escapeForHtml(url)}" target="_blank" rel="noopener" style="word-break:break-all;color:#1F5560;font-size:.82rem;">${escapeForHtml(url)}</a>`
-    + `<br><small style="color:#a8998a">Teacher ID: <b>${escapeForHtml(teacherId)}</b> &nbsp;|&nbsp; Grade: ${escapeForHtml(STREAM_NAMES[gradeKey]||gradeKey)} &nbsp;|&nbsp; Section: ${escapeForHtml(decodeURIComponent(section))}</small>`
-    + `<br><small style="color:#4F8C66">✅ Copy and share this link with your students. Results will go to ${ownScript ? 'your own Apps Script URL' : 'the default admin Google Sheet'}.</small>`;
+  output.innerHTML = `<a href="${escapeForHtml(url)}" target="_blank" rel="noopener" style="word-break:break-all;color:#1F5560">${escapeForHtml(url)}</a><br><small style="color:#a8998a">Teacher ID: ${escapeForHtml(teacherId)} — Copy and share this link with your students.</small>`;
   navigator.clipboard?.writeText(url).catch(()=>{});
 }
 function renderAvatars(){
@@ -2062,68 +1934,41 @@ function renderBadges(){
   if(studentEl) studentEl.innerHTML = content;
 }
 
-function saveGoogleSheetUrl(){
-  const el = document.getElementById('googleSheetUrl');
-  if (el) {
-    localStorage.setItem('googleSheetUrl', el.value.trim());
-    document.getElementById('reportStatus').textContent = 'Google Sheets URL saved. ✅';
-  }
-}
-
-function sendReportToGoogleSheets(report, statusElId) {
-  const url = getActiveScriptUrl();
+function saveGoogleSheetUrl(){ const el=document.getElementById('googleSheetUrl'); if(el){ localStorage.setItem('googleSheetUrl', el.value.trim()); document.getElementById('reportStatus').textContent='Google Sheets URL saved.'; } }
+function sendReportToGoogleSheets(report, statusElId){
+  const hardcoded = GOOGLE_SHEET_WEB_APP_URL;
+  const stored = localStorage.getItem('googleSheetUrl') || '';
+  const url = (hardcoded && hardcoded.startsWith('https://script.google.com/')) ? hardcoded
+             : (stored && stored.startsWith('https://script.google.com/')) ? stored : '';
   const statusIds = [statusElId, 'submitStatusMsg', 'reportStatus'].filter(Boolean);
-  function setStatus(msg) { statusIds.forEach(id => { const el = document.getElementById(id); if (el) el.textContent = msg; }); }
-  if (!url) { setStatus('⚠️ Google Sheets is not connected. Please add a valid Apps Script URL in Teacher Tools → Reports.'); return; }
+  function setStatus(msg){ statusIds.forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=msg; }); }
+  if(!url){ setStatus('Google Sheets is not connected. Please add a valid Apps Script URL.'); return; }
   const _params = new URLSearchParams();
   Object.keys(report).forEach(k => _params.append(k, report[k] == null ? '' : String(report[k])));
-  setStatus('⏳ Submitting…');
-  fetch(url, { method: 'POST', mode: 'no-cors', body: _params })
-    .then(() => {
-      setStatus('✅ Submitted to teacher successfully!');
-    })
-    .catch(err => {
-      setStatus('❌ Submission failed. Your result has been saved locally as a backup.');
-      // Offline fallback: save to localStorage
-      try {
-        const offline = JSON.parse(localStorage.getItem('offlineSubmissions') || '[]');
-        offline.push({ ...report, _failedAt: new Date().toISOString(), _url: url });
-        localStorage.setItem('offlineSubmissions', JSON.stringify(offline));
-      } catch(e) {}
-    });
+  fetch(url,{method:'POST',mode:'no-cors',body:_params})
+    .then(()=>{ setStatus('\u2705 Submitted to teacher successfully!'); })
+    .catch(()=>{ setStatus('\u274c Submission failed. Check your internet connection.'); });
 }
 
 function recordLocalReport(isCorrect){
   const params = new URLSearchParams(location.search);
-  const mod = (DATABASE[activeStream][activeTab] || [])[activeModuleIndex] || {};
-  const pct = answered > 0 ? Math.round(score/answered*100) : 0;
-  const report = {
-    submissionType: 'quiz_answer',
+  localReports.push({
     date: new Date().toLocaleString(),
+    teacher: params.get('teacher') || '',
     teacherId: params.get('teacherId') || '',
-    teacherName: decodeURIComponent(params.get('teacher') || ''),
-    teacherAppsScriptUrl: getActiveScriptUrl(),
-    studentName: localStorage.getItem('studentName') || '',
-    className: params.get('section') || localStorage.getItem('studentSection') || '',
-    grade: STREAM_NAMES[activeStream] || activeStream,
-    stream: activeStream,
+    student: localStorage.getItem('studentName') || '',
     section: params.get('section') || localStorage.getItem('studentSection') || '',
-    skill: activeTab,
-    activityTitle: mod.title || '',
-    score: score,
-    total: answered,
-    percentage: pct + '%',
-    badge: currentBadge(),
+    grade: STREAM_NAMES[activeStream] || activeStream,
+    tab: activeTab,
+    module: DATABASE[activeStream][activeTab][activeModuleIndex].title,
+    avatar: selectedAvatar,
     correct: isCorrect ? 'Yes' : 'No',
-    pageUrl: location.href,
-    avatar: selectedAvatar
-  };
-  localReports.push(report);
+    score: `${score}/${answered}`
+  });
   localStorage.setItem('localReports', JSON.stringify(localReports));
-  sendReportToGoogleSheets(report);
+  sendReportToGoogleSheets(localReports[localReports.length-1]);
   renderBadges();
 }
-
 function submitToTeacher(){
   const params = new URLSearchParams(location.search);
   const modules = DATABASE[activeStream] && DATABASE[activeStream][activeTab] ? DATABASE[activeStream][activeTab] : [];
@@ -2131,30 +1976,23 @@ function submitToTeacher(){
   const pct = answered > 0 ? Math.round(score/answered*100) : 0;
   const badge = pct>=90?'🏆 Excellence':pct>=75?'⭐ Proficient':pct>=60?'👍 Developing':'💪 Keep Practising';
   const report = {
-    submissionType: 'quiz_complete',
     date: new Date().toLocaleString(),
-    teacherId: params.get('teacherId') || '',
-    teacherName: decodeURIComponent(params.get('teacher') || ''),
-    teacherAppsScriptUrl: getActiveScriptUrl(),
-    studentName: localStorage.getItem('studentName') || '',
-    className: params.get('section') || localStorage.getItem('studentSection') || '',
-    grade: STREAM_NAMES[activeStream] || activeStream,
-    stream: activeStream,
+    teacher: params.get('teacher') || '',
+    student: localStorage.getItem('studentName') || '',
     section: params.get('section') || localStorage.getItem('studentSection') || '',
-    skill: activeTab,
-    activityTitle: mod.title || '',
+    grade: activeStream,
+    tab: activeTab,
+    module: mod.title || '',
+    avatar: selectedAvatar,
     score: score,
     total: answered,
     percentage: pct + '%',
     badge: badge,
-    pageUrl: location.href,
-    avatar: selectedAvatar,
     status: 'Module Submitted'
   };
-  localReports.push(report);
   localStorage.setItem('localReports', JSON.stringify(localReports));
   const msgEl = document.getElementById('submitStatusMsg');
-  if (msgEl) msgEl.textContent = '⏳ Submitting…';
+  if(msgEl) msgEl.textContent = 'Submitting…';
   sendReportToGoogleSheets(report, 'submitStatusMsg');
 }
 
@@ -2167,102 +2005,7 @@ function downloadReportsCsv(){
   a.href = URL.createObjectURL(blob); a.download = 'student-reports.csv'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-// ── TASK 2: Teacher Dashboard renderer ──────────────────────────────────────
-function renderDashboard() {
-  const gradeFilter = (document.getElementById('dashGradeFilter') || {}).value || '';
-  const skillFilter = (document.getElementById('dashSkillFilter') || {}).value || '';
-  let reports = localReports.filter(r => {
-    const g = r.grade || r.stream || '';
-    const s = r.skill || r.tab || '';
-    return (!gradeFilter || g === gradeFilter) && (!skillFilter || s === skillFilter);
-  });
-  const offline = JSON.parse(localStorage.getItem('offlineSubmissions') || '[]');
-  const all = [...reports, ...offline.map(r => ({ ...r, _offline: true }))];
-  const summaryEl = document.getElementById('dashSummary');
-  const tableEl   = document.getElementById('dashTable');
-  if (!summaryEl || !tableEl) return;
-  const total = all.length;
-  const students = [...new Set(all.map(r => r.studentName || r.student).filter(Boolean))].length;
-  summaryEl.innerHTML = [
-    ['Total Submissions', total],
-    ['Unique Students', students],
-    ['Offline Queued', offline.length]
-  ].map(([label, val]) =>
-    `<div style="background:#f4eee5;border:1px solid #e2d8c6;border-radius:10px;padding:10px 16px;text-align:center;min-width:110px;"><div style="font-size:1.3rem;font-weight:800;color:#1F5560;">${val}</div><div style="font-size:.72rem;color:#a8998a;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">${label}</div></div>`
-  ).join('');
-  if (!all.length) { tableEl.innerHTML = '<em style="color:#a8998a;">No submissions yet. Results will appear here once students submit work.</em>'; return; }
-  const cols = ['Date','Student','Grade','Section','Skill','Activity','Score','%','Badge','Teacher','Correct'];
-  const rows = all.slice(-50).reverse().map(r => [
-    r.date||'', r.studentName||r.student||'—', r.grade||r.stream||'',
-    r.section||r.className||'', r.skill||r.tab||'', r.activityTitle||r.module||'',
-    r.score!=null?r.score:'', r.percentage||'', r.badge||'',
-    r.teacherName||r.teacher||'', r.correct||''
-  ]);
-  tableEl.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:.78rem;"><thead><tr>${cols.map(c=>`<th style="background:#f4eee5;border:1px solid #e2d8c6;padding:6px 8px;text-align:left;white-space:nowrap;">${c}</th>`).join('')}</tr></thead><tbody>${rows.map((row,i)=>`<tr style="background:${i%2===0?'#fff':'#faf8f5'}">${row.map(cell=>`<td style="border:1px solid #e2d8c6;padding:5px 8px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeForHtml(String(cell))}">${escapeForHtml(String(cell||''))}</td>`).join('')}</tr>`).join('')}</tbody></table><p style="font-size:.72rem;color:#a8998a;margin-top:6px;">Showing last 50 submissions. Use CSV download above for full history.</p>`;
-}
-function retryOfflineSubmissions() {
-  const offline = JSON.parse(localStorage.getItem('offlineSubmissions') || '[]');
-  if (!offline.length) { alert('No offline submissions to retry.'); return; }
-  offline.forEach(r => sendReportToGoogleSheets(r));
-  alert(`Retrying ${offline.length} offline submission(s)…`);
-  setTimeout(() => { localStorage.removeItem('offlineSubmissions'); renderDashboard(); }, 4000);
-}
-function clearAllLocalReports() {
-  if (!confirm('Clear ALL local reports from this browser? This cannot be undone.')) return;
-  localReports = []; localStorage.setItem('localReports', JSON.stringify(localReports));
-  localStorage.removeItem('offlineSubmissions'); renderDashboard();
-}
-
-// ── TASK 5: Like / Dislike feedback widget ───────────────────────────────────
-function injectFeedbackWidget() {
-  const container = document.querySelector('#quizStage .card');
-  if (!container || container.querySelector('.as-feedback-widget')) return;
-  const mod = (DATABASE[activeStream] && DATABASE[activeStream][activeTab]) ? (DATABASE[activeStream][activeTab][activeModuleIndex] || {}) : {};
-  const feedbackKey = 'fb_' + activeStream + '_' + activeTab + '_' + (mod.title||'x').replace(/\W+/g,'_').substring(0,25);
-  const alreadyVoted = localStorage.getItem(feedbackKey);
-  const html = `<div class="as-feedback-widget" style="margin-top:14px;padding:10px 14px;background:#faf8f4;border:1px dashed #e2d8c6;border-radius:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">`
-    + `<span style="font-size:.79rem;font-weight:700;color:#536468;">Was this activity useful?</span>`
-    + (alreadyVoted
-      ? `<span style="font-size:.79rem;color:#4F8C66;font-weight:700;">✓ Thank you for your feedback!</span>`
-      : `<button onclick="submitFeedback('like','${feedbackKey}')" style="border:1px solid #c2e0cc;background:#EBF5EE;color:#2E7A4A;border-radius:8px;padding:5px 12px;font-weight:700;cursor:pointer;font-size:.79rem;">👍 Like</button>`
-        + `<button onclick="submitFeedback('dislike','${feedbackKey}')" style="border:1px solid #f5c6c6;background:#FDF2F2;color:#B14545;border-radius:8px;padding:5px 12px;font-weight:700;cursor:pointer;font-size:.79rem;">👎 Dislike</button>`)
-    + `</div>`;
-  container.insertAdjacentHTML('beforeend', html);
-}
-function submitFeedback(feedbackType, feedbackKey) {
-  if (localStorage.getItem(feedbackKey)) return;
-  const params = new URLSearchParams(location.search);
-  const mod = (DATABASE[activeStream] && DATABASE[activeStream][activeTab]) ? (DATABASE[activeStream][activeTab][activeModuleIndex] || {}) : {};
-  const report = {
-    submissionType: 'feedback', feedbackType,
-    date: new Date().toLocaleString(),
-    teacherId: params.get('teacherId')||'',
-    teacherName: decodeURIComponent(params.get('teacher')||''),
-    studentName: localStorage.getItem('studentName')||'',
-    className: params.get('section')||localStorage.getItem('studentSection')||'',
-    grade: STREAM_NAMES[activeStream]||activeStream,
-    section: params.get('section')||localStorage.getItem('studentSection')||'',
-    skill: activeTab, activityTitle: mod.title||'', pageUrl: location.href
-  };
-  localStorage.setItem(feedbackKey, feedbackType);
-  sendReportToGoogleSheets(report);
-  const widget = document.querySelector('.as-feedback-widget');
-  if (widget) widget.innerHTML = `<span style="font-size:.79rem;color:#4F8C66;font-weight:700;">✓ Thank you! (${feedbackType==='like'?'👍':'👎'})</span>`;
-}
-
 function escapeForHtml(value){ return String(value == null ? '' : value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
-// ── Shared store for AI-generated questions waiting to be added ──────────────
-let bulkAiQuestions = [];
-
-// ── Populate the Bulk Add tab dropdowns ──────────────────────────────────────
-function populateBulkTabs() {
-  const streamKey = (document.getElementById('bulkGradeSelect') || {}).value || activeStream;
-  const tabs = Object.keys(DATABASE[streamKey] || {});
-  const sel = document.getElementById('bulkTabSelect');
-  if (sel) sel.innerHTML = tabs.map(t => `<option value="${t}">${t}</option>`).join('');
-}
-
-// ── Parse manually formatted MCQ text (fallback) ─────────────────────────────
 function parseBulkMcqText(text){
   const blocks = String(text||'').replace(/\r/g,'').split(/\n\s*\n+/).map(b=>b.trim()).filter(Boolean);
   const valid=[], errors=[];
@@ -2277,313 +2020,207 @@ function parseBulkMcqText(text){
     });
     let ansObj = opts.find(o=>o.mark===answerMark) || opts.find(o=>o.text.toLowerCase()===answerText.toLowerCase());
     if(!qLine || opts.length < 2 || !ansObj){ errors.push(`Question ${index+1}: missing question, choices, or valid Answer line.`); return; }
-    valid.push({type:'mcq', q:qLine, options:opts.map(o=>o.text), answer:ansObj.text, explanation:'Correct answer: '+ansObj.text});
+    valid.push({q:qLine, options:opts.map(o=>o.text), answer:ansObj.text, explanation:'Correct answer: '+ansObj.text});
   });
   return {valid, errors};
 }
-
-// ── Preview manually formatted questions ────────────────────────────────────
 function previewBulkQuestions(){
   const result = parseBulkMcqText(document.getElementById('bulkQuestionText').value);
-  bulkAiQuestions = result.valid;
+  _bulkAiQuestions = result.valid;
   const statusEl = document.getElementById('bulkAiStatus');
-  const previewEl = document.getElementById('bulkPreview');
-  const addBtn = document.getElementById('bulkAddBtnArea');
-  if (result.valid.length) {
-    statusEl.textContent = `📋 ${result.valid.length} question(s) found in manual format.${result.errors.length ? ' ' + result.errors.length + ' skipped.' : ''}`;
-    renderBulkPreview(result.valid);
-    previewEl.style.display = 'block';
-    addBtn.style.display = 'block';
+  const addBtn   = document.getElementById('bulkAddBtnArea');
+  if(result.valid.length){
+    statusEl.textContent = result.valid.length + ' question(s) found in manual format.' + (result.errors.length ? ' ' + result.errors.length + ' skipped.' : '');
+    _renderBulkPreview(result.valid);
+    if(addBtn) addBtn.style.display = 'block';
   } else {
-    statusEl.textContent = result.errors.length
-      ? '⚠️ No valid questions found. Errors: ' + result.errors.join(' | ')
-      : '⚠️ No questions found. Use the AI button to generate from your text, or check the manual format.';
-    previewEl.style.display = 'none';
-    addBtn.style.display = 'none';
+    document.getElementById('bulkPreview').textContent = 'No valid questions found.\n' + (result.errors.length ? result.errors.join('\n') : 'Check the A/B/C + Answer: format.');
+    if(addBtn) addBtn.style.display = 'none';
   }
   return result;
 }
-
-// ── Render a preview of questions (AI or manual) ─────────────────────────────
-function renderBulkPreview(questions) {
-  const el = document.getElementById('bulkPreview');
-  if (!questions || !questions.length) { el.innerHTML = '<em>No questions to preview.</em>'; return; }
-  const typeLabel = { mcq:'📝 MCQ', tf:'✔✘ True/False/Not Given', fill:'___ Fill in the Blanks' };
-  el.innerHTML = `<div style="font-size:.78rem;font-weight:800;color:#536468;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">${questions.length} question(s) ready</div>`
-    + questions.map((q, i) => {
-      const lbl = typeLabel[q.type] || '📝 MCQ';
-      return `<div style="border:1px solid #e2d8c6;border-radius:10px;padding:10px 12px;margin:6px 0;background:#fff;">
-        <div style="font-size:.68rem;font-weight:800;color:#536468;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">${lbl} · Q${i+1}</div>
-        <div style="font-weight:700;font-size:.88rem;color:var(--dark);margin-bottom:7px;">${escapeForHtml(q.q)}</div>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px;">${(q.options||[]).map(o =>
-          `<span style="background:${o===q.answer?'#EBF5EE':'#f4eee5'};border:1px solid ${o===q.answer?'#C2E0CC':'#e2d8c6'};border-radius:6px;padding:3px 9px;font-size:.79rem;${o===q.answer?'font-weight:800;color:#2E7A4A;':''}">${escapeForHtml(o)}${o===q.answer?' ✓':''}</span>`
-        ).join('')}</div>
-        <div style="font-size:.74rem;color:#a8998a;font-style:italic;">${escapeForHtml(q.explanation||'')}</div>
-      </div>`;
-    }).join('');
-}
-
-// ── Add questions to the selected grade/tab ──────────────────────────────────
 function addBulkQuestionsToTab(){
-  // Use bulk-specific dropdowns if present, fall back to add-activity dropdowns
-  const gradeEl = document.getElementById('bulkGradeSelect') || document.getElementById('activityGradeSelect');
-  const tabEl   = document.getElementById('bulkTabSelect')   || document.getElementById('activityTabSelect');
-  const streamKey = gradeEl ? gradeEl.value : activeStream;
-  const tab = tabEl ? tabEl.value : activeTab;
-  const title = (document.getElementById('bulkModuleTitle').value || '').trim() || 'AI Worksheet Activity';
-
-  const questions = bulkAiQuestions.length ? bulkAiQuestions : parseBulkMcqText(document.getElementById('bulkQuestionText').value).valid;
-  if (!questions.length) { alert('No questions ready. Use the AI Generate button or check the manual format.'); return; }
-
-  // Strip the 'type' field — the DB only needs q/options/answer/explanation
-  const dbQuestions = questions.map(({ type, ...rest }) => rest);
-  const module = { title, questions: dbQuestions };
-  if (!DATABASE[streamKey]) DATABASE[streamKey] = {};
-  if (!DATABASE[streamKey][tab]) DATABASE[streamKey][tab] = [];
+  const streamKey = document.getElementById('activityGradeSelect').value;
+  const tab = document.getElementById('activityTabSelect').value;
+  const title = document.getElementById('bulkModuleTitle').value.trim() || 'Teacher Worksheet Activity';
+  const questions = _bulkAiQuestions.length ? _bulkAiQuestions.map(({type,...r})=>r) : parseBulkMcqText(document.getElementById('bulkQuestionText').value).valid;
+  if(!questions.length){ alert('No questions ready. Use the AI Generate button or check the manual format.'); return; }
+  const module = {title, questions};
+  if(!DATABASE[streamKey][tab]) DATABASE[streamKey][tab] = [];
   DATABASE[streamKey][tab].push(module);
   saveTeacherModule(streamKey, tab, module);
-  if (streamKey === activeStream && tab === activeTab) { renderTabs(); renderTab(); }
-
-  // Reset
-  bulkAiQuestions = [];
+  if(streamKey === activeStream && tab === activeTab){ renderTabs(); renderTab(); }
+  _bulkAiQuestions = [];
   document.getElementById('bulkQuestionText').value = '';
-  document.getElementById('bulkModuleTitle').value = '';
-  document.getElementById('bulkFileStatus').textContent = 'No file selected';
   document.getElementById('bulkAiStatus').textContent = '';
-  document.getElementById('bulkPreview').style.display = 'none';
-  document.getElementById('bulkAddBtnArea').style.display = 'none';
-
-  alert(`✅ ${dbQuestions.length} question(s) added to "${tab}" under "${title}".`);
+  document.getElementById('bulkPreview').textContent = '';
+  const addBtn = document.getElementById('bulkAddBtnArea'); if(addBtn) addBtn.style.display='none';
+  alert(questions.length + ' question(s) added to ' + tab + '.');
 }
 
-// ── AI: convert worksheet text to questions via Claude API ───────────────────
-async function aiConvertWorksheet() {
-  const text = (document.getElementById('bulkQuestionText').value || '').trim();
+// ── Shared store for AI-generated questions ──────────────────────────────────
+let _bulkAiQuestions = [];
+
+function _renderBulkPreview(questions){
+  const el = document.getElementById('bulkPreview');
+  if(!questions||!questions.length){el.textContent='No questions.';return;}
+  const typeLabel = {mcq:'📝 MCQ', tf:'✔✘ True/False/Not Given', fill:'___ Fill in the Blanks'};
+  el.innerHTML = '<div style="font-size:.75rem;font-weight:800;color:#536468;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">'+questions.length+' question(s) ready to add</div>'
+    + questions.map((q,i)=>{
+        const lbl = typeLabel[q.type]||'📝 MCQ';
+        const opts = (q.options||[]).map(o=>'<span style="background:'+(o===q.answer?'#EBF5EE':'#f4eee5')+';border:1px solid '+(o===q.answer?'#C2E0CC':'#e2d8c6')+';border-radius:6px;padding:3px 9px;font-size:.78rem;'+(o===q.answer?'font-weight:800;color:#2E7A4A;':'')+'">'+(o===q.answer?'✓ ':'')+escHtml(o)+'</span>').join(' ');
+        return '<div style="border:1px solid #e2d8c6;border-radius:10px;padding:10px 12px;margin:5px 0;background:#fff;">'
+          +'<div style="font-size:.68rem;font-weight:800;color:#536468;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">'+lbl+' · Q'+(i+1)+'</div>'
+          +'<div style="font-weight:700;font-size:.87rem;margin-bottom:6px;">'+escHtml(q.q)+'</div>'
+          +'<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px;">'+opts+'</div>'
+          +'<div style="font-size:.74rem;color:#a8998a;font-style:italic;">'+escHtml(q.explanation||'')+'</div></div>';
+      }).join('');
+}
+
+async function aiConvertWorksheet(){
+  const text = (document.getElementById('bulkQuestionText').value||'').trim();
   const statusEl = document.getElementById('bulkAiStatus');
-  const previewEl = document.getElementById('bulkPreview');
-  const addBtn = document.getElementById('bulkAddBtnArea');
-
-  if (!text) {
-    statusEl.textContent = '⚠️ Please upload a file or paste worksheet content first.';
-    return;
-  }
-
+  const addBtn   = document.getElementById('bulkAddBtnArea');
+  if(!text){statusEl.textContent='⚠️ Please upload a file or paste worksheet content first.';return;}
   const wantMCQ  = document.getElementById('genMCQ')  ? document.getElementById('genMCQ').checked  : true;
   const wantTF   = document.getElementById('genTF')   ? document.getElementById('genTF').checked   : true;
   const wantFill = document.getElementById('genFill') ? document.getElementById('genFill').checked : true;
-
-  if (!wantMCQ && !wantTF && !wantFill) {
-    statusEl.textContent = '⚠️ Please select at least one question type.';
-    return;
-  }
-
-  const typeList = [wantMCQ && 'MCQ', wantTF && 'True/False/Not Given', wantFill && 'Fill in the Blanks'].filter(Boolean).join(', ');
-  statusEl.textContent = `🤖 AI is reading the worksheet and generating ${typeList} questions… please wait.`;
-  previewEl.style.display = 'none';
-  addBtn.style.display = 'none';
-  bulkAiQuestions = [];
-
-  const typeInstructions = [];
-  if (wantMCQ)  typeInstructions.push('MCQ: {"type":"mcq","q":"question","options":["A","B","C","D"],"answer":"exact matching option","explanation":"brief reason"}');
-  if (wantTF)   typeInstructions.push('True/False/Not Given: {"type":"tf","q":"statement from or based on the text","options":["True","False","Not Given"],"answer":"True OR False OR Not Given","explanation":"brief reason"}');
-  if (wantFill) typeInstructions.push('Fill in the Blanks: {"type":"fill","q":"sentence with ___ for the gap","options":["correct","wrong1","wrong2"],"answer":"correct","explanation":"brief reason"}');
-
-  const systemPrompt = `You are an expert English language teacher creating interactive exam-style questions from a worksheet for grades 9–12. Return ONLY a raw JSON object — no markdown, no code fences, no preamble, no explanation outside the JSON.
-
-Format: {"questions":[...]}
-
-Question formats to use:
-${typeInstructions.join('\n')}
-
-Rules:
-- Generate 6–12 questions total, mixing the requested types proportionally.
-- Questions must be based on the provided worksheet content only.
-- The "answer" value MUST exactly match one of the strings in "options".
-- Options for MCQ: 3–4 items. True/False/Not Given: exactly ["True","False","Not Given"]. Fill: 3 items.
-- Explanations under 15 words.
-- Do not include any text outside the JSON object.`;
-
-  const userPrompt = `Create ${typeList} questions from this worksheet content:\n\n${text.substring(0, 7000)}`;
-
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: userPrompt }]
-      })
+  if(!wantMCQ&&!wantTF&&!wantFill){statusEl.textContent='⚠️ Please tick at least one question type.';return;}
+  const typeList=[wantMCQ&&'MCQ',wantTF&&'True/False/Not Given',wantFill&&'Fill in the Blanks'].filter(Boolean).join(', ');
+  statusEl.textContent='🤖 AI is reading the worksheet and generating '+typeList+' questions… please wait.';
+  document.getElementById('bulkPreview').textContent='';
+  if(addBtn) addBtn.style.display='none';
+  _bulkAiQuestions=[];
+  const fmts=[];
+  if(wantMCQ)  fmts.push('MCQ: {"type":"mcq","q":"question text","options":["A","B","C","D"],"answer":"one of the options verbatim","explanation":"short reason"}');
+  if(wantTF)   fmts.push('True/False/Not Given: {"type":"tf","q":"statement","options":["True","False","Not Given"],"answer":"True or False or Not Given","explanation":"short reason"}');
+  if(wantFill) fmts.push('Fill in the Blanks: {"type":"fill","q":"sentence with ___ in it","options":["correct","wrong1","wrong2"],"answer":"correct","explanation":"short reason"}');
+  const systemPrompt='You are an expert English language teacher. Generate '+typeList+' questions from the provided worksheet. Return ONLY valid JSON with no markdown: {"questions":[...]}.\nFormats:\n'+fmts.join('\n')+'\nRules: 6-12 questions, answer must exactly match one option string, explanations under 15 words, no text outside the JSON.';
+  try{
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,
+        system:systemPrompt,
+        messages:[{role:'user',content:'Generate questions from this worksheet:\n\n'+text.substring(0,7000)}]})
     });
-
-    if (!response.ok) {
-      const errBody = await response.text().catch(() => '');
-      throw new Error(`API returned ${response.status}. ${errBody.substring(0,120)}`);
-    }
-
-    const data = await response.json();
-    const raw = (data.content || []).map(c => c.type === 'text' ? c.text : '').join('').trim();
-
-    // Strip any accidental markdown fences
-    const clean = raw.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
-    let parsed;
-    try { parsed = JSON.parse(clean); }
-    catch(pe) {
-      // Attempt to find JSON inside the response
-      const m = raw.match(/\{[\s\S]*\}/);
-      if (m) parsed = JSON.parse(m[0]);
-      else throw new Error('Could not parse AI response as JSON.');
-    }
-
-    if (!parsed.questions || !parsed.questions.length) throw new Error('AI returned no questions. Try adding more content to the worksheet.');
-
-    // Validate each question has required fields
-    bulkAiQuestions = parsed.questions.filter(q => q.q && q.options && q.options.length >= 2 && q.answer);
-
-    if (!bulkAiQuestions.length) throw new Error('No valid questions in AI response. Please try again.');
-
-    renderBulkPreview(bulkAiQuestions);
-    previewEl.style.display = 'block';
-    addBtn.style.display = 'block';
-    statusEl.textContent = `✅ ${bulkAiQuestions.length} question(s) generated! Review below, then click "Add All Generated Questions".`;
-
-  } catch(err) {
-    statusEl.textContent = `❌ AI generation failed: ${err.message}. Try pasting more content, or use the "Preview Manual Format" button if your text is already formatted as MCQs.`;
+    if(!res.ok) throw new Error('API error '+res.status);
+    const data = await res.json();
+    const raw = (data.content||[]).map(c=>c.type==='text'?c.text:'').join('').trim();
+    const clean = raw.replace(/^```json\s*/i,'').replace(/^```/,'').replace(/```$/,'').trim();
+    let parsed; try{parsed=JSON.parse(clean);}catch(e){const m=raw.match(/\{[\s\S]*\}/);if(m)parsed=JSON.parse(m[0]);else throw new Error('Could not parse AI response.');}
+    _bulkAiQuestions=(parsed.questions||[]).filter(q=>q.q&&q.options&&q.options.length>=2&&q.answer);
+    if(!_bulkAiQuestions.length) throw new Error('AI returned no valid questions. Try adding more content.');
+    _renderBulkPreview(_bulkAiQuestions);
+    if(addBtn) addBtn.style.display='block';
+    statusEl.textContent='✅ '+_bulkAiQuestions.length+' question(s) generated! Review above, then click "Add All Generated Questions".';
+  }catch(err){
+    statusEl.textContent='❌ AI generation failed: '+err.message+'. Try the "Preview Manual Format" button if your text is already formatted as MCQs.';
   }
 }
 
-// ── Enhanced file loader: DOCX extraction + image support ────────────────────
 function loadBulkQuestionFile(file){
   if(!file) return;
   const statusEl = document.getElementById('bulkFileStatus');
   statusEl.textContent = '⏳ Reading: ' + file.name + '…';
 
+  // For text-based files: txt, csv
   if(/\.(txt|csv)$/i.test(file.name)){
     const reader = new FileReader();
     reader.onload = e => {
       document.getElementById('bulkQuestionText').value = e.target.result || '';
-      statusEl.textContent = '✅ Loaded: ' + file.name + '. Click "Generate Questions with AI" to convert.';
+      statusEl.textContent = '✅ Loaded: ' + file.name + '. Click "Generate with AI".';
     };
     reader.onerror = () => { statusEl.textContent = '❌ Error reading file.'; };
     reader.readAsText(file);
     return;
   }
 
+  // For Word — extract text between XML tags
   if(/\.(docx|doc)$/i.test(file.name)){
     const reader = new FileReader();
     reader.onload = e => {
       try {
         const raw = e.target.result;
         const matches = raw.match(/<w:t[^>]*>([^<]+)<\/w:t>/g) || [];
-        const extracted = matches.map(m => m.replace(/<[^>]+>/g, '')).join(' ').replace(/\s+/g,' ').trim();
+        const extracted = matches.map(m => m.replace(/<[^>]+>/g, '')).join(' ').trim();
         if(extracted.length > 20){
           document.getElementById('bulkQuestionText').value = extracted;
-          statusEl.textContent = '✅ Text extracted from: ' + file.name + '. Click "Generate Questions with AI".';
+          statusEl.textContent = '✅ Text extracted from: ' + file.name + '. Click "Generate with AI".';
         } else {
-          statusEl.textContent = '⚠️ Could not auto-extract from this Word file. Please copy all text (Ctrl+A, Ctrl+C) from the Word doc and paste it in the text area below.';
+          statusEl.textContent = '⚠️ Could not extract text. Please copy-paste the Word content instead.';
         }
-      } catch(err){ statusEl.textContent = '⚠️ Please copy-paste the content from this Word file.'; }
+      } catch(err){ statusEl.textContent = '⚠️ Please copy-paste content from this Word file.'; }
     };
     reader.readAsText(file, 'utf-8');
     return;
   }
 
   if(/\.(jpg|jpeg|png|gif|webp)$/i.test(file.name)){
-    // Read as base64 and send to Claude vision for OCR + question generation
-    statusEl.textContent = '📸 Image loaded: ' + file.name + '. The AI will read the image directly. Click "Generate Questions with AI".';
+    // Read image as base64 for Claude vision
     const reader = new FileReader();
     reader.onload = async e => {
+      statusEl.textContent = '📸 Image loaded. Sending to AI for reading…';
       const base64 = e.target.result.split(',')[1];
       const mediaType = file.type || 'image/jpeg';
-      // Store image for AI call
-      window._bulkImageData = { base64, mediaType, name: file.name };
-      statusEl.textContent = '📸 Image ready: ' + file.name + '. Click "Generate Questions with AI" — AI will read the image.';
+      const wantMCQ  = document.getElementById('genMCQ')  ? document.getElementById('genMCQ').checked  : true;
+      const wantTF   = document.getElementById('genTF')   ? document.getElementById('genTF').checked   : true;
+      const wantFill = document.getElementById('genFill') ? document.getElementById('genFill').checked : true;
+      const typeList=[wantMCQ&&'MCQ',wantTF&&'True/False/Not Given',wantFill&&'Fill in the Blanks'].filter(Boolean).join(', ');
+      const fmts=[];
+      if(wantMCQ)  fmts.push('MCQ: {"type":"mcq","q":"question text","options":["A","B","C","D"],"answer":"one of the options verbatim","explanation":"short reason"}');
+      if(wantTF)   fmts.push('True/False/Not Given: {"type":"tf","q":"statement","options":["True","False","Not Given"],"answer":"True or False or Not Given","explanation":"short reason"}');
+      if(wantFill) fmts.push('Fill in the Blanks: {"type":"fill","q":"sentence with ___ in it","options":["correct","wrong1","wrong2"],"answer":"correct","explanation":"short reason"}');
+      const addBtn = document.getElementById('bulkAddBtnArea');
+      document.getElementById('bulkAiStatus').textContent='🤖 AI is reading the image and generating '+typeList+' questions…';
+      _bulkAiQuestions=[];
+      if(addBtn) addBtn.style.display='none';
+      try{
+        const res = await fetch('https://api.anthropic.com/v1/messages',{
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,
+            messages:[{role:'user',content:[
+              {type:'image',source:{type:'base64',media_type:mediaType,data:base64}},
+              {type:'text',text:'Read all text in this worksheet image and generate '+typeList+' questions from it. Return ONLY raw JSON: {"questions":[...]}.\nFormats:\n'+fmts.join('\n')+'\nRules: 6-12 questions, answer must exactly match one option, explanations under 15 words, no text outside JSON.'}
+            ]}]})
+        });
+        if(!res.ok) throw new Error('API error '+res.status);
+        const data=await res.json();
+        const raw=(data.content||[]).map(c=>c.type==='text'?c.text:'').join('').trim();
+        const clean=raw.replace(/^```json\s*/i,'').replace(/^```/,'').replace(/```$/,'').trim();
+        let parsed; try{parsed=JSON.parse(clean);}catch(e){const m=raw.match(/\{[\s\S]*\}/);if(m)parsed=JSON.parse(m[0]);else throw new Error('Cannot parse response.');}
+        _bulkAiQuestions=(parsed.questions||[]).filter(q=>q.q&&q.options&&q.options.length>=2&&q.answer);
+        if(!_bulkAiQuestions.length) throw new Error('No valid questions returned.');
+        _renderBulkPreview(_bulkAiQuestions);
+        if(addBtn) addBtn.style.display='block';
+        document.getElementById('bulkAiStatus').textContent='✅ '+_bulkAiQuestions.length+' question(s) generated from image! Click "Add All Generated Questions".';
+        statusEl.textContent='✅ Image processed: '+file.name;
+      }catch(err){
+        document.getElementById('bulkAiStatus').textContent='❌ Image AI failed: '+err.message+'. Try copy-pasting the text instead.';
+        statusEl.textContent='⚠️ Image processing failed.';
+      }
     };
     reader.readAsDataURL(file);
     return;
   }
 
   if(/\.pdf$/i.test(file.name)){
-    statusEl.textContent = '📄 PDF received: ' + file.name + '. For best results: open the PDF → Select All (Ctrl+A) → Copy (Ctrl+C) → paste in the text area below. Then click "Generate Questions with AI".';
+    statusEl.textContent = '📄 PDF uploaded: ' + file.name + '. Open the PDF, select all text (Ctrl+A), copy (Ctrl+C), then paste in the text area below.';
     return;
   }
 
-  // Fallback
+  // Fallback: try reading as text
   const reader = new FileReader();
   reader.onload = e => {
     const text = (e.target.result || '').replace(/[^\x20-\x7E\n\r\t]/g, ' ').trim();
     if(text.length > 30){
       document.getElementById('bulkQuestionText').value = text;
-      statusEl.textContent = '✅ Loaded: ' + file.name + '. Click "Generate Questions with AI".';
+      statusEl.textContent = '✅ Loaded: ' + file.name + '. Click "Generate with AI".';
     } else {
-      statusEl.textContent = '⚠️ Could not read this file type automatically. Please paste the content directly.';
+      statusEl.textContent = '⚠️ Could not read this file type. Please paste content directly.';
     }
   };
   reader.readAsText(file);
 }
-
-// Override aiConvertWorksheet to support image input
-const _aiConvertWorksheetOrig = aiConvertWorksheet;
-window.aiConvertWorksheet = async function() {
-  // If an image was uploaded, use vision API
-  if (window._bulkImageData) {
-    const imgData = window._bulkImageData;
-    const statusEl = document.getElementById('bulkAiStatus');
-    const previewEl = document.getElementById('bulkPreview');
-    const addBtn = document.getElementById('bulkAddBtnArea');
-    const wantMCQ  = document.getElementById('genMCQ')  ? document.getElementById('genMCQ').checked  : true;
-    const wantTF   = document.getElementById('genTF')   ? document.getElementById('genTF').checked   : true;
-    const wantFill = document.getElementById('genFill') ? document.getElementById('genFill').checked : true;
-    const typeList = [wantMCQ && 'MCQ', wantTF && 'True/False/Not Given', wantFill && 'Fill in the Blanks'].filter(Boolean).join(', ');
-
-    statusEl.textContent = `🤖 AI is reading the image and generating ${typeList} questions…`;
-    previewEl.style.display = 'none';
-    addBtn.style.display = 'none';
-    bulkAiQuestions = [];
-
-    const typeInstructions = [];
-    if (wantMCQ)  typeInstructions.push('MCQ: {"type":"mcq","q":"question","options":["A","B","C","D"],"answer":"exact matching option","explanation":"brief reason"}');
-    if (wantTF)   typeInstructions.push('True/False/Not Given: {"type":"tf","q":"statement","options":["True","False","Not Given"],"answer":"True OR False OR Not Given","explanation":"brief reason"}');
-    if (wantFill) typeInstructions.push('Fill in the Blanks: {"type":"fill","q":"sentence with ___ for the gap","options":["correct","wrong1","wrong2"],"answer":"correct","explanation":"brief reason"}');
-
-    try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 4000,
-          messages: [{
-            role: 'user',
-            content: [
-              { type: 'image', source: { type: 'base64', media_type: imgData.mediaType, data: imgData.base64 } },
-              { type: 'text', text: `Read all text in this worksheet image and generate ${typeList} questions from it. Return ONLY a raw JSON object: {"questions":[...]}\n\nFormats:\n${typeInstructions.join('\n')}\n\nRules: 6–12 questions, answer must exactly match one option string, explanations under 15 words, no text outside the JSON.` }
-            ]
-          }]
-        })
-      });
-      if (!response.ok) throw new Error('API returned ' + response.status);
-      const data = await response.json();
-      const raw = (data.content || []).map(c => c.type === 'text' ? c.text : '').join('').trim();
-      const clean = raw.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
-      let parsed;
-      try { parsed = JSON.parse(clean); } catch(pe) { const m = raw.match(/\{[\s\S]*\}/); if(m) parsed = JSON.parse(m[0]); else throw new Error('Cannot parse response.'); }
-      bulkAiQuestions = (parsed.questions || []).filter(q => q.q && q.options && q.options.length >= 2 && q.answer);
-      if (!bulkAiQuestions.length) throw new Error('No valid questions returned.');
-      renderBulkPreview(bulkAiQuestions);
-      previewEl.style.display = 'block';
-      addBtn.style.display = 'block';
-      statusEl.textContent = `✅ ${bulkAiQuestions.length} question(s) generated from image! Review and click "Add All Generated Questions".`;
-      window._bulkImageData = null;
-    } catch(err) {
-      statusEl.textContent = `❌ Image AI failed: ${err.message}. Try copying the text from the worksheet and pasting it instead.`;
-    }
-    return;
-  }
-  // No image — use text path
-  return _aiConvertWorksheetOrig();
-};
 
 /* ── Import Tab Switcher ── */
 function switchImportTab(tab, btn){
@@ -2928,40 +2565,7 @@ function updateStreamBanner(stream) {
   main.insertBefore(banner, main.firstChild);
 }
 
-window.addEventListener('DOMContentLoaded',()=>{
-  loadTeacherAdditions();
-  refreshStreamButtons();
-
-  // ── TASK 4: Read teacher URL parameters ──────────────────────────────────
-  const urlParams = new URLSearchParams(location.search);
-  const gradeParam = urlParams.get('grade');
-  const scriptParam = urlParams.get('scriptUrl');
-  const teacherParam = urlParams.get('teacher');
-
-  // Save teacher-specific scriptUrl to sessionStorage for this session
-  if (scriptParam && scriptParam.startsWith('https://script.google.com/')) {
-    sessionStorage.setItem('teacherScriptUrl', decodeURIComponent(scriptParam));
-  }
-
-  // Auto-switch to teacher's specified grade
-  if (gradeParam && DATABASE[gradeParam]) {
-    activeStream = gradeParam;
-    document.body.dataset.activeStream = gradeParam;
-    document.querySelectorAll('.stream-btn').forEach(b => b.classList.toggle('active', b.dataset.stream === gradeParam));
-  }
-
-  renderStudentProfileControls();
-
-  // Show homepage by default
-  document.getElementById('homePage').style.display='flex';
-  document.getElementById('homePage').style.flexDirection='column';
-  document.getElementById('practiceApp').style.display='none';
-
-  // If teacher link is active, go straight to practice page
-  if (gradeParam && teacherParam) {
-    selectGradeAndShow(gradeParam);
-  }
-});
+window.addEventListener('DOMContentLoaded',()=>{loadTeacherAdditions(); refreshStreamButtons(); renderStudentProfileControls(); /* Show homepage by default */ document.getElementById('homePage').style.display='flex'; document.getElementById('homePage').style.flexDirection='column'; document.getElementById('practiceApp').style.display='none'; });
 </script>
 <!-- ── Teacher Password Modal (Fix 2) ──────────────────────────────────────── -->
 <div class="pw-modal" id="teacherPwModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="pwModalTitle">
