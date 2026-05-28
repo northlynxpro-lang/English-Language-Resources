@@ -1322,11 +1322,19 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
       </div>
       <div class="teacher-box" id="toolTeacherLink">
         <h3>Generate Teacher Link</h3>
-        <label>Teacher name/code</label>
-        <input id="teacherCode" placeholder="Example: MsAliya" />
-        <label>Section</label>
+        <p style="font-size:.78rem;color:#a8998a;margin:0 0 10px;">Fill in your details, then click Generate. Share the unique link with your students. Results will go to your own Google Sheet.</p>
+        <label>Your Teacher Name</label>
+        <input id="teacherCode" placeholder="Example: Ms Aliya or MrSmith" />
+        <label>School / Department (optional)</label>
+        <input id="teacherSchoolName" placeholder="Example: Al Noor Academy" />
+        <label>Grade / Stream</label>
+        <select id="teacherLinkGradeSelect"></select>
+        <label>Section / Class</label>
         <select id="teacherSectionSelect"></select>
-        <button class="btn" onclick="generateTeacherLink()">Generate Link</button>
+        <label>Your Google Apps Script URL (optional)</label>
+        <input id="teacherOwnScriptUrl" placeholder="Paste your Apps Script web app URL here" style="font-size:.78rem;" />
+        <p style="font-size:.73rem;color:#a8998a;margin:4px 0 10px;">Leave blank to use the default admin Apps Script URL. If you have your own Google Sheet, paste your web app URL above.</p>
+        <button class="btn" onclick="generateTeacherLink()">Generate Teacher Link</button>
         <div class="teacher-link-output" id="teacherLinkOutput">Your link will appear here.</div>
       </div>
       <div class="teacher-box">
@@ -1410,11 +1418,38 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
       <div class="teacher-box" id="toolReports">
         <h3>Reports &amp; Google Sheets</h3>
         <div id="badgePreview"></div>
-        <button class="btn secondary" onclick="downloadReportsCsv()">Download Reports CSV</button>
-        <label>Google Apps Script URL</label><input id="googleSheetUrl" placeholder="Paste Google Apps Script web app URL" />
-        <button class="btn secondary" onclick="saveGoogleSheetUrl()">Save Google Sheets URL</button>
-        <div class="teacher-report-output" id="reportStatus">Reports are stored locally in this browser. Add a Google Apps Script URL to send submissions to Sheets.</div>
-        <p style="font-size:.75rem;color:#a8998a;margin-top:8px;">💡 If you use Google Apps Script, add a <code>teacherId</code> and <code>teacherName</code> column to your sheet to capture the teacher link identifier. The submit function already includes this field if a teacher URL parameter is present.</p>
+        <button class="btn secondary" onclick="downloadReportsCsv()">⬇ Download Reports CSV</button>
+        <label style="margin-top:12px;">Your Google Apps Script URL</label>
+        <input id="googleSheetUrl" placeholder="Paste Google Apps Script web app URL" />
+        <button class="btn secondary" onclick="saveGoogleSheetUrl()">Save URL</button>
+        <div class="teacher-report-output" id="reportStatus">Reports are stored locally in this browser. Paste your Apps Script URL above to send submissions to your Google Sheet.</div>
+        <p style="font-size:.75rem;color:#a8998a;margin-top:6px;">💡 Each teacher's generated link includes their own <code>scriptUrl</code> — student submissions are automatically routed to the correct Google Sheet.</p>
+        <button class="btn secondary" style="margin-top:8px;" onclick="retryOfflineSubmissions()">🔄 Retry Offline Submissions</button>
+        <div id="offlineCountMsg" style="font-size:.78rem;color:#a8998a;margin-top:4px;"></div>
+      </div>
+
+      <!-- ── Teacher Dashboard ── -->
+      <div class="teacher-box" id="toolDashboard" style="grid-column:1/-1;">
+        <h3>📊 Teacher Dashboard — Student Results</h3>
+        <p style="font-size:.8rem;color:#a8998a;margin:0 0 12px;">Showing locally stored submissions from this browser. Use the CSV download above to export all data.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;align-items:flex-end;">
+          <div>
+            <label style="font-size:.72rem;font-weight:800;color:#536468;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px;">Filter by Grade</label>
+            <select id="dashGradeFilter" onchange="renderDashboard()" style="padding:8px 10px;border:1px solid #D6CDBC;border-radius:8px;font:inherit;font-size:.82rem;">
+              <option value="">All Grades</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:.72rem;font-weight:800;color:#536468;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px;">Filter by Skill</label>
+            <select id="dashSkillFilter" onchange="renderDashboard()" style="padding:8px 10px;border:1px solid #D6CDBC;border-radius:8px;font:inherit;font-size:.82rem;">
+              <option value="">All Skills</option>
+            </select>
+          </div>
+          <button class="btn secondary" onclick="renderDashboard()" style="margin-bottom:0;">Refresh</button>
+          <button class="btn secondary" onclick="clearAllLocalReports()" style="margin-bottom:0;background:#fff5f5;border-color:#e8c0c0;color:#c55;">Clear All Local Reports</button>
+        </div>
+        <div id="dashSummary" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;"></div>
+        <div id="dashTable" style="overflow-x:auto;font-size:.8rem;"></div>
       </div>
     </div>
   </div>
@@ -1615,6 +1650,7 @@ function renderQuestion(){
     '<div id="submitStatusMsg" style="margin-top:8px;font-size:.85rem;font-weight:600;color:#1F5560;"></div>' +
     '</div>';
   if (activeTab === 'Listening') { setTimeout(()=>injectTTSPlayer(DATABASE[activeStream][activeTab], activeModuleIndex), 10); }
+  setTimeout(injectFeedbackWidget, 80);
 }
 function chooseOption(i){
   if(locked) return;
@@ -1693,8 +1729,29 @@ const AVATARS = [
 let selectedAvatar = localStorage.getItem('studentAvatar') || (AVATARS[0].emoji + ' ' + AVATARS[0].name);
 let teacherSections = JSON.parse(localStorage.getItem('teacherSections') || '[]');
 let localReports = JSON.parse(localStorage.getItem('localReports') || '[]');
-// ── Google Sheets URL ── Paste your Apps Script Web App URL here ──────────────
-const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwqgNQ3t7prIdMo2JJhbFF5S9DDVvhjlxzkSj82OTMyGr6awOVILeMruHhAEVcihOqL/exec';
+// ── DEFAULT / ADMIN Apps Script URL ─────────────────────────────────────────
+// This is the one place where the admin Apps Script URL is stored.
+// Other teachers can supply their own URL via the Teacher Link system.
+// NOTE: Password protection in a static HTML file is front-end only and does
+//       not prevent a determined user from reading the source. Do not rely on
+//       it for truly sensitive data. It is sufficient to keep students out of
+//       the teacher panel during normal classroom use.
+const DEFAULT_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyX8E5Rkc9OxAU9oIYmYnBRwYO0ZfGJQ_IheRs8FdtsdEiNMi519ewWx6aAI44z0xEZvg/exec';
+
+// ── Resolve which Apps Script URL to use for this session ────────────────────
+// Priority: URL param ?scriptUrl= → sessionStorage → localStorage teacher URL → admin default
+function getActiveScriptUrl() {
+  const params = new URLSearchParams(location.search);
+  const urlParam = params.get('scriptUrl');
+  if (urlParam && urlParam.startsWith('https://script.google.com/')) {
+    return decodeURIComponent(urlParam);
+  }
+  const session = sessionStorage.getItem('teacherScriptUrl') || '';
+  if (session && session.startsWith('https://script.google.com/')) return session;
+  const stored = localStorage.getItem('googleSheetUrl') || '';
+  if (stored && stored.startsWith('https://script.google.com/')) return stored;
+  return DEFAULT_APPS_SCRIPT_URL;
+}
 
 function loadTeacherAdditions(){
   const saved = JSON.parse(localStorage.getItem('teacherAdditions') || '{}');
@@ -1793,10 +1850,38 @@ function populateTeacherControls(){
   const certGrSel = document.getElementById('certGradeSelect');
   if(certGrSel) certGrSel.innerHTML = gradeOptions(activeStream);
 
-  // Populate resource grade dropdown
-  const resGrSel = document.getElementById('resourceGradeSelect');
-  if(resGrSel) resGrSel.innerHTML = '<option value="">All Grades</option>' + gradeOptions(activeStream);
+  // Populate Teacher Link grade dropdown (Task 3 fix — all 8 streams)
+  const tlGradeSel = document.getElementById('teacherLinkGradeSelect');
+  if (tlGradeSel) {
+    const existing = tlGradeSel.value;
+    tlGradeSel.innerHTML = ALL_GRADES.map(g => `<option value="${g.k}">${g.label}</option>`).join('');
+    if (existing && ALL_GRADES.find(g => g.k === existing)) tlGradeSel.value = existing;
+    else tlGradeSel.value = activeStream;
+  }
 
+  // Populate Dashboard filters
+  const dashGrade = document.getElementById('dashGradeFilter');
+  if (dashGrade) {
+    dashGrade.innerHTML = '<option value="">All Grades</option>' + ALL_GRADES.map(g => `<option value="${g.label}">${g.label}</option>`).join('');
+  }
+  const dashSkill = document.getElementById('dashSkillFilter');
+  if (dashSkill) {
+    const skills = [...new Set(localReports.map(r => r.skill || r.tab).filter(Boolean))];
+    dashSkill.innerHTML = '<option value="">All Skills</option>' + skills.map(s => `<option value="${s}">${s}</option>`).join('');
+  }
+
+  // Pre-fill teacher's stored URL
+  const gsu = document.getElementById('googleSheetUrl');
+  if (gsu && !gsu.value) gsu.value = localStorage.getItem('googleSheetUrl') || '';
+
+  // Show offline submission count
+  const offlineEl = document.getElementById('offlineCountMsg');
+  if (offlineEl) {
+    const offline = JSON.parse(localStorage.getItem('offlineSubmissions') || '[]');
+    offlineEl.textContent = offline.length ? `${offline.length} offline submission(s) waiting to retry.` : '';
+  }
+
+  renderDashboard();
   renderAvatars();
   renderBadges();
   renderStudentProfileControls();
@@ -1851,13 +1936,25 @@ function addActivityToTab(){
 function generateTeacherLink(){
   const teacherRaw = document.getElementById('teacherCode').value.trim() || 'teacher';
   const teacher = encodeURIComponent(teacherRaw);
+  const school = encodeURIComponent((document.getElementById('teacherSchoolName') ? document.getElementById('teacherSchoolName').value.trim() : ''));
   const section = encodeURIComponent(document.getElementById('teacherSectionSelect').value || 'section');
-  // Generate a unique teacher ID: teacherName + short hash
+  // Use the dedicated grade dropdown in the Teacher Link section
+  const gradeEl = document.getElementById('teacherLinkGradeSelect') || document.getElementById('activityGradeSelect');
+  const gradeKey = gradeEl ? gradeEl.value : activeStream;
+  // Teacher's own Apps Script URL (optional)
+  const ownScriptEl = document.getElementById('teacherOwnScriptUrl');
+  const ownScript = ownScriptEl ? ownScriptEl.value.trim() : '';
+  // Generate a stable teacherId from name + random suffix
   const teacherId = teacherRaw.replace(/\s+/g,'_') + '_' + Math.random().toString(36).substring(2,7).toUpperCase();
-  const gradeKey = document.getElementById('activityGradeSelect') ? document.getElementById('activityGradeSelect').value : activeStream;
-  const url = `${location.origin}${location.pathname}?teacher=${teacher}&section=${section}&grade=${encodeURIComponent(gradeKey)}&teacherId=${encodeURIComponent(teacherId)}`;
+  let url = `${location.origin}${location.pathname}?teacher=${teacher}&section=${section}&grade=${encodeURIComponent(gradeKey)}&teacherId=${encodeURIComponent(teacherId)}`;
+  if (school) url += `&school=${school}`;
+  if (ownScript && ownScript.startsWith('https://script.google.com/')) {
+    url += `&scriptUrl=${encodeURIComponent(ownScript)}`;
+  }
   const output = document.getElementById('teacherLinkOutput');
-  output.innerHTML = `<a href="${escapeForHtml(url)}" target="_blank" rel="noopener" style="word-break:break-all;color:#1F5560">${escapeForHtml(url)}</a><br><small style="color:#a8998a">Teacher ID: ${escapeForHtml(teacherId)} — Copy and share this link with your students.</small>`;
+  output.innerHTML = `<a href="${escapeForHtml(url)}" target="_blank" rel="noopener" style="word-break:break-all;color:#1F5560;font-size:.82rem;">${escapeForHtml(url)}</a>`
+    + `<br><small style="color:#a8998a">Teacher ID: <b>${escapeForHtml(teacherId)}</b> &nbsp;|&nbsp; Grade: ${escapeForHtml(STREAM_NAMES[gradeKey]||gradeKey)} &nbsp;|&nbsp; Section: ${escapeForHtml(decodeURIComponent(section))}</small>`
+    + `<br><small style="color:#4F8C66">✅ Copy and share this link with your students. Results will go to ${ownScript ? 'your own Apps Script URL' : 'the default admin Google Sheet'}.</small>`;
   navigator.clipboard?.writeText(url).catch(()=>{});
 }
 function renderAvatars(){
@@ -1911,41 +2008,68 @@ function renderBadges(){
   if(studentEl) studentEl.innerHTML = content;
 }
 
-function saveGoogleSheetUrl(){ const el=document.getElementById('googleSheetUrl'); if(el){ localStorage.setItem('googleSheetUrl', el.value.trim()); document.getElementById('reportStatus').textContent='Google Sheets URL saved.'; } }
-function sendReportToGoogleSheets(report, statusElId){
-  const hardcoded = GOOGLE_SHEET_WEB_APP_URL;
-  const stored = localStorage.getItem('googleSheetUrl') || '';
-  const url = (hardcoded && hardcoded.startsWith('https://script.google.com/')) ? hardcoded
-             : (stored && stored.startsWith('https://script.google.com/')) ? stored : '';
+function saveGoogleSheetUrl(){
+  const el = document.getElementById('googleSheetUrl');
+  if (el) {
+    localStorage.setItem('googleSheetUrl', el.value.trim());
+    document.getElementById('reportStatus').textContent = 'Google Sheets URL saved. ✅';
+  }
+}
+
+function sendReportToGoogleSheets(report, statusElId) {
+  const url = getActiveScriptUrl();
   const statusIds = [statusElId, 'submitStatusMsg', 'reportStatus'].filter(Boolean);
-  function setStatus(msg){ statusIds.forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=msg; }); }
-  if(!url){ setStatus('Google Sheets is not connected. Please add a valid Apps Script URL.'); return; }
+  function setStatus(msg) { statusIds.forEach(id => { const el = document.getElementById(id); if (el) el.textContent = msg; }); }
+  if (!url) { setStatus('⚠️ Google Sheets is not connected. Please add a valid Apps Script URL in Teacher Tools → Reports.'); return; }
   const _params = new URLSearchParams();
   Object.keys(report).forEach(k => _params.append(k, report[k] == null ? '' : String(report[k])));
-  fetch(url,{method:'POST',mode:'no-cors',body:_params})
-    .then(()=>{ setStatus('\u2705 Submitted to teacher successfully!'); })
-    .catch(()=>{ setStatus('\u274c Submission failed. Check your internet connection.'); });
+  setStatus('⏳ Submitting…');
+  fetch(url, { method: 'POST', mode: 'no-cors', body: _params })
+    .then(() => {
+      setStatus('✅ Submitted to teacher successfully!');
+    })
+    .catch(err => {
+      setStatus('❌ Submission failed. Your result has been saved locally as a backup.');
+      // Offline fallback: save to localStorage
+      try {
+        const offline = JSON.parse(localStorage.getItem('offlineSubmissions') || '[]');
+        offline.push({ ...report, _failedAt: new Date().toISOString(), _url: url });
+        localStorage.setItem('offlineSubmissions', JSON.stringify(offline));
+      } catch(e) {}
+    });
 }
 
 function recordLocalReport(isCorrect){
   const params = new URLSearchParams(location.search);
-  localReports.push({
+  const mod = (DATABASE[activeStream][activeTab] || [])[activeModuleIndex] || {};
+  const pct = answered > 0 ? Math.round(score/answered*100) : 0;
+  const report = {
+    submissionType: 'quiz_answer',
     date: new Date().toLocaleString(),
-    teacher: params.get('teacher') || '',
     teacherId: params.get('teacherId') || '',
-    student: localStorage.getItem('studentName') || '',
-    section: params.get('section') || localStorage.getItem('studentSection') || '',
+    teacherName: decodeURIComponent(params.get('teacher') || ''),
+    teacherAppsScriptUrl: getActiveScriptUrl(),
+    studentName: localStorage.getItem('studentName') || '',
+    className: params.get('section') || localStorage.getItem('studentSection') || '',
     grade: STREAM_NAMES[activeStream] || activeStream,
-    tab: activeTab,
-    module: DATABASE[activeStream][activeTab][activeModuleIndex].title,
-    avatar: selectedAvatar,
+    stream: activeStream,
+    section: params.get('section') || localStorage.getItem('studentSection') || '',
+    skill: activeTab,
+    activityTitle: mod.title || '',
+    score: score,
+    total: answered,
+    percentage: pct + '%',
+    badge: currentBadge(),
     correct: isCorrect ? 'Yes' : 'No',
-    score: `${score}/${answered}`
-  });
+    pageUrl: location.href,
+    avatar: selectedAvatar
+  };
+  localReports.push(report);
   localStorage.setItem('localReports', JSON.stringify(localReports));
-  sendReportToGoogleSheets(localReports[localReports.length-1]);
+  sendReportToGoogleSheets(report);
   renderBadges();
 }
+
 function submitToTeacher(){
   const params = new URLSearchParams(location.search);
   const modules = DATABASE[activeStream] && DATABASE[activeStream][activeTab] ? DATABASE[activeStream][activeTab] : [];
@@ -1953,23 +2077,30 @@ function submitToTeacher(){
   const pct = answered > 0 ? Math.round(score/answered*100) : 0;
   const badge = pct>=90?'🏆 Excellence':pct>=75?'⭐ Proficient':pct>=60?'👍 Developing':'💪 Keep Practising';
   const report = {
+    submissionType: 'quiz_complete',
     date: new Date().toLocaleString(),
-    teacher: params.get('teacher') || '',
-    student: localStorage.getItem('studentName') || '',
+    teacherId: params.get('teacherId') || '',
+    teacherName: decodeURIComponent(params.get('teacher') || ''),
+    teacherAppsScriptUrl: getActiveScriptUrl(),
+    studentName: localStorage.getItem('studentName') || '',
+    className: params.get('section') || localStorage.getItem('studentSection') || '',
+    grade: STREAM_NAMES[activeStream] || activeStream,
+    stream: activeStream,
     section: params.get('section') || localStorage.getItem('studentSection') || '',
-    grade: activeStream,
-    tab: activeTab,
-    module: mod.title || '',
-    avatar: selectedAvatar,
+    skill: activeTab,
+    activityTitle: mod.title || '',
     score: score,
     total: answered,
     percentage: pct + '%',
     badge: badge,
+    pageUrl: location.href,
+    avatar: selectedAvatar,
     status: 'Module Submitted'
   };
+  localReports.push(report);
   localStorage.setItem('localReports', JSON.stringify(localReports));
   const msgEl = document.getElementById('submitStatusMsg');
-  if(msgEl) msgEl.textContent = 'Submitting…';
+  if (msgEl) msgEl.textContent = '⏳ Submitting…';
   sendReportToGoogleSheets(report, 'submitStatusMsg');
 }
 
@@ -1980,6 +2111,89 @@ function downloadReportsCsv(){
   const blob = new Blob([csv], {type:'text/csv'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = 'student-reports.csv'; a.click(); URL.revokeObjectURL(a.href);
+}
+
+// ── TASK 2: Teacher Dashboard renderer ──────────────────────────────────────
+function renderDashboard() {
+  const gradeFilter = (document.getElementById('dashGradeFilter') || {}).value || '';
+  const skillFilter = (document.getElementById('dashSkillFilter') || {}).value || '';
+  let reports = localReports.filter(r => {
+    const g = r.grade || r.stream || '';
+    const s = r.skill || r.tab || '';
+    return (!gradeFilter || g === gradeFilter) && (!skillFilter || s === skillFilter);
+  });
+  const offline = JSON.parse(localStorage.getItem('offlineSubmissions') || '[]');
+  const all = [...reports, ...offline.map(r => ({ ...r, _offline: true }))];
+  const summaryEl = document.getElementById('dashSummary');
+  const tableEl   = document.getElementById('dashTable');
+  if (!summaryEl || !tableEl) return;
+  const total = all.length;
+  const students = [...new Set(all.map(r => r.studentName || r.student).filter(Boolean))].length;
+  summaryEl.innerHTML = [
+    ['Total Submissions', total],
+    ['Unique Students', students],
+    ['Offline Queued', offline.length]
+  ].map(([label, val]) =>
+    `<div style="background:#f4eee5;border:1px solid #e2d8c6;border-radius:10px;padding:10px 16px;text-align:center;min-width:110px;"><div style="font-size:1.3rem;font-weight:800;color:#1F5560;">${val}</div><div style="font-size:.72rem;color:#a8998a;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">${label}</div></div>`
+  ).join('');
+  if (!all.length) { tableEl.innerHTML = '<em style="color:#a8998a;">No submissions yet. Results will appear here once students submit work.</em>'; return; }
+  const cols = ['Date','Student','Grade','Section','Skill','Activity','Score','%','Badge','Teacher','Correct'];
+  const rows = all.slice(-50).reverse().map(r => [
+    r.date||'', r.studentName||r.student||'—', r.grade||r.stream||'',
+    r.section||r.className||'', r.skill||r.tab||'', r.activityTitle||r.module||'',
+    r.score!=null?r.score:'', r.percentage||'', r.badge||'',
+    r.teacherName||r.teacher||'', r.correct||''
+  ]);
+  tableEl.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:.78rem;"><thead><tr>${cols.map(c=>`<th style="background:#f4eee5;border:1px solid #e2d8c6;padding:6px 8px;text-align:left;white-space:nowrap;">${c}</th>`).join('')}</tr></thead><tbody>${rows.map((row,i)=>`<tr style="background:${i%2===0?'#fff':'#faf8f5'}">${row.map(cell=>`<td style="border:1px solid #e2d8c6;padding:5px 8px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeForHtml(String(cell))}">${escapeForHtml(String(cell||''))}</td>`).join('')}</tr>`).join('')}</tbody></table><p style="font-size:.72rem;color:#a8998a;margin-top:6px;">Showing last 50 submissions. Use CSV download above for full history.</p>`;
+}
+function retryOfflineSubmissions() {
+  const offline = JSON.parse(localStorage.getItem('offlineSubmissions') || '[]');
+  if (!offline.length) { alert('No offline submissions to retry.'); return; }
+  offline.forEach(r => sendReportToGoogleSheets(r));
+  alert(`Retrying ${offline.length} offline submission(s)…`);
+  setTimeout(() => { localStorage.removeItem('offlineSubmissions'); renderDashboard(); }, 4000);
+}
+function clearAllLocalReports() {
+  if (!confirm('Clear ALL local reports from this browser? This cannot be undone.')) return;
+  localReports = []; localStorage.setItem('localReports', JSON.stringify(localReports));
+  localStorage.removeItem('offlineSubmissions'); renderDashboard();
+}
+
+// ── TASK 5: Like / Dislike feedback widget ───────────────────────────────────
+function injectFeedbackWidget() {
+  const container = document.querySelector('#quizStage .card');
+  if (!container || container.querySelector('.as-feedback-widget')) return;
+  const mod = (DATABASE[activeStream] && DATABASE[activeStream][activeTab]) ? (DATABASE[activeStream][activeTab][activeModuleIndex] || {}) : {};
+  const feedbackKey = 'fb_' + activeStream + '_' + activeTab + '_' + (mod.title||'x').replace(/\W+/g,'_').substring(0,25);
+  const alreadyVoted = localStorage.getItem(feedbackKey);
+  const html = `<div class="as-feedback-widget" style="margin-top:14px;padding:10px 14px;background:#faf8f4;border:1px dashed #e2d8c6;border-radius:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">`
+    + `<span style="font-size:.79rem;font-weight:700;color:#536468;">Was this activity useful?</span>`
+    + (alreadyVoted
+      ? `<span style="font-size:.79rem;color:#4F8C66;font-weight:700;">✓ Thank you for your feedback!</span>`
+      : `<button onclick="submitFeedback('like','${feedbackKey}')" style="border:1px solid #c2e0cc;background:#EBF5EE;color:#2E7A4A;border-radius:8px;padding:5px 12px;font-weight:700;cursor:pointer;font-size:.79rem;">👍 Like</button>`
+        + `<button onclick="submitFeedback('dislike','${feedbackKey}')" style="border:1px solid #f5c6c6;background:#FDF2F2;color:#B14545;border-radius:8px;padding:5px 12px;font-weight:700;cursor:pointer;font-size:.79rem;">👎 Dislike</button>`)
+    + `</div>`;
+  container.insertAdjacentHTML('beforeend', html);
+}
+function submitFeedback(feedbackType, feedbackKey) {
+  if (localStorage.getItem(feedbackKey)) return;
+  const params = new URLSearchParams(location.search);
+  const mod = (DATABASE[activeStream] && DATABASE[activeStream][activeTab]) ? (DATABASE[activeStream][activeTab][activeModuleIndex] || {}) : {};
+  const report = {
+    submissionType: 'feedback', feedbackType,
+    date: new Date().toLocaleString(),
+    teacherId: params.get('teacherId')||'',
+    teacherName: decodeURIComponent(params.get('teacher')||''),
+    studentName: localStorage.getItem('studentName')||'',
+    className: params.get('section')||localStorage.getItem('studentSection')||'',
+    grade: STREAM_NAMES[activeStream]||activeStream,
+    section: params.get('section')||localStorage.getItem('studentSection')||'',
+    skill: activeTab, activityTitle: mod.title||'', pageUrl: location.href
+  };
+  localStorage.setItem(feedbackKey, feedbackType);
+  sendReportToGoogleSheets(report);
+  const widget = document.querySelector('.as-feedback-widget');
+  if (widget) widget.innerHTML = `<span style="font-size:.79rem;color:#4F8C66;font-weight:700;">✓ Thank you! (${feedbackType==='like'?'👍':'👎'})</span>`;
 }
 
 function escapeForHtml(value){ return String(value == null ? '' : value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
@@ -2428,7 +2642,40 @@ function updateStreamBanner(stream) {
   main.insertBefore(banner, main.firstChild);
 }
 
-window.addEventListener('DOMContentLoaded',()=>{loadTeacherAdditions(); refreshStreamButtons(); renderStudentProfileControls(); /* Show homepage by default */ document.getElementById('homePage').style.display='flex'; document.getElementById('homePage').style.flexDirection='column'; document.getElementById('practiceApp').style.display='none'; });
+window.addEventListener('DOMContentLoaded',()=>{
+  loadTeacherAdditions();
+  refreshStreamButtons();
+
+  // ── TASK 4: Read teacher URL parameters ──────────────────────────────────
+  const urlParams = new URLSearchParams(location.search);
+  const gradeParam = urlParams.get('grade');
+  const scriptParam = urlParams.get('scriptUrl');
+  const teacherParam = urlParams.get('teacher');
+
+  // Save teacher-specific scriptUrl to sessionStorage for this session
+  if (scriptParam && scriptParam.startsWith('https://script.google.com/')) {
+    sessionStorage.setItem('teacherScriptUrl', decodeURIComponent(scriptParam));
+  }
+
+  // Auto-switch to teacher's specified grade
+  if (gradeParam && DATABASE[gradeParam]) {
+    activeStream = gradeParam;
+    document.body.dataset.activeStream = gradeParam;
+    document.querySelectorAll('.stream-btn').forEach(b => b.classList.toggle('active', b.dataset.stream === gradeParam));
+  }
+
+  renderStudentProfileControls();
+
+  // Show homepage by default
+  document.getElementById('homePage').style.display='flex';
+  document.getElementById('homePage').style.flexDirection='column';
+  document.getElementById('practiceApp').style.display='none';
+
+  // If teacher link is active, go straight to practice page
+  if (gradeParam && teacherParam) {
+    selectGradeAndShow(gradeParam);
+  }
+});
 </script>
 <!-- ── Teacher Password Modal (Fix 2) ──────────────────────────────────────── -->
 <div class="pw-modal" id="teacherPwModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="pwModalTitle">
