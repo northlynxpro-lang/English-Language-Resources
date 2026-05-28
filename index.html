@@ -127,8 +127,11 @@ footer::before {
 .as-footer-url:hover{color:var(--as-plum,#4A2C3D);border-bottom-color:var(--as-plum,#4A2C3D);}
 .as-footer-copy{margin-top:14px;font-size:.73rem;color:#8a7d70;line-height:1.7;}
 .as-footer-edu{margin-top:10px;font-size:.67rem;color:#b09e8e;font-style:italic;line-height:1.6;max-width:580px;margin-left:auto;margin-right:auto;}
-/* print: branded page footer */
-@media print {
+/* ── AI Worksheet Converter: full-width grid span ── */
+#toolBulkAdd { grid-column: 1 / -1; }
+#toolBulkAdd .as-paste-area { min-height: 130px; }
+@media (max-width: 600px) { #toolBulkAdd { grid-column: 1; } }
+</style>
   footer{display:none!important}
   .as-print-footer{display:flex!important;justify-content:space-between;align-items:center;border-top:0.5pt solid #c8bba6;padding:6pt 0 0;margin-top:20pt;font-size:7.5pt;color:#666;font-family:"DM Sans",Arial,sans-serif;letter-spacing:.06em;}
   .as-print-footer a{color:#666;text-decoration:none;}
@@ -1212,7 +1215,7 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
       <button class="teacher-tab-btn" onclick="document.getElementById('toolAddGrade').scrollIntoView({block:'start'})">+ Add Grade</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolAddSection').scrollIntoView({block:'start'})">+ Add Section</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolAddActivity').scrollIntoView({block:'start'})">+ Add Activity</button>
-      <button class="teacher-tab-btn" onclick="document.getElementById('toolBulkAdd').scrollIntoView({block:'start'})">Bulk Add MCQs</button>
+      <button class="teacher-tab-btn" onclick="document.getElementById('toolBulkAdd').scrollIntoView({block:'start'})">🤖 AI Worksheet Converter</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolCertificateSettings').scrollIntoView({block:'start'})">Certificate Settings</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolPrintCertificate').scrollIntoView({block:'start'})">Print Certificate</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolAssignBadges').scrollIntoView({block:'start'})">Assign Badges</button>
@@ -1279,33 +1282,74 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
         <textarea id="activityExplanation" placeholder="Explain why the answer is correct."></textarea>
         <button class="btn" onclick="addActivityToTab()">Add Activity</button>
       </div>
-      <div class="teacher-box" id="toolBulkAdd">
-        <h3>Bulk Add MCQs</h3>
-        <p>Paste many questions at once, or upload a file. Format each question with A/B/C choices and an answer line.</p>
+      <div class="teacher-box" id="toolBulkAdd" style="grid-column:1/-1;">
+        <h3>🤖 AI Worksheet Converter</h3>
+        <p style="font-size:.85rem;color:var(--muted);margin:0 0 14px;">Upload a Word worksheet or paste any text — AI will automatically turn it into interactive MCQs, True/False/Not Given, and/or Fill in the Blanks activities. No need to format questions manually.</p>
+
+        <!-- Grade / Tab / Title row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;">
+          <div>
+            <label>Grade / Stream</label>
+            <select id="bulkGradeSelect" onchange="populateBulkTabs()"></select>
+          </div>
+          <div>
+            <label>Skill Tab</label>
+            <select id="bulkTabSelect"></select>
+          </div>
+          <div>
+            <label>Module / Activity Title</label>
+            <input id="bulkModuleTitle" placeholder="e.g. Reading Worksheet Term 2" />
+          </div>
+        </div>
+
+        <!-- Question type selector -->
+        <label>Question Types to Generate</label>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px;">
+          <label style="display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--dark);">
+            <input type="checkbox" id="genMCQ" checked style="width:auto;min-width:0;padding:0;border:0;background:none;"> 📝 MCQ
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--dark);">
+            <input type="checkbox" id="genTF" checked style="width:auto;min-width:0;padding:0;border:0;background:none;"> ✔✘ True / False / Not Given
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--dark);">
+            <input type="checkbox" id="genFill" checked style="width:auto;min-width:0;padding:0;border:0;background:none;"> ___ Fill in the Blanks
+          </label>
+        </div>
 
         <!-- Upload area -->
-        <label>Upload File</label>
+        <label>Upload Worksheet (Word, PDF, TXT, Image)</label>
         <div class="as-file-upload-area" id="bulkDropZone">
           <input type="file" id="bulkFileInput"
             accept=".txt,.csv,.pdf,.doc,.docx,.jpg,.jpeg,.png"
             onchange="loadBulkQuestionFile(this.files[0])"
-            aria-label="Upload file for bulk MCQ import">
+            aria-label="Upload worksheet file">
           <div class="as-file-upload-icon">📂</div>
-          <div class="as-file-upload-label">Click to upload or drag & drop</div>
-          <div class="as-file-upload-types">Word (.docx), PDF, CSV, JPG, PNG, TXT — text will be extracted automatically</div>
+          <div class="as-file-upload-label">Click to upload or drag &amp; drop</div>
+          <div class="as-file-upload-types">Word (.docx), PDF, TXT, CSV, JPG, PNG — text extracted automatically</div>
         </div>
         <div class="as-file-status" id="bulkFileStatus">No file selected</div>
 
-        <label style="margin-top:12px;">Or paste questions directly</label>
-        <textarea class="as-paste-area" id="bulkQuestionText" placeholder="1. Question text&#10;A. Option one&#10;B. Option two&#10;C. Option three&#10;Answer: B&#10;&#10;2. Next question..."></textarea>
+        <!-- Paste area -->
+        <label style="margin-top:12px;">Or paste worksheet content directly</label>
+        <textarea class="as-paste-area" id="bulkQuestionText"
+          placeholder="Paste your worksheet, reading passage, vocabulary list, grammar notes, or any text here. AI will read it and create questions automatically.&#10;&#10;You can also paste pre-formatted MCQs in this format:&#10;1. Question text&#10;A. Option one  B. Option two  C. Option three&#10;Answer: A"></textarea>
 
-        <label style="margin-top:10px;">Module title</label>
-        <input id="bulkModuleTitle" placeholder="Example: Teacher Bulk MCQ Practice" />
-        <div style="display:flex;gap:8px;margin-top:10px;">
-          <button class="btn secondary" style="flex:1" onclick="previewBulkQuestions()">Preview</button>
-          <button class="btn" style="flex:1" onclick="addBulkQuestionsToTab()">Add Valid Questions</button>
+        <!-- Action buttons -->
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+          <button class="btn" style="flex:2;min-width:160px;" onclick="aiConvertWorksheet()">🤖 Generate Questions with AI</button>
+          <button class="btn secondary" style="flex:1;min-width:130px;" onclick="previewBulkQuestions()">📋 Preview Manual Format</button>
         </div>
-        <div class="bulk-preview" id="bulkPreview">No bulk questions previewed yet.</div>
+
+        <!-- Status line -->
+        <div id="bulkAiStatus" style="margin-top:10px;font-size:.83rem;font-weight:600;color:#1F5560;min-height:20px;line-height:1.5;"></div>
+
+        <!-- Preview of generated questions -->
+        <div class="bulk-preview" id="bulkPreview" style="display:none;margin-top:10px;background:transparent;border:none;padding:0;white-space:normal;"></div>
+
+        <!-- Add button — shown only after questions are ready -->
+        <div id="bulkAddBtnArea" style="display:none;margin-top:12px;">
+          <button class="btn" style="width:100%;" onclick="addBulkQuestionsToTab()">✅ Add All Generated Questions to Activity</button>
+        </div>
       </div>
       <div class="teacher-box" id="toolCertificateSettings">
         <h3>Certificate Settings</h3>
@@ -1850,6 +1894,16 @@ function populateTeacherControls(){
   const certGrSel = document.getElementById('certGradeSelect');
   if(certGrSel) certGrSel.innerHTML = gradeOptions(activeStream);
 
+  // Populate Bulk Add / AI Converter grade dropdown
+  const bulkGradeSel = document.getElementById('bulkGradeSelect');
+  if (bulkGradeSel) {
+    const existing = bulkGradeSel.value;
+    bulkGradeSel.innerHTML = ALL_GRADES.map(g => `<option value="${g.k}">${g.label}</option>`).join('');
+    if (existing && ALL_GRADES.find(g => g.k === existing)) bulkGradeSel.value = existing;
+    else bulkGradeSel.value = activeStream;
+    populateBulkTabs();
+  }
+
   // Populate Teacher Link grade dropdown (Task 3 fix — all 8 streams)
   const tlGradeSel = document.getElementById('teacherLinkGradeSelect');
   if (tlGradeSel) {
@@ -2197,6 +2251,18 @@ function submitFeedback(feedbackType, feedbackKey) {
 }
 
 function escapeForHtml(value){ return String(value == null ? '' : value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+// ── Shared store for AI-generated questions waiting to be added ──────────────
+let bulkAiQuestions = [];
+
+// ── Populate the Bulk Add tab dropdowns ──────────────────────────────────────
+function populateBulkTabs() {
+  const streamKey = (document.getElementById('bulkGradeSelect') || {}).value || activeStream;
+  const tabs = Object.keys(DATABASE[streamKey] || {});
+  const sel = document.getElementById('bulkTabSelect');
+  if (sel) sel.innerHTML = tabs.map(t => `<option value="${t}">${t}</option>`).join('');
+}
+
+// ── Parse manually formatted MCQ text (fallback) ─────────────────────────────
 function parseBulkMcqText(text){
   const blocks = String(text||'').replace(/\r/g,'').split(/\n\s*\n+/).map(b=>b.trim()).filter(Boolean);
   const valid=[], errors=[];
@@ -2211,93 +2277,313 @@ function parseBulkMcqText(text){
     });
     let ansObj = opts.find(o=>o.mark===answerMark) || opts.find(o=>o.text.toLowerCase()===answerText.toLowerCase());
     if(!qLine || opts.length < 2 || !ansObj){ errors.push(`Question ${index+1}: missing question, choices, or valid Answer line.`); return; }
-    valid.push({q:qLine, options:opts.map(o=>o.text), answer:ansObj.text, explanation:'Correct answer: '+ansObj.text});
+    valid.push({type:'mcq', q:qLine, options:opts.map(o=>o.text), answer:ansObj.text, explanation:'Correct answer: '+ansObj.text});
   });
   return {valid, errors};
 }
+
+// ── Preview manually formatted questions ────────────────────────────────────
 function previewBulkQuestions(){
   const result = parseBulkMcqText(document.getElementById('bulkQuestionText').value);
-  document.getElementById('bulkPreview').textContent = `${result.valid.length} valid question(s) found.\n${result.errors.length ? result.errors.join('\n') : 'No format errors found.'}`;
+  bulkAiQuestions = result.valid;
+  const statusEl = document.getElementById('bulkAiStatus');
+  const previewEl = document.getElementById('bulkPreview');
+  const addBtn = document.getElementById('bulkAddBtnArea');
+  if (result.valid.length) {
+    statusEl.textContent = `📋 ${result.valid.length} question(s) found in manual format.${result.errors.length ? ' ' + result.errors.length + ' skipped.' : ''}`;
+    renderBulkPreview(result.valid);
+    previewEl.style.display = 'block';
+    addBtn.style.display = 'block';
+  } else {
+    statusEl.textContent = result.errors.length
+      ? '⚠️ No valid questions found. Errors: ' + result.errors.join(' | ')
+      : '⚠️ No questions found. Use the AI button to generate from your text, or check the manual format.';
+    previewEl.style.display = 'none';
+    addBtn.style.display = 'none';
+  }
   return result;
 }
+
+// ── Render a preview of questions (AI or manual) ─────────────────────────────
+function renderBulkPreview(questions) {
+  const el = document.getElementById('bulkPreview');
+  if (!questions || !questions.length) { el.innerHTML = '<em>No questions to preview.</em>'; return; }
+  const typeLabel = { mcq:'📝 MCQ', tf:'✔✘ True/False/Not Given', fill:'___ Fill in the Blanks' };
+  el.innerHTML = `<div style="font-size:.78rem;font-weight:800;color:#536468;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">${questions.length} question(s) ready</div>`
+    + questions.map((q, i) => {
+      const lbl = typeLabel[q.type] || '📝 MCQ';
+      return `<div style="border:1px solid #e2d8c6;border-radius:10px;padding:10px 12px;margin:6px 0;background:#fff;">
+        <div style="font-size:.68rem;font-weight:800;color:#536468;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">${lbl} · Q${i+1}</div>
+        <div style="font-weight:700;font-size:.88rem;color:var(--dark);margin-bottom:7px;">${escapeForHtml(q.q)}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px;">${(q.options||[]).map(o =>
+          `<span style="background:${o===q.answer?'#EBF5EE':'#f4eee5'};border:1px solid ${o===q.answer?'#C2E0CC':'#e2d8c6'};border-radius:6px;padding:3px 9px;font-size:.79rem;${o===q.answer?'font-weight:800;color:#2E7A4A;':''}">${escapeForHtml(o)}${o===q.answer?' ✓':''}</span>`
+        ).join('')}</div>
+        <div style="font-size:.74rem;color:#a8998a;font-style:italic;">${escapeForHtml(q.explanation||'')}</div>
+      </div>`;
+    }).join('');
+}
+
+// ── Add questions to the selected grade/tab ──────────────────────────────────
 function addBulkQuestionsToTab(){
-  const streamKey = document.getElementById('activityGradeSelect').value;
-  const tab = document.getElementById('activityTabSelect').value;
-  const title = document.getElementById('bulkModuleTitle').value.trim() || 'Teacher Bulk MCQ Practice';
-  const result = previewBulkQuestions();
-  if(!result.valid.length){ alert('No valid MCQs found. Please check the format.'); return; }
-  const module = {title, questions:result.valid};
-  if(!DATABASE[streamKey][tab]) DATABASE[streamKey][tab] = [];
+  // Use bulk-specific dropdowns if present, fall back to add-activity dropdowns
+  const gradeEl = document.getElementById('bulkGradeSelect') || document.getElementById('activityGradeSelect');
+  const tabEl   = document.getElementById('bulkTabSelect')   || document.getElementById('activityTabSelect');
+  const streamKey = gradeEl ? gradeEl.value : activeStream;
+  const tab = tabEl ? tabEl.value : activeTab;
+  const title = (document.getElementById('bulkModuleTitle').value || '').trim() || 'AI Worksheet Activity';
+
+  const questions = bulkAiQuestions.length ? bulkAiQuestions : parseBulkMcqText(document.getElementById('bulkQuestionText').value).valid;
+  if (!questions.length) { alert('No questions ready. Use the AI Generate button or check the manual format.'); return; }
+
+  // Strip the 'type' field — the DB only needs q/options/answer/explanation
+  const dbQuestions = questions.map(({ type, ...rest }) => rest);
+  const module = { title, questions: dbQuestions };
+  if (!DATABASE[streamKey]) DATABASE[streamKey] = {};
+  if (!DATABASE[streamKey][tab]) DATABASE[streamKey][tab] = [];
   DATABASE[streamKey][tab].push(module);
   saveTeacherModule(streamKey, tab, module);
-  if(streamKey === activeStream && tab === activeTab){ renderTabs(); renderTab(); }
-  alert(result.valid.length + ' questions added to ' + tab + '.');
+  if (streamKey === activeStream && tab === activeTab) { renderTabs(); renderTab(); }
+
+  // Reset
+  bulkAiQuestions = [];
+  document.getElementById('bulkQuestionText').value = '';
+  document.getElementById('bulkModuleTitle').value = '';
+  document.getElementById('bulkFileStatus').textContent = 'No file selected';
+  document.getElementById('bulkAiStatus').textContent = '';
+  document.getElementById('bulkPreview').style.display = 'none';
+  document.getElementById('bulkAddBtnArea').style.display = 'none';
+
+  alert(`✅ ${dbQuestions.length} question(s) added to "${tab}" under "${title}".`);
 }
+
+// ── AI: convert worksheet text to questions via Claude API ───────────────────
+async function aiConvertWorksheet() {
+  const text = (document.getElementById('bulkQuestionText').value || '').trim();
+  const statusEl = document.getElementById('bulkAiStatus');
+  const previewEl = document.getElementById('bulkPreview');
+  const addBtn = document.getElementById('bulkAddBtnArea');
+
+  if (!text) {
+    statusEl.textContent = '⚠️ Please upload a file or paste worksheet content first.';
+    return;
+  }
+
+  const wantMCQ  = document.getElementById('genMCQ')  ? document.getElementById('genMCQ').checked  : true;
+  const wantTF   = document.getElementById('genTF')   ? document.getElementById('genTF').checked   : true;
+  const wantFill = document.getElementById('genFill') ? document.getElementById('genFill').checked : true;
+
+  if (!wantMCQ && !wantTF && !wantFill) {
+    statusEl.textContent = '⚠️ Please select at least one question type.';
+    return;
+  }
+
+  const typeList = [wantMCQ && 'MCQ', wantTF && 'True/False/Not Given', wantFill && 'Fill in the Blanks'].filter(Boolean).join(', ');
+  statusEl.textContent = `🤖 AI is reading the worksheet and generating ${typeList} questions… please wait.`;
+  previewEl.style.display = 'none';
+  addBtn.style.display = 'none';
+  bulkAiQuestions = [];
+
+  const typeInstructions = [];
+  if (wantMCQ)  typeInstructions.push('MCQ: {"type":"mcq","q":"question","options":["A","B","C","D"],"answer":"exact matching option","explanation":"brief reason"}');
+  if (wantTF)   typeInstructions.push('True/False/Not Given: {"type":"tf","q":"statement from or based on the text","options":["True","False","Not Given"],"answer":"True OR False OR Not Given","explanation":"brief reason"}');
+  if (wantFill) typeInstructions.push('Fill in the Blanks: {"type":"fill","q":"sentence with ___ for the gap","options":["correct","wrong1","wrong2"],"answer":"correct","explanation":"brief reason"}');
+
+  const systemPrompt = `You are an expert English language teacher creating interactive exam-style questions from a worksheet for grades 9–12. Return ONLY a raw JSON object — no markdown, no code fences, no preamble, no explanation outside the JSON.
+
+Format: {"questions":[...]}
+
+Question formats to use:
+${typeInstructions.join('\n')}
+
+Rules:
+- Generate 6–12 questions total, mixing the requested types proportionally.
+- Questions must be based on the provided worksheet content only.
+- The "answer" value MUST exactly match one of the strings in "options".
+- Options for MCQ: 3–4 items. True/False/Not Given: exactly ["True","False","Not Given"]. Fill: 3 items.
+- Explanations under 15 words.
+- Do not include any text outside the JSON object.`;
+
+  const userPrompt = `Create ${typeList} questions from this worksheet content:\n\n${text.substring(0, 7000)}`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userPrompt }]
+      })
+    });
+
+    if (!response.ok) {
+      const errBody = await response.text().catch(() => '');
+      throw new Error(`API returned ${response.status}. ${errBody.substring(0,120)}`);
+    }
+
+    const data = await response.json();
+    const raw = (data.content || []).map(c => c.type === 'text' ? c.text : '').join('').trim();
+
+    // Strip any accidental markdown fences
+    const clean = raw.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
+    let parsed;
+    try { parsed = JSON.parse(clean); }
+    catch(pe) {
+      // Attempt to find JSON inside the response
+      const m = raw.match(/\{[\s\S]*\}/);
+      if (m) parsed = JSON.parse(m[0]);
+      else throw new Error('Could not parse AI response as JSON.');
+    }
+
+    if (!parsed.questions || !parsed.questions.length) throw new Error('AI returned no questions. Try adding more content to the worksheet.');
+
+    // Validate each question has required fields
+    bulkAiQuestions = parsed.questions.filter(q => q.q && q.options && q.options.length >= 2 && q.answer);
+
+    if (!bulkAiQuestions.length) throw new Error('No valid questions in AI response. Please try again.');
+
+    renderBulkPreview(bulkAiQuestions);
+    previewEl.style.display = 'block';
+    addBtn.style.display = 'block';
+    statusEl.textContent = `✅ ${bulkAiQuestions.length} question(s) generated! Review below, then click "Add All Generated Questions".`;
+
+  } catch(err) {
+    statusEl.textContent = `❌ AI generation failed: ${err.message}. Try pasting more content, or use the "Preview Manual Format" button if your text is already formatted as MCQs.`;
+  }
+}
+
+// ── Enhanced file loader: DOCX extraction + image support ────────────────────
 function loadBulkQuestionFile(file){
   if(!file) return;
   const statusEl = document.getElementById('bulkFileStatus');
   statusEl.textContent = '⏳ Reading: ' + file.name + '…';
 
-  // For text-based files: txt, csv
   if(/\.(txt|csv)$/i.test(file.name)){
     const reader = new FileReader();
     reader.onload = e => {
       document.getElementById('bulkQuestionText').value = e.target.result || '';
-      statusEl.textContent = '✅ Loaded: ' + file.name;
-      previewBulkQuestions();
+      statusEl.textContent = '✅ Loaded: ' + file.name + '. Click "Generate Questions with AI" to convert.';
     };
     reader.onerror = () => { statusEl.textContent = '❌ Error reading file.'; };
     reader.readAsText(file);
     return;
   }
 
-  // For Word, PDF, image — extract what we can via readAsText / inform user
   if(/\.(docx|doc)$/i.test(file.name)){
-    // Read raw bytes and try to extract text between XML tags
     const reader = new FileReader();
     reader.onload = e => {
       try {
         const raw = e.target.result;
-        // Extract readable text from docx XML (rough extraction)
         const matches = raw.match(/<w:t[^>]*>([^<]+)<\/w:t>/g) || [];
-        const extracted = matches.map(m => m.replace(/<[^>]+>/g, '')).join(' ').trim();
+        const extracted = matches.map(m => m.replace(/<[^>]+>/g, '')).join(' ').replace(/\s+/g,' ').trim();
         if(extracted.length > 20){
           document.getElementById('bulkQuestionText').value = extracted;
-          statusEl.textContent = '✅ Text extracted from: ' + file.name;
-          previewBulkQuestions();
+          statusEl.textContent = '✅ Text extracted from: ' + file.name + '. Click "Generate Questions with AI".';
         } else {
-          statusEl.textContent = '⚠️ Could not extract text from this Word file. Please copy-paste the content instead.';
+          statusEl.textContent = '⚠️ Could not auto-extract from this Word file. Please copy all text (Ctrl+A, Ctrl+C) from the Word doc and paste it in the text area below.';
         }
-      } catch(err){ statusEl.textContent = '⚠️ Please copy-paste content from this Word file.'; }
+      } catch(err){ statusEl.textContent = '⚠️ Please copy-paste the content from this Word file.'; }
     };
     reader.readAsText(file, 'utf-8');
     return;
   }
 
   if(/\.(jpg|jpeg|png|gif|webp)$/i.test(file.name)){
-    statusEl.textContent = '📸 Image uploaded: ' + file.name + '. Images cannot be auto-converted to text. Please type or paste the content.';
+    // Read as base64 and send to Claude vision for OCR + question generation
+    statusEl.textContent = '📸 Image loaded: ' + file.name + '. The AI will read the image directly. Click "Generate Questions with AI".';
+    const reader = new FileReader();
+    reader.onload = async e => {
+      const base64 = e.target.result.split(',')[1];
+      const mediaType = file.type || 'image/jpeg';
+      // Store image for AI call
+      window._bulkImageData = { base64, mediaType, name: file.name };
+      statusEl.textContent = '📸 Image ready: ' + file.name + '. Click "Generate Questions with AI" — AI will read the image.';
+    };
+    reader.readAsDataURL(file);
     return;
   }
 
   if(/\.pdf$/i.test(file.name)){
-    statusEl.textContent = '📄 PDF uploaded: ' + file.name + '. For best results, open the PDF, select all text (Ctrl+A), copy (Ctrl+C), then paste below.';
+    statusEl.textContent = '📄 PDF received: ' + file.name + '. For best results: open the PDF → Select All (Ctrl+A) → Copy (Ctrl+C) → paste in the text area below. Then click "Generate Questions with AI".';
     return;
   }
 
-  // Fallback: try reading as text
+  // Fallback
   const reader = new FileReader();
   reader.onload = e => {
     const text = (e.target.result || '').replace(/[^\x20-\x7E\n\r\t]/g, ' ').trim();
     if(text.length > 30){
       document.getElementById('bulkQuestionText').value = text;
-      statusEl.textContent = '✅ Loaded: ' + file.name;
-      previewBulkQuestions();
+      statusEl.textContent = '✅ Loaded: ' + file.name + '. Click "Generate Questions with AI".';
     } else {
-      statusEl.textContent = '⚠️ Could not read this file type. Please paste content directly.';
+      statusEl.textContent = '⚠️ Could not read this file type automatically. Please paste the content directly.';
     }
   };
   reader.readAsText(file);
 }
+
+// Override aiConvertWorksheet to support image input
+const _aiConvertWorksheetOrig = aiConvertWorksheet;
+window.aiConvertWorksheet = async function() {
+  // If an image was uploaded, use vision API
+  if (window._bulkImageData) {
+    const imgData = window._bulkImageData;
+    const statusEl = document.getElementById('bulkAiStatus');
+    const previewEl = document.getElementById('bulkPreview');
+    const addBtn = document.getElementById('bulkAddBtnArea');
+    const wantMCQ  = document.getElementById('genMCQ')  ? document.getElementById('genMCQ').checked  : true;
+    const wantTF   = document.getElementById('genTF')   ? document.getElementById('genTF').checked   : true;
+    const wantFill = document.getElementById('genFill') ? document.getElementById('genFill').checked : true;
+    const typeList = [wantMCQ && 'MCQ', wantTF && 'True/False/Not Given', wantFill && 'Fill in the Blanks'].filter(Boolean).join(', ');
+
+    statusEl.textContent = `🤖 AI is reading the image and generating ${typeList} questions…`;
+    previewEl.style.display = 'none';
+    addBtn.style.display = 'none';
+    bulkAiQuestions = [];
+
+    const typeInstructions = [];
+    if (wantMCQ)  typeInstructions.push('MCQ: {"type":"mcq","q":"question","options":["A","B","C","D"],"answer":"exact matching option","explanation":"brief reason"}');
+    if (wantTF)   typeInstructions.push('True/False/Not Given: {"type":"tf","q":"statement","options":["True","False","Not Given"],"answer":"True OR False OR Not Given","explanation":"brief reason"}');
+    if (wantFill) typeInstructions.push('Fill in the Blanks: {"type":"fill","q":"sentence with ___ for the gap","options":["correct","wrong1","wrong2"],"answer":"correct","explanation":"brief reason"}');
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 4000,
+          messages: [{
+            role: 'user',
+            content: [
+              { type: 'image', source: { type: 'base64', media_type: imgData.mediaType, data: imgData.base64 } },
+              { type: 'text', text: `Read all text in this worksheet image and generate ${typeList} questions from it. Return ONLY a raw JSON object: {"questions":[...]}\n\nFormats:\n${typeInstructions.join('\n')}\n\nRules: 6–12 questions, answer must exactly match one option string, explanations under 15 words, no text outside the JSON.` }
+            ]
+          }]
+        })
+      });
+      if (!response.ok) throw new Error('API returned ' + response.status);
+      const data = await response.json();
+      const raw = (data.content || []).map(c => c.type === 'text' ? c.text : '').join('').trim();
+      const clean = raw.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
+      let parsed;
+      try { parsed = JSON.parse(clean); } catch(pe) { const m = raw.match(/\{[\s\S]*\}/); if(m) parsed = JSON.parse(m[0]); else throw new Error('Cannot parse response.'); }
+      bulkAiQuestions = (parsed.questions || []).filter(q => q.q && q.options && q.options.length >= 2 && q.answer);
+      if (!bulkAiQuestions.length) throw new Error('No valid questions returned.');
+      renderBulkPreview(bulkAiQuestions);
+      previewEl.style.display = 'block';
+      addBtn.style.display = 'block';
+      statusEl.textContent = `✅ ${bulkAiQuestions.length} question(s) generated from image! Review and click "Add All Generated Questions".`;
+      window._bulkImageData = null;
+    } catch(err) {
+      statusEl.textContent = `❌ Image AI failed: ${err.message}. Try copying the text from the worksheet and pasting it instead.`;
+    }
+    return;
+  }
+  // No image — use text path
+  return _aiConvertWorksheetOrig();
+};
 
 /* ── Import Tab Switcher ── */
 function switchImportTab(tab, btn){
