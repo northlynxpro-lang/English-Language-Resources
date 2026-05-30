@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="English Language Practice Resources for Grades 9–12. A collaborative platform where teachers can add activities, generate class links, and review their own students' reports. Originally designed by Aliya Shah." />
-<title>English Language Practice Hub · A Collaborative Teaching Space</title>
+<title>Grade 12 General · English Language Practice Hub · A Collaborative Teaching Space</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1436,17 +1436,6 @@ body.role-locked #backToHomeBtn{visibility:hidden}
         and instant feedback for English language learners in Grades 9–12.
       </p>
       <p class="hp-hero-sig">Designed &amp; authored by <strong><a href="https://www.aliyashah13.com/" target="_blank" rel="noopener">Aliya Shah</a></strong> · English Language Teacher</p>
-      <!-- UAE Cultural Hero Image -->
-      <div style="margin:24px 0 0">
-        <img
-          src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1100&q=80&auto=format&fit=crop"
-          alt="Dubai cityscape at sunset representing UAE culture and modern education environment"
-          width="1100" height="180"
-          loading="lazy"
-          style="width:100%;height:180px;object-fit:cover;border-radius:14px;display:block;opacity:.88;box-shadow:0 6px 24px rgba(0,0,0,.22);"
-        />
-        <p style="font-size:.64rem;color:rgba(255,255,255,.5);text-align:right;margin:4px 0 0;letter-spacing:.04em;">Photo: <a href="https://unsplash.com" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Unsplash</a></p>
-      </div>
       <div class="hp-features">
         <span class="hp-feat-item">📖 Reading &amp; Writing</span>
         <span class="hp-feat-item">🎧 Listening &amp; Speaking</span>
@@ -1464,7 +1453,7 @@ body.role-locked #backToHomeBtn{visibility:hidden}
     <p class="hp-section-sub">Select your grade and learning stream to open your personalised practice page.</p>
     <div class="hp-grades-grid">
 
-      <div class="hp-grade-card" data-stream="g9g" onclick="window.location.href='./9-general/'" role="button" tabindex="0" onkeypress="if(event.key==='Enter')window.location.href='./9-general/'" aria-label="Open Grade 9 General practice">
+      <div class="hp-grade-card" data-stream="g9g" onclick="selectGradeAndShow('g9g')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g9g')" aria-label="Open Grade 9 General practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 9</span><span class="hp-card-stream-badge">General</span></div>
         <div class="hp-card-icon">📗</div>
         <h3 class="hp-card-title">Grade 9 General</h3>
@@ -1472,7 +1461,7 @@ body.role-locked #backToHomeBtn{visibility:hidden}
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
       </div><!-- /grade-card -->
 
-      <div class="hp-grade-card" data-stream="g9a" onclick="window.location.href='./9-advanced/'" role="button" tabindex="0" onkeypress="if(event.key==='Enter')window.location.href='./9-advanced/'" aria-label="Open Grade 9 Advanced practice">
+      <div class="hp-grade-card" data-stream="g9a" onclick="selectGradeAndShow('g9a')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g9a')" aria-label="Open Grade 9 Advanced practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 9</span><span class="hp-card-stream-badge">Advanced</span></div>
         <div class="hp-card-icon">📘</div>
         <h3 class="hp-card-title">Grade 9 Advanced</h3>
@@ -1480,7 +1469,7 @@ body.role-locked #backToHomeBtn{visibility:hidden}
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
       </div><!-- /grade-card -->
 
-      <div class="hp-grade-card" data-stream="g10g" onclick="window.location.href='./10-general/'" role="button" tabindex="0" onkeypress="if(event.key==='Enter')window.location.href='./10-general/'" aria-label="Open Grade 10 General practice">
+      <div class="hp-grade-card" data-stream="g10g" onclick="selectGradeAndShow('g10g')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g10g')" aria-label="Open Grade 10 General practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 10</span><span class="hp-card-stream-badge">General</span></div>
         <div class="hp-card-icon">📐</div>
         <h3 class="hp-card-title">Grade 10 General</h3>
@@ -1488,7 +1477,7 @@ body.role-locked #backToHomeBtn{visibility:hidden}
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
       </div><!-- /grade-card -->
 
-      <div class="hp-grade-card" data-stream="g10a" onclick="window.location.href='./10-advanced/'" role="button" tabindex="0" onkeypress="if(event.key==='Enter')window.location.href='./10-advanced/'" aria-label="Open Grade 10 Advanced practice">
+      <div class="hp-grade-card" data-stream="g10a" onclick="selectGradeAndShow('g10a')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g10a')" aria-label="Open Grade 10 Advanced practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 10</span><span class="hp-card-stream-badge">Advanced</span></div>
         <div class="hp-card-icon">🌐</div>
         <h3 class="hp-card-title">Grade 10 Advanced</h3>
@@ -1496,7 +1485,7 @@ body.role-locked #backToHomeBtn{visibility:hidden}
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
       </div><!-- /grade-card -->
 
-      <div class="hp-grade-card" data-stream="general" onclick="window.location.href='./11-general/'" role="button" tabindex="0" onkeypress="if(event.key==='Enter')window.location.href='./11-general/'" aria-label="Open Grade 11 General practice">
+      <div class="hp-grade-card" data-stream="general" onclick="selectGradeAndShow('general')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('general')" aria-label="Open Grade 11 General practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 11</span><span class="hp-card-stream-badge">General</span></div>
         <div class="hp-card-icon">🎓</div>
         <h3 class="hp-card-title">Grade 11 General</h3>
@@ -1504,7 +1493,7 @@ body.role-locked #backToHomeBtn{visibility:hidden}
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
       </div><!-- /grade-card -->
 
-      <div class="hp-grade-card" data-stream="advanced" onclick="window.location.href='./11-advanced/'" role="button" tabindex="0" onkeypress="if(event.key==='Enter')window.location.href='./11-advanced/'" aria-label="Open Grade 11 Advanced practice">
+      <div class="hp-grade-card" data-stream="advanced" onclick="selectGradeAndShow('advanced')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('advanced')" aria-label="Open Grade 11 Advanced practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 11</span><span class="hp-card-stream-badge">Advanced</span></div>
         <div class="hp-card-icon">🦋</div>
         <h3 class="hp-card-title">Grade 11 Advanced</h3>
@@ -1512,7 +1501,7 @@ body.role-locked #backToHomeBtn{visibility:hidden}
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
       </div><!-- /grade-card -->
 
-      <div class="hp-grade-card" data-stream="g12g" onclick="window.location.href='./12-general/'" role="button" tabindex="0" onkeypress="if(event.key==='Enter')window.location.href='./12-general/'" aria-label="Open Grade 12 General practice">
+      <div class="hp-grade-card" data-stream="g12g" onclick="selectGradeAndShow('g12g')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g12g')" aria-label="Open Grade 12 General practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 12</span><span class="hp-card-stream-badge">General</span></div>
         <div class="hp-card-icon">🏛️</div>
         <h3 class="hp-card-title">Grade 12 General</h3>
@@ -1520,7 +1509,7 @@ body.role-locked #backToHomeBtn{visibility:hidden}
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
       </div><!-- /grade-card -->
 
-      <div class="hp-grade-card" data-stream="g12a" onclick="window.location.href='./12-advanced/'" role="button" tabindex="0" onkeypress="if(event.key==='Enter')window.location.href='./12-advanced/'" aria-label="Open Grade 12 Advanced practice">
+      <div class="hp-grade-card" data-stream="g12a" onclick="selectGradeAndShow('g12a')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g12a')" aria-label="Open Grade 12 Advanced practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 12</span><span class="hp-card-stream-badge">Advanced</span></div>
         <div class="hp-card-icon">🔬</div>
         <h3 class="hp-card-title">Grade 12 Advanced</h3>
@@ -1547,6 +1536,17 @@ body.role-locked #backToHomeBtn{visibility:hidden}
 <div class="layout">
   <aside id="tabSidebar"><div class="sidebar-tools"><button class="teacher-tools-btn" onclick="openTeacherTools()">Teacher Tools</button></div></aside>
   <main>
+    <!-- Grade 12 General Hero Image -->
+    <div style="margin-bottom:0">
+      <img
+        src="https://images.unsplash.com/photo-1546412414-e1885259563a?w=1200&q=80&auto=format&fit=crop"
+        alt="Louvre Abu Dhabi museum representing UAE art and universal culture"
+        width="1200" height="220"
+        loading="eager"
+        style="width:100%;height:220px;object-fit:cover;border-radius:14px;margin-bottom:4px;display:block;box-shadow:0 4px 18px rgba(0,0,0,.10);"
+      />
+      <p style="font-size:.64rem;color:#b0a090;text-align:right;margin:0 0 18px;letter-spacing:.04em;">Photo: <a href="https://unsplash.com" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Unsplash</a></p>
+    </div>
     <!-- Welcome Banner -->
     <section class="as-welcome-banner" id="welcomeBanner" aria-label="Welcome from your teacher">
       <div class="as-wb-left">
@@ -3543,6 +3543,7 @@ function selectGradeAndShow(stream) {
 }
 
 function showHomePage() {
+  window.location.href='../'; return;
   document.getElementById('homePage').style.display = 'flex';
   document.getElementById('homePage').style.flexDirection = 'column';
   const app = document.getElementById('practiceApp');
@@ -3706,10 +3707,9 @@ window.addEventListener('DOMContentLoaded',()=>{
     });
   }
 
-  /* Show homepage by default */
-  document.getElementById('homePage').style.display='flex';
-  document.getElementById('homePage').style.flexDirection='column';
-  document.getElementById('practiceApp').style.display='none';
+  /* Sub-page auto-select: Grade 12 General */
+  document.getElementById('homePage').style.display = 'none';
+  selectGradeAndShow('g12g');
 
   /* Teacher chip + role overlay logic */
   updateTeacherChip();
