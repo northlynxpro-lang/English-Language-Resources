@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="English Language Practice Resources for Grade 9, 10, 11, and 12 students. Designed by Aliya Shah." />
-<title>English Language Practice Resources · Ms Aliya Shah</title>
+<meta name="description" content="English Language Practice Resources for Grades 9–12. A collaborative platform where teachers can add activities, generate class links, and review their own students' reports. Originally designed by Aliya Shah." />
+<title>English Language Practice Hub · A Collaborative Teaching Space</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1019,18 +1019,398 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
 .pw-box input[type="password"]:focus{outline:none;border-color:var(--as-plum,#4A2C3D);box-shadow:0 0 0 3px rgba(74,44,61,.12)}
 .pw-error{color:var(--no,#B14545);font-size:.83rem;font-weight:700;min-height:18px;margin-bottom:10px}
 .pw-box .btn{width:100%;margin-bottom:8px}
+
+/* ════════════════════════════════════════════════════════════
+   NEW: Multi-Teacher Collaborative Layer
+   ════════════════════════════════════════════════════════════ */
+
+/* — Teacher chip in the header — */
+.teacher-chip{
+  display:none;align-items:center;gap:10px;
+  background:linear-gradient(135deg,#F9F5EF 0%,#F0E5D2 100%);
+  border:1px solid var(--as-champagne,#EDE0C8);
+  border-radius:999px;padding:6px 14px 6px 6px;
+  font-size:.78rem;font-weight:700;color:var(--as-plum,#4A2C3D);
+  box-shadow:0 2px 8px rgba(74,44,61,.08);
+}
+.teacher-chip.shown{display:inline-flex}
+.teacher-chip-avatar{
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,var(--as-plum,#4A2C3D) 0%,#7B4A62 100%);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-family:"DM Serif Display",serif;font-style:italic;font-size:.9rem;
+  letter-spacing:.04em;
+}
+.teacher-chip-logout{
+  background:none;border:none;color:var(--as-mauve,#9B7B8B);
+  font-size:.72rem;font-weight:700;cursor:pointer;padding:0 0 0 4px;
+  border-left:1px solid var(--as-champagne,#EDE0C8);margin-left:4px;letter-spacing:.06em;
+}
+.teacher-chip-logout:hover{color:var(--as-plum,#4A2C3D)}
+
+/* — Teacher Setup Modal (after password) — */
+.setup-modal{position:fixed;inset:0;background:rgba(17,34,38,.55);display:none;align-items:center;justify-content:center;z-index:480;padding:20px}
+.setup-modal.open{display:flex}
+.setup-box{
+  background:#fff;border-radius:22px;padding:36px 34px 30px;
+  max-width:520px;width:100%;
+  box-shadow:0 28px 80px rgba(0,0,0,.32);
+  border-top:5px solid var(--as-plum,#4A2C3D);
+  max-height:92vh;overflow:auto;
+}
+.setup-box h3{
+  font-family:"DM Serif Display",serif;font-style:italic;
+  font-size:1.7rem;margin:0 0 4px;color:var(--as-plum,#4A2C3D);text-align:center;
+}
+.setup-box .setup-sub{
+  text-align:center;color:var(--muted);font-size:.86rem;margin:0 0 22px;line-height:1.55;
+}
+.setup-box label{
+  display:block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:800;color:var(--as-mauve,#9B7B8B);margin:14px 0 6px;
+}
+.setup-box input[type="text"],
+.setup-box input[type="url"],
+.setup-box input[type="email"]{
+  width:100%;padding:11px 14px;border:1.5px solid #D6CDBC;border-radius:10px;
+  font:inherit;font-size:.95rem;transition:border-color .2s,box-shadow .2s;
+}
+.setup-box input:focus{outline:none;border-color:var(--as-plum,#4A2C3D);box-shadow:0 0 0 3px rgba(74,44,61,.1)}
+.setup-help{
+  font-size:.74rem;color:#a8998a;margin:4px 0 0;line-height:1.45;
+}
+.setup-help a{color:var(--as-rose,#C2917A);text-decoration:none;font-weight:700;border-bottom:1px solid rgba(194,145,122,.3)}
+.setup-actions{display:flex;gap:10px;margin-top:22px}
+.setup-actions .btn{flex:1}
+
+/* — Owner badge inside Teacher Tools modal — */
+.owner-badge{
+  display:inline-block;font-size:.65rem;font-weight:800;letter-spacing:.16em;
+  text-transform:uppercase;background:var(--as-gold,#B8932F);color:#fff;
+  padding:3px 9px;border-radius:999px;margin-left:8px;vertical-align:middle;
+}
+
+/* — Teacher Profile card inside Teacher Tools — */
+.teacher-profile-card{
+  background:linear-gradient(135deg,#F9F5EF 0%,#F0E5D2 100%);
+  border:1px solid var(--as-champagne,#EDE0C8);
+  border-radius:16px;padding:18px 20px;margin-bottom:18px;
+  display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+}
+.teacher-profile-card .tpc-avatar{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--as-plum,#4A2C3D) 0%,#7B4A62 100%);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-family:"DM Serif Display",serif;font-style:italic;font-size:1.4rem;flex-shrink:0;
+}
+.teacher-profile-card .tpc-body{flex:1;min-width:200px}
+.teacher-profile-card .tpc-name{
+  font-family:"DM Serif Display",serif;font-style:italic;
+  font-size:1.25rem;color:var(--as-plum,#4A2C3D);margin:0 0 2px;
+}
+.teacher-profile-card .tpc-meta{
+  font-size:.78rem;color:var(--muted);margin:0;letter-spacing:.04em;
+}
+.teacher-profile-card .tpc-meta strong{color:var(--as-plum,#4A2C3D)}
+.teacher-profile-card .tpc-status{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.72rem;font-weight:700;color:var(--ok,#4F8C66);
+  background:rgba(79,140,102,.12);padding:4px 10px;border-radius:999px;margin-top:6px;
+}
+.teacher-profile-card .tpc-status.warn{color:#a36a00;background:rgba(184,147,47,.15)}
+.teacher-profile-card .tpc-status::before{content:"●";font-size:.7rem}
+.teacher-profile-card .tpc-actions{display:flex;gap:8px;flex-wrap:wrap}
+.teacher-profile-card .tpc-actions .btn{padding:8px 14px;font-size:.78rem}
+
+/* — Elegant Class Link result — */
+.class-link-result{
+  background:linear-gradient(135deg,#FDFAF5 0%,#F9F0E0 100%);
+  border:1px solid var(--as-champagne,#EDE0C8);
+  border-radius:14px;padding:16px 18px;margin-top:14px;
+  display:none;
+}
+.class-link-result.shown{display:block;animation:hp-fadeIn .3s ease}
+.class-link-result .cll-label{
+  font-size:.66rem;font-weight:800;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--as-mauve,#9B7B8B);margin-bottom:6px;
+}
+.class-link-result .cll-url{
+  display:block;background:#fff;border:1px dashed #C9BFAE;border-radius:10px;
+  padding:10px 12px;font-size:.82rem;color:var(--as-plum,#4A2C3D);
+  word-break:break-all;font-family:"SF Mono",Consolas,monospace;
+  margin-bottom:10px;
+}
+.class-link-result .cll-meta{
+  font-size:.74rem;color:var(--muted);margin-bottom:10px;line-height:1.5;
+}
+.class-link-result .cll-meta b{color:var(--as-plum,#4A2C3D)}
+.class-link-result .cll-actions{display:flex;gap:8px;flex-wrap:wrap}
+.class-link-result .cll-actions .btn{flex:1;min-width:120px;padding:9px 14px;font-size:.78rem}
+.cll-copied{
+  display:inline-block;font-size:.74rem;color:var(--ok,#4F8C66);font-weight:700;
+  margin-left:8px;opacity:0;transition:opacity .25s;
+}
+.cll-copied.shown{opacity:1}
+
+/* — Teacher activity attribution chip on quiz card — */
+.teacher-attribution{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.7rem;font-weight:700;
+  background:var(--s-mid,#F4EFE5);
+  color:var(--s-text,var(--as-plum,#4A2C3D));
+  padding:3px 10px;border-radius:999px;margin-left:8px;letter-spacing:.04em;
+}
+.teacher-attribution::before{content:"👩‍🏫";font-size:.85rem}
+
+/* — Instant feedback flash — */
+.feedback-flash{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.7);
+  background:#fff;border-radius:24px;padding:34px 40px;
+  box-shadow:0 30px 90px rgba(0,0,0,.4);
+  text-align:center;z-index:600;pointer-events:none;opacity:0;
+  transition:opacity .25s,transform .35s cubic-bezier(.18,.89,.32,1.28);
+  min-width:240px;
+}
+.feedback-flash.shown{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.feedback-flash.correct{border-top:6px solid var(--ok,#4F8C66)}
+.feedback-flash.wrong{border-top:6px solid var(--no,#B14545)}
+.feedback-flash .ff-icon{font-size:3rem;margin-bottom:6px;display:block;line-height:1}
+.feedback-flash .ff-title{
+  font-family:"DM Serif Display",serif;font-style:italic;
+  font-size:1.5rem;margin:4px 0 2px;color:var(--as-plum,#4A2C3D);
+}
+.feedback-flash.correct .ff-title{color:var(--ok,#4F8C66)}
+.feedback-flash.wrong .ff-title{color:var(--no,#B14545)}
+.feedback-flash .ff-sub{font-size:.85rem;color:var(--muted)}
+
+/* — Confetti container (subtle) — */
+.confetti-host{position:fixed;inset:0;pointer-events:none;z-index:599;overflow:hidden;display:none}
+.confetti-host.active{display:block}
+.confetti-piece{
+  position:absolute;width:9px;height:14px;top:-20px;
+  animation:cf-fall 2.4s cubic-bezier(.45,.2,.55,.85) forwards;
+}
+@keyframes cf-fall{
+  0%{transform:translateY(-30px) rotate(0deg);opacity:1}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:.2}
+}
+
+/* — Beautiful, elegant Welcome / Role Picker overlay — */
+.role-overlay{
+  position:fixed;inset:0;z-index:550;display:none;
+  background:linear-gradient(135deg,#FDFAF5 0%,#F4EAD5 60%,#EDD9B8 100%);
+  align-items:center;justify-content:center;padding:24px;
+  overflow:auto;
+}
+.role-overlay.shown{display:flex}
+.role-card{
+  background:#fff;border-radius:26px;padding:40px 38px;
+  max-width:560px;width:100%;
+  box-shadow:0 32px 90px rgba(74,44,61,.22);
+  border-top:6px solid var(--as-plum,#4A2C3D);
+  text-align:center;position:relative;overflow:hidden;
+}
+.role-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:140px;
+  background:radial-gradient(ellipse at top,rgba(184,147,47,.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+.role-card .rc-monogram{
+  width:62px;height:62px;border-radius:50%;
+  background:linear-gradient(135deg,var(--as-plum,#4A2C3D) 0%,#7B4A62 100%);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-family:"DM Serif Display",serif;font-style:italic;font-size:1.6rem;
+  margin:0 auto 16px;box-shadow:0 6px 22px rgba(74,44,61,.32);
+}
+.role-card h2{
+  font-family:"DM Serif Display",serif;font-style:italic;
+  font-size:1.9rem;color:var(--as-plum,#4A2C3D);margin:0 0 6px;
+}
+.role-card .rc-tag{
+  font-size:.7rem;font-weight:800;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--as-rose,#C2917A);margin-bottom:18px;
+}
+.role-card .rc-sub{
+  font-size:.92rem;color:var(--muted);margin:0 0 26px;line-height:1.6;
+}
+.role-choices{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+@media(max-width:520px){.role-choices{grid-template-columns:1fr}}
+.role-choice{
+  background:var(--cream,#FCFAF6);border:1.5px solid var(--as-champagne,#EDE0C8);
+  border-radius:18px;padding:22px 18px;cursor:pointer;
+  transition:transform .2s,border-color .2s,box-shadow .2s;
+  text-align:center;font:inherit;
+}
+.role-choice:hover{
+  transform:translateY(-4px);border-color:var(--as-plum,#4A2C3D);
+  box-shadow:0 10px 26px rgba(74,44,61,.14);
+}
+.role-choice .rc-icon{font-size:2.2rem;display:block;margin-bottom:8px}
+.role-choice .rc-name{
+  font-family:"DM Serif Display",serif;font-style:italic;
+  font-size:1.15rem;color:var(--as-plum,#4A2C3D);margin:0 0 4px;
+}
+.role-choice .rc-desc{font-size:.78rem;color:var(--muted);line-height:1.45;margin:0}
+.role-card .rc-footer{
+  font-size:.74rem;color:#a8998a;border-top:1px solid var(--as-champagne,#EDE0C8);
+  padding-top:14px;margin-top:6px;
+}
+.role-card .rc-footer a{color:var(--as-rose,#C2917A);text-decoration:none;font-weight:700}
+
+/* — Small pulse animation on profile chip — */
+@keyframes chip-pulse{0%,100%{box-shadow:0 2px 8px rgba(74,44,61,.08)}50%{box-shadow:0 2px 14px rgba(184,147,47,.25)}}
+.teacher-chip.fresh{animation:chip-pulse 1.6s ease 0s 2}
+
+/* — Hide stream selector buttons until role chosen (smoother first paint) — */
+body.role-locked .stream-selector,
+body.role-locked .header-nav-actions .teacher-tools-btn,
+body.role-locked #backToHomeBtn{visibility:hidden}
+
+/* — Better stream-button labels: ensure wrap behaves — */
+.stream-btn{min-width:auto}
+
+/* — Resource list card polish — */
+#resourceList > div,#manualBadgeList > div{transition:background .15s}
+#resourceList > div:hover,#manualBadgeList > div:hover{background:#fff8ec!important}
+
+/* — Quiz card subtle hover — */
+.option-item:focus-visible{outline:3px solid var(--as-plum,#4A2C3D);outline-offset:2px}
+.btn:focus-visible{outline:3px solid var(--as-gold,#B8932F);outline-offset:2px}
+
+@media print{.role-overlay,.setup-modal,.pw-modal,.feedback-flash,.confetti-host,.teacher-chip{display:none!important}}
+
+/* ════════════════════════════════════════════════════════════
+   UAE Cultural Image Banners
+   ════════════════════════════════════════════════════════════ */
+.uae-banner{
+  background: linear-gradient(135deg, var(--s-mid, #F4EFE5) 0%, #fff 60%, var(--as-pearl,#FDFAF5) 100%);
+  border: 1px solid var(--s-accent, var(--line));
+  border-radius: 16px;
+  padding: 14px 20px;
+  margin: 0 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 3px 14px rgba(74,44,61,.06);
+  position: relative;
+  overflow: hidden;
+}
+.uae-banner::after{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--as-rose,#C2917A) 30%,var(--as-gold,#B8932F) 50%,var(--as-rose,#C2917A) 70%,transparent);
+  opacity:.45;
+}
+.uae-banner svg{ width:110px; height:66px; flex-shrink:0; }
+.uae-banner-text{
+  font-family:"DM Serif Display",serif;font-style:italic;
+  font-size:1.02rem;line-height:1.35;color:var(--s-text,var(--as-plum,#4A2C3D));
+}
+.uae-banner-tag{
+  display:block;font-family:"DM Sans",sans-serif;font-style:normal;
+  font-size:.66rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--as-rose,#C2917A);margin-bottom:3px;
+}
+.uae-banner-caption{
+  display:block;font-family:"DM Sans",sans-serif;font-style:normal;
+  font-size:.74rem;color:var(--muted);margin-top:4px;
+}
+
+/* Module-card thumbnail */
+.module-card .uae-thumb{
+  width:calc(100% + 36px);
+  height:74px;
+  background: linear-gradient(135deg, var(--s-mid, #F4EFE5) 0%, #fff 100%);
+  border-radius: 14px 14px 0 0;
+  display:flex;align-items:center;justify-content:center;
+  margin: -18px -18px 12px;
+  position:relative;
+}
+.module-card .uae-thumb::after{
+  content:"";position:absolute;left:18px;right:18px;bottom:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--s-accent,var(--line)),transparent);
+}
+.module-card .uae-thumb svg{ width:96px;height:56px; opacity:.94; }
+
+/* Quiz card image strip */
+.quiz-image-strip{
+  background: linear-gradient(135deg, var(--s-mid, #F4EFE5) 0%, #fff 100%);
+  border: 1px solid var(--s-accent, var(--line));
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.quiz-image-strip svg{ width:92px;height:56px; flex-shrink:0; }
+.qis-caption{
+  font-size:.78rem;color:var(--muted);font-style:italic;line-height:1.4;
+}
+.qis-caption b{
+  display:block;font-style:normal;color:var(--s-text,var(--as-plum,#4A2C3D));
+  font-weight:800;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:2px;
+}
+
+/* Homepage grade card — tiny UAE motif corner */
+.hp-grade-card .hp-uae-motif{
+  position:absolute;top:14px;right:14px;
+  width:46px;height:30px;opacity:.55;
+}
+.hp-grade-card .hp-uae-motif svg{width:100%;height:100%}
+
+@media (max-width:560px){
+  .uae-banner{flex-direction:column;text-align:center;gap:8px;padding:14px}
+  .uae-banner svg{width:120px;height:72px}
+  .quiz-image-strip{flex-direction:column;text-align:center;gap:8px}
+  .quiz-image-strip svg{width:100px}
+}
+@media print{ .uae-thumb, .quiz-image-strip, .uae-banner, .hp-uae-motif{ display:none!important; } }
 </style>
 </head>
-<body data-active-stream="general">
+<body data-active-stream="general" class="role-locked">
+
+<!-- ════════════════════════════════════════════════════════════
+     Role Picker Overlay — shown to first-time visitors
+     ════════════════════════════════════════════════════════════ -->
+<div class="role-overlay" id="roleOverlay" aria-hidden="true" role="dialog" aria-labelledby="roleTitle">
+  <div class="role-card">
+    <div class="rc-monogram">AS</div>
+    <div class="rc-tag">Collaborative Teaching Space</div>
+    <h2 id="roleTitle">Welcome to the English Practice Hub</h2>
+    <p class="rc-sub">An open, beautifully crafted practice journal for English language learners — built so any teacher can add activities, share a class link, and receive their own students' reports.</p>
+    <div class="role-choices">
+      <button class="role-choice" onclick="enterAsStudent()" aria-label="Enter as student">
+        <span class="rc-icon">🎒</span>
+        <h3 class="rc-name">I'm a Student</h3>
+        <p class="rc-desc">Choose your grade and start practising with instant feedback.</p>
+      </button>
+      <button class="role-choice" onclick="openTeacherLogin()" aria-label="Enter as teacher">
+        <span class="rc-icon">👩‍🏫</span>
+        <h3 class="rc-name">I'm a Teacher</h3>
+        <p class="rc-desc">Add activities, generate class links, and review reports.</p>
+      </button>
+    </div>
+    <div class="rc-footer">
+      Originally designed &amp; authored by <a href="https://www.aliyashah13.com/" target="_blank" rel="noopener">Aliya Shah</a> · English Language Teacher
+    </div>
+  </div>
+</div>
+
 <header>
   <div class="header-identity">
     <a class="as-logo" href="https://www.aliyashah13.com/" target="_blank" rel="noopener" title="Aliya Shah · English Language Teacher" aria-label="AS — Aliya Shah">AS</a>
     <div class="brand">
-      <h1 id="dynamicTitle">English Language Practice Resources</h1>
-      <p id="headerSubtitle">Practice Journal &nbsp;·&nbsp; <a href="https://www.aliyashah13.com/" target="_blank" rel="noopener" style="color:var(--as-rose,#C2917A);text-decoration:none;font-weight:700;">Aliya Shah</a></p>
+      <h1 id="dynamicTitle">English Language Practice Hub</h1>
+      <p id="headerSubtitle">A collaborative space &nbsp;·&nbsp; <a href="https://www.aliyashah13.com/" target="_blank" rel="noopener" style="color:var(--as-rose,#C2917A);text-decoration:none;font-weight:700;">Founded by Aliya Shah</a></p>
     </div>
   </div>
   <div class="header-nav-actions">
+    <div class="teacher-chip" id="teacherChip" title="You are signed in as a teacher">
+      <span class="teacher-chip-avatar" id="teacherChipAvatar">T</span>
+      <span id="teacherChipName">Teacher</span>
+      <button class="teacher-chip-logout" onclick="logoutTeacher()" title="Sign out">Sign out</button>
+    </div>
     <button id="backToHomeBtn" onclick="showHomePage()" title="Back to grade selection">Home</button>
     <div class="stream-selector" role="navigation" aria-label="Select grade and stream">
       <button class="stream-btn" data-stream="g9g" onclick="switchStream('g9g')">G9 General</button>
@@ -1079,7 +1459,7 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
         <h3 class="hp-card-title">Grade 9 General</h3>
         <p class="hp-card-desc">B1.1 level. Cultural celebrations, sleep &amp; the brain, Wh-questions, past simple &amp; continuous, vocabulary &amp; SEN support.</p>
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
-      </div>
+      </div><!-- /grade-card -->
 
       <div class="hp-grade-card" data-stream="g9a" onclick="selectGradeAndShow('g9a')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g9a')" aria-label="Open Grade 9 Advanced practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 9</span><span class="hp-card-stream-badge">Advanced</span></div>
@@ -1087,7 +1467,7 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
         <h3 class="hp-card-title">Grade 9 Advanced</h3>
         <p class="hp-card-desc">B1.2 level. Architecture &amp; culture, dining customs, passive voice, comparatives, and discussion language skills.</p>
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
-      </div>
+      </div><!-- /grade-card -->
 
       <div class="hp-grade-card" data-stream="g10g" onclick="selectGradeAndShow('g10g')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g10g')" aria-label="Open Grade 10 General practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 10</span><span class="hp-card-stream-badge">General</span></div>
@@ -1095,7 +1475,7 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
         <h3 class="hp-card-title">Grade 10 General</h3>
         <p class="hp-card-desc">B1.2 level. Architecture through history, homes &amp; society, passives, comparatives, and presentation skills.</p>
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
-      </div>
+      </div><!-- /grade-card -->
 
       <div class="hp-grade-card" data-stream="g10a" onclick="selectGradeAndShow('g10a')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g10a')" aria-label="Open Grade 10 Advanced practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 10</span><span class="hp-card-stream-badge">Advanced</span></div>
@@ -1103,7 +1483,7 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
         <h3 class="hp-card-title">Grade 10 Advanced</h3>
         <p class="hp-card-desc">B1.2–B2.1 level. Intercultural communication, conditionals, reported speech, and formal academic essay writing.</p>
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
-      </div>
+      </div><!-- /grade-card -->
 
       <div class="hp-grade-card" data-stream="general" onclick="selectGradeAndShow('general')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('general')" aria-label="Open Grade 11 General practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 11</span><span class="hp-card-stream-badge">General</span></div>
@@ -1111,7 +1491,7 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
         <h3 class="hp-card-title">Grade 11 General</h3>
         <p class="hp-card-desc">B2 level. Academic integrity, student housing, city &amp; environment, mixed practice, and SEN A1 differentiated support.</p>
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
-      </div>
+      </div><!-- /grade-card -->
 
       <div class="hp-grade-card" data-stream="advanced" onclick="selectGradeAndShow('advanced')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('advanced')" aria-label="Open Grade 11 Advanced practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 11</span><span class="hp-card-stream-badge">Advanced</span></div>
@@ -1119,7 +1499,7 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
         <h3 class="hp-card-title">Grade 11 Advanced</h3>
         <p class="hp-card-desc">B2 level. Cyberbullying, architecture, Silk Road, language development, third conditional &amp; academic writing skills.</p>
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
-      </div>
+      </div><!-- /grade-card -->
 
       <div class="hp-grade-card" data-stream="g12g" onclick="selectGradeAndShow('g12g')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g12g')" aria-label="Open Grade 12 General practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 12</span><span class="hp-card-stream-badge">General</span></div>
@@ -1127,7 +1507,7 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
         <h3 class="hp-card-title">Grade 12 General</h3>
         <p class="hp-card-desc">B2.1 level. Universal language debate, architecture past &amp; present, third conditional &amp; comparative essays.</p>
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
-      </div>
+      </div><!-- /grade-card -->
 
       <div class="hp-grade-card" data-stream="g12a" onclick="selectGradeAndShow('g12a')" role="button" tabindex="0" onkeypress="if(event.key==='Enter')selectGradeAndShow('g12a')" aria-label="Open Grade 12 Advanced practice">
         <div class="hp-card-meta"><span class="hp-card-grade-label">Grade 12</span><span class="hp-card-stream-badge">Advanced</span></div>
@@ -1135,7 +1515,7 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
         <h3 class="hp-card-title">Grade 12 Advanced</h3>
         <p class="hp-card-desc">B2.2 level. Sapir-Whorf hypothesis, avian flu, alternative therapy, future perfect continuous &amp; academic essay.</p>
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
-      </div>
+      </div><!-- /grade-card -->
 
     </div>
   </section>
@@ -1197,6 +1577,7 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
         <button class="btn secondary" style="margin-top:8px" onclick="printCertificate()">Print Certificate</button>
       </div>
     </section>
+    <div id="uaeTabBanner" class="uae-banner" style="display:none" aria-hidden="true"></div>
     <section id="moduleList" class="module-grid"></section>
     <section id="quizStage"></section>
   </main>
@@ -1206,8 +1587,22 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
 <div class="teacher-modal" id="teacherModal" aria-hidden="true">
   <div class="teacher-panel" role="dialog" aria-modal="true" aria-labelledby="teacherToolsTitle">
     <button class="teacher-close" onclick="closeTeacherTools()">Close</button>
-    <h2 id="teacherToolsTitle">Teacher Tools</h2>
-    <p>Add grades, sections, and activities without changing the original Grade 11 General and Advanced practice pages. New content is saved in this browser.</p>
+    <h2 id="teacherToolsTitle">Teacher Tools <span class="owner-badge" id="ownerBadge" style="display:none">Owner</span></h2>
+    <p>Add activities, generate a unique class link for your students, and review the reports that come into your own Google Apps Script.</p>
+
+    <!-- Teacher Profile card -->
+    <div class="teacher-profile-card" id="teacherProfileCard">
+      <div class="tpc-avatar" id="tpcAvatar">T</div>
+      <div class="tpc-body">
+        <p class="tpc-name" id="tpcName">Your name</p>
+        <p class="tpc-meta" id="tpcMeta">Profile not set</p>
+        <span class="tpc-status" id="tpcStatus">Connected</span>
+      </div>
+      <div class="tpc-actions">
+        <button class="btn secondary" onclick="openEditProfile()">Edit profile</button>
+        <button class="btn secondary" onclick="logoutTeacher()">Sign out</button>
+      </div>
+    </div>
     <div class="teacher-tabs" aria-label="Teacher tool shortcuts">
       <button class="teacher-tab-btn" onclick="document.getElementById('toolAddGrade').scrollIntoView({block:'start'})">+ Add Grade</button>
       <button class="teacher-tab-btn" onclick="document.getElementById('toolAddSection').scrollIntoView({block:'start'})">+ Add Section</button>
@@ -1341,15 +1736,29 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
         <button class="btn secondary" onclick="resetCertificateSettings()">Reset Default</button>
       </div>
       <div class="teacher-box" id="toolTeacherLink">
-        <h3>Generate Teacher Link</h3>
-        <label>Teacher name/code</label>
-        <input id="teacherCode" placeholder="Example: MsAliya" />
-        <label>Grade</label>
+        <h3>Generate Unique Class Link</h3>
+        <p style="font-size:.8rem;color:#a8998a;margin:0 0 10px;">A unique link for your class. Reports from this link go to <strong>your</strong> Google Apps Script. Activities you've added below are bundled in too.</p>
+        <label>Class name (optional)</label>
+        <input id="teacherCode" placeholder="e.g. 11G1 — Term 2" />
+        <label>Grade / Stream</label>
         <select id="teacherLinkGradeSelect"></select>
         <label>Section</label>
         <select id="teacherSectionSelect"></select>
-        <button class="btn" onclick="generateTeacherLink()">Generate Link</button>
-        <div class="teacher-link-output" id="teacherLinkOutput">Your link will appear here.</div>
+        <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-weight:700;color:var(--dark);margin-top:14px">
+          <input type="checkbox" id="bundleActivitiesChk" checked>
+          Include my added activities in the link
+        </label>
+        <button class="btn" onclick="generateTeacherLink()">Generate Class Link</button>
+        <div class="class-link-result" id="classLinkResult">
+          <div class="cll-label">Share this link with your students</div>
+          <code class="cll-url" id="classLinkUrl"></code>
+          <div class="cll-meta" id="classLinkMeta"></div>
+          <div class="cll-actions">
+            <button class="btn" onclick="copyClassLink()">Copy link <span class="cll-copied" id="cllCopied">✓ Copied</span></button>
+            <button class="btn secondary" onclick="openClassLink()">Open preview</button>
+            <button class="btn secondary" onclick="shareClassLinkEmail()">Email link</button>
+          </div>
+        </div>
       </div>
       <div class="teacher-box">
         <h3>Student Avatars</h3>
@@ -1430,13 +1839,29 @@ body[data-active-stream] .writing-save-btn { background: var(--s-accent); }
 
       <!-- ── Reports ── -->
       <div class="teacher-box" id="toolReports">
-        <h3>Reports &amp; Google Sheets</h3>
+        <h3>Your Reports &amp; Google Sheets</h3>
+        <p style="font-size:.8rem;color:#a8998a;margin:0 0 10px;">Every report from a student who opens <em>your</em> class link is sent to <em>your</em> Apps Script — not anyone else's.</p>
         <div id="badgePreview"></div>
-        <button class="btn secondary" onclick="downloadReportsCsv()">Download Reports CSV</button>
-        <label>Google Apps Script URL</label><input id="googleSheetUrl" placeholder="Paste Google Apps Script web app URL" />
-        <button class="btn secondary" onclick="saveGoogleSheetUrl()">Save Google Sheets URL</button>
-        <div class="teacher-report-output" id="reportStatus">Reports are stored locally in this browser. Add a Google Apps Script URL to send submissions to Sheets.</div>
-        <p style="font-size:.75rem;color:#a8998a;margin-top:8px;">💡 If you use Google Apps Script, add a <code>teacherId</code> and <code>teacherName</code> column to your sheet to capture the teacher link identifier. The submit function already includes this field if a teacher URL parameter is present.</p>
+        <label>Your Google Apps Script URL</label>
+        <input id="googleSheetUrl" placeholder="https://script.google.com/macros/s/.../exec" />
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+          <button class="btn" style="flex:1;min-width:140px" onclick="saveGoogleSheetUrl()">Save URL</button>
+          <button class="btn secondary" style="flex:1;min-width:140px" onclick="testGoogleSheetUrl()">Test connection</button>
+        </div>
+        <div class="teacher-report-output" id="reportStatus">Add your Apps Script URL to start receiving your own students' reports.</div>
+
+        <div style="margin-top:14px;border-top:1px solid var(--as-champagne,#EDE0C8);padding-top:14px">
+          <label style="margin:0 0 8px">Local backup (this device only)</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn secondary" style="flex:1;min-width:160px" onclick="downloadReportsCsv()">📥 Download CSV</button>
+            <button class="btn secondary" style="flex:1;min-width:160px" onclick="viewLocalReports()">👁 View saved reports</button>
+            <button class="btn secondary" style="flex:1;min-width:140px;background:#FBEEEE;color:#a35353" onclick="clearLocalReports()">🗑 Clear local</button>
+          </div>
+          <div id="localReportsPreview" style="margin-top:10px;font-size:.8rem;max-height:200px;overflow-y:auto"></div>
+        </div>
+        <p style="font-size:.74rem;color:#a8998a;margin-top:12px;line-height:1.5;">
+          💡 Need help deploying your own Apps Script? Open <code>GoogleAppsScript_Code.js</code> from this project, paste it into <a href="https://script.google.com/" target="_blank" rel="noopener" style="color:var(--as-rose,#C2917A);font-weight:700">script.google.com</a>, deploy as a Web App (Execute as: Me · Access: Anyone), and copy the URL above.
+        </p>
       </div>
     </div>
   </div>
@@ -1466,7 +1891,13 @@ const DATABASE = {"general":{"Student":[{"title":"22. Reading Diagnostic: Online
 
 // ── TEACHER PASSWORD — change the value below to set your own password ──────
 // ↓↓↓ CHANGE THIS PASSWORD before sharing with students ↓↓↓
+/* ─── Shared teacher password (the one all teachers use to access Teacher Tools) ─── */
 const TEACHER_PASSWORD = 'Teacher@2026';
+/* The original owner of this website (their name and the GAS URL they originally deployed).
+   When no other teacher is signed in, this is the default reporting target. */
+const OWNER_NAME = 'Aliya Shah';
+const OWNER_GAS_URL = 'https://script.google.com/macros/s/AKfycbwqgNQ3t7prIdMo2JJhbFF5S9DDVvhjlxzkSj82OTMyGr6awOVILeMruHhAEVcihOqL/exec';
+
 let teacherAuthenticated = false; // resets each browser session
 
 let activeStream='general', activeTab='Student', activeModuleIndex=0, currentIndex=0, selected=null;
@@ -1506,6 +1937,7 @@ function renderTab(){
   const select=document.getElementById('moduleSelect');
   select.innerHTML=modules.map((m,i)=>`<option value="${i}">${m.title} (${m.questions.length} Qs)</option>`).join('');
   select.value=activeModuleIndex;
+  renderUaeTabBanner();
   renderModuleCards();
   renderQuestion();
   updateProgress();
@@ -1513,7 +1945,15 @@ function renderTab(){
 function renderModuleCards(){
   const box=document.getElementById('moduleList');
   const modules=DATABASE[activeStream][activeTab] || [];
-  box.innerHTML=modules.map((m,i)=>`<article class="module-card" onclick="selectModule(${i})"><h3>${m.title}</h3><p>${m.questions.length} questions</p></article>`).join('');
+  box.innerHTML=modules.map((m,i)=>{
+    const key = uaeImageKeyForModule(m, activeTab);
+    const thumb = '<div class="uae-thumb" aria-hidden="true">' + uaeSvgFor(key) + '</div>';
+    return '<article class="module-card" onclick="selectModule(' + i + ')">' +
+      thumb +
+      '<h3>' + escHtml(m.title) + '</h3>' +
+      '<p>' + m.questions.length + ' questions</p>' +
+    '</article>';
+  }).join('');
 }
 
 // ── Post-render: inject TTS player for Listening modules ─────
@@ -1618,8 +2058,16 @@ function renderQuestion(){
   }
 
   currentOptions=shuffle(q.options.slice());
+  const attribution = module._addedBy ? '<span class="teacher-attribution" title="Added by this teacher">' + escHtml(module._addedBy) + '</span>' : '';
+  const uaeKey = uaeImageKeyForModule(module, activeTab);
+  const uaeCap = uaeCaptionFor(uaeKey);
+  const uaeStrip = '<div class="quiz-image-strip" aria-hidden="true">' +
+    uaeSvgFor(uaeKey) +
+    '<div class="qis-caption"><b>' + escHtml(uaeCap.title) + '</b>' + escHtml(uaeCap.text) + '</div>' +
+    '</div>';
   stage.innerHTML='<div class="card">' +
-    '<div class="card-header">Question ' + (currentIndex+1) + ' of ' + module.questions.length + ' • ' + escHtml(module.title) + '</div>' +
+    '<div class="card-header">Question ' + (currentIndex+1) + ' of ' + module.questions.length + ' • ' + escHtml(module.title) + attribution + '</div>' +
+    uaeStrip +
     passageHtml +
     '<p class="question-text">' + escHtml(displayQ) + '</p>' +
     '<div class="options-stack">' +
@@ -1645,12 +2093,8 @@ function chooseOption(i){
 }
 function checkAnswer(){
   const modules=DATABASE[activeStream][activeTab], module=modules[activeModuleIndex], q=module.questions[currentIndex];
-  // TTS injection for Listening tab
-  if (activeTab === 'Listening') { setTimeout(()=>injectTTSPlayer(DATABASE[activeStream][activeTab], activeModuleIndex), 10); }
-  // Writing task injection for Writing tab
-  if (activeTab === 'Writing') { setTimeout(()=>injectWritingTask(DATABASE[activeStream][activeTab], activeModuleIndex, activeStream), 10); }
   if(document.getElementById('checkBtn').textContent==='Next Question'){ nextQuestion(); return; }
-  if(selected===null){ alert('Please choose one answer first.'); return; }
+  if(selected===null){ flashFeedback('warn','Please choose an answer','Pick the option you think is correct, then press Check.'); return; }
   locked=true; answered++;
   const chosen=currentOptions[selected];
   const correct=q.answer;
@@ -1671,6 +2115,47 @@ function checkAnswer(){
   document.getElementById('checkBtn').textContent='Next Question';
   updateProgress();
   recordLocalReport(isCorrect);
+  flashFeedback(isCorrect?'correct':'wrong',
+    isCorrect ? 'Correct!' : 'Not quite',
+    isCorrect ? randomEncouragement() : 'Read the explanation and keep going — every try counts.'
+  );
+}
+
+/* ── Beautiful instant-feedback flash + confetti ── */
+const ENCOURAGEMENTS = ['Brilliant work!','Excellent thinking!','Spot on!','You’re on fire!','Perfect answer!','Outstanding!','Wonderful — keep it up!','Beautifully done!'];
+function randomEncouragement(){ return ENCOURAGEMENTS[Math.floor(Math.random()*ENCOURAGEMENTS.length)]; }
+function flashFeedback(kind, title, sub){
+  const f = document.getElementById('feedbackFlash');
+  if(!f) return;
+  f.classList.remove('correct','wrong');
+  const icon = document.getElementById('ffIcon');
+  if(kind==='correct'){ f.classList.add('correct'); icon.textContent = ['🎉','⭐','✨','🌟','🏅'][Math.floor(Math.random()*5)]; sparkleConfetti(); }
+  else if(kind==='wrong'){ f.classList.add('wrong'); icon.textContent = '💡'; }
+  else { icon.textContent = '👀'; }
+  document.getElementById('ffTitle').textContent = title;
+  document.getElementById('ffSub').textContent = sub || '';
+  f.classList.add('shown'); f.setAttribute('aria-hidden','false');
+  clearTimeout(window._ffTimer);
+  window._ffTimer = setTimeout(()=>{ f.classList.remove('shown'); f.setAttribute('aria-hidden','true'); }, 1600);
+}
+function sparkleConfetti(){
+  const host = document.getElementById('confettiHost');
+  if(!host) return;
+  host.classList.add('active');
+  const colors = ['#4F8C66','#B8932F','#D63660','#4A2C3D','#7E57C2','#42A5CC','#FF8A65'];
+  const pieces = 26;
+  host.innerHTML = '';
+  for(let i=0;i<pieces;i++){
+    const d = document.createElement('span');
+    d.className = 'confetti-piece';
+    d.style.left = (Math.random()*100) + 'vw';
+    d.style.background = colors[Math.floor(Math.random()*colors.length)];
+    d.style.animationDelay = (Math.random()*.4) + 's';
+    d.style.animationDuration = (1.8 + Math.random()*1.4) + 's';
+    d.style.transform = 'rotate(' + (Math.random()*360) + 'deg)';
+    host.appendChild(d);
+  }
+  setTimeout(()=>{ host.classList.remove('active'); host.innerHTML=''; }, 2700);
 }
 function nextQuestion(){
   const module=DATABASE[activeStream][activeTab][activeModuleIndex];
@@ -1712,28 +2197,425 @@ const AVATARS = [
   {emoji:'📚', name:'Progress Hero'},
   {emoji:'🏆', name:'Digital Champion'}
 ];
+/* ════════════════════════════════════════════════════════════
+   UAE Culture-Sensitive Inline SVG Library
+   Each illustration is brand-coloured (plum / gold / rose / sand)
+   and embedded so it works offline and never breaks.
+   ════════════════════════════════════════════════════════════ */
+const UAE_SVG = {
+  /* Lateen-sailed dhow — traditional UAE sailing boat */
+  dhow: '<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+
+    '<defs><linearGradient id="uaeSail" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#EDE0C8"/><stop offset="1" stop-color="#B8932F"/></linearGradient>'+
+    '<linearGradient id="uaeSea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#C2917A" stop-opacity=".35"/><stop offset="1" stop-color="#C2917A" stop-opacity="0"/></linearGradient></defs>'+
+    '<path d="M0 50 L100 50 L100 60 L0 60 Z" fill="url(#uaeSea)"/>'+
+    '<line x1="0" y1="50" x2="100" y2="50" stroke="#C2917A" stroke-width=".6" opacity=".6"/>'+
+    '<path d="M52 6 L52 44 L84 44 Z" fill="url(#uaeSail)"/>'+
+    '<path d="M52 6 L52 44 L84 44 Z" fill="none" stroke="#4A2C3D" stroke-width=".8"/>'+
+    '<line x1="52" y1="6" x2="52" y2="48" stroke="#4A2C3D" stroke-width="1.2"/>'+
+    '<path d="M14 46 Q50 60 86 46 L80 50 Q50 56 20 50 Z" fill="#4A2C3D"/>'+
+    '<path d="M52 6 L58 4 L52 10 Z" fill="#D63660"/>'+
+    '<line x1="50" y1="48" x2="46" y2="40" stroke="#4A2C3D" stroke-width=".6"/>'+
+    '</svg>',
+
+  /* Date palm — UAE national tree */
+  palm: '<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+
+    '<g stroke="#4F8C66" stroke-width="2.4" fill="none" stroke-linecap="round">'+
+    '<path d="M50 20 Q30 10 14 12"/>'+
+    '<path d="M50 20 Q70 10 86 12"/>'+
+    '<path d="M50 20 Q30 16 16 24"/>'+
+    '<path d="M50 20 Q70 16 84 24"/>'+
+    '<path d="M50 20 Q42 8 34 2"/>'+
+    '<path d="M50 20 Q58 8 66 2"/>'+
+    '<path d="M50 20 Q44 14 38 14"/>'+
+    '<path d="M50 20 Q56 14 62 14"/>'+
+    '</g>'+
+    '<g fill="#B8932F">'+
+    '<circle cx="45" cy="23" r="1.6"/><circle cx="50" cy="24" r="1.6"/><circle cx="55" cy="23" r="1.6"/>'+
+    '<circle cx="47" cy="26" r="1.4"/><circle cx="53" cy="26" r="1.4"/>'+
+    '</g>'+
+    '<path d="M47 20 Q48 38 45 56" stroke="#4A2C3D" stroke-width="2.6" fill="none"/>'+
+    '<path d="M53 20 Q52 38 55 56" stroke="#4A2C3D" stroke-width="2.6" fill="none"/>'+
+    '<g stroke="#4A2C3D" stroke-width=".5">'+
+    '<line x1="45" y1="28" x2="55" y2="28"/><line x1="45" y1="36" x2="55" y2="36"/>'+
+    '<line x1="45" y1="44" x2="55" y2="44"/><line x1="45" y1="52" x2="55" y2="52"/>'+
+    '</g>'+
+    '</svg>',
+
+  /* Falcon — UAE national bird, perched */
+  falcon: '<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+
+    '<path d="M14 52 Q50 56 86 52 L84 54 Q50 58 16 54 Z" fill="#C2917A" opacity=".5"/>'+
+    '<line x1="14" y1="52" x2="86" y2="52" stroke="#4A2C3D" stroke-width="1.6"/>'+
+    '<path d="M50 16 Q62 18 64 30 Q62 44 50 48 Q38 44 36 30 Q38 18 50 16 Z" fill="#4A2C3D"/>'+
+    '<path d="M40 28 Q50 32 60 28 Q56 36 50 40 Q44 36 40 28 Z" fill="#B8932F" opacity=".55"/>'+
+    '<circle cx="50" cy="12" r="6.5" fill="#4A2C3D"/>'+
+    '<path d="M56 12 L62 13 L56 15 Z" fill="#B8932F"/>'+
+    '<circle cx="52" cy="11" r="1.2" fill="#FDFAF5"/>'+
+    '<circle cx="52" cy="11" r=".5" fill="#4A2C3D"/>'+
+    '<path d="M46 6 Q44 4 46 2" stroke="#B8932F" stroke-width=".8" fill="none"/>'+
+    '<line x1="46" y1="48" x2="46" y2="52" stroke="#B8932F" stroke-width="1.6"/>'+
+    '<line x1="54" y1="48" x2="54" y2="52" stroke="#B8932F" stroke-width="1.6"/>'+
+    '</svg>',
+
+  /* Sheikh Zayed-style mosque */
+  mosque: '<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+
+    '<line x1="2" y1="55" x2="98" y2="55" stroke="#4A2C3D" stroke-width="1.2"/>'+
+    '<rect x="13" y="20" width="6" height="35" fill="#4A2C3D"/>'+
+    '<path d="M13 20 L19 20 L16 12 Z" fill="#B8932F"/>'+
+    '<circle cx="16" cy="10" r="1.5" fill="#B8932F"/>'+
+    '<line x1="16" y1="8" x2="16" y2="4" stroke="#4A2C3D" stroke-width=".8"/>'+
+    '<rect x="14" y="32" width="4" height="2" fill="#B8932F" opacity=".5"/>'+
+    '<rect x="14" y="42" width="4" height="2" fill="#B8932F" opacity=".5"/>'+
+    '<rect x="81" y="20" width="6" height="35" fill="#4A2C3D"/>'+
+    '<path d="M81 20 L87 20 L84 12 Z" fill="#B8932F"/>'+
+    '<circle cx="84" cy="10" r="1.5" fill="#B8932F"/>'+
+    '<line x1="84" y1="8" x2="84" y2="4" stroke="#4A2C3D" stroke-width=".8"/>'+
+    '<rect x="82" y="32" width="4" height="2" fill="#B8932F" opacity=".5"/>'+
+    '<rect x="82" y="42" width="4" height="2" fill="#B8932F" opacity=".5"/>'+
+    '<rect x="26" y="34" width="48" height="21" fill="#4A2C3D"/>'+
+    '<path d="M28 34 Q50 6 72 34 Z" fill="#B8932F"/>'+
+    '<circle cx="50" cy="8" r="2" fill="#4A2C3D"/>'+
+    '<line x1="50" y1="6" x2="50" y2="2" stroke="#4A2C3D" stroke-width="1"/>'+
+    '<path d="M44 55 L44 46 Q50 40 56 46 L56 55 Z" fill="#FDFAF5" opacity=".55"/>'+
+    '<path d="M32 55 L32 48 Q36 44 40 48 L40 55 Z" fill="#FDFAF5" opacity=".35"/>'+
+    '<path d="M60 55 L60 48 Q64 44 68 48 L68 55 Z" fill="#FDFAF5" opacity=".35"/>'+
+    '</svg>',
+
+  /* Dallah — traditional Arabic coffee pot */
+  dallah: '<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+
+    '<path d="M28 22 Q16 18 12 26 L18 28 Q24 24 30 28 Z" fill="#B8932F"/>'+
+    '<path d="M30 18 L60 18 Q66 30 60 50 L30 50 Q24 30 30 18 Z" fill="#4A2C3D"/>'+
+    '<rect x="32" y="33" width="28" height="2.5" fill="#B8932F"/>'+
+    '<rect x="32" y="42" width="28" height="1.5" fill="#B8932F" opacity=".5"/>'+
+    '<rect x="34" y="14" width="22" height="4" fill="#B8932F"/>'+
+    '<path d="M38 14 L52 14 L45 6 Z" fill="#B8932F"/>'+
+    '<circle cx="45" cy="4" r="1.5" fill="#4A2C3D"/>'+
+    '<path d="M60 24 Q76 30 60 44" stroke="#4A2C3D" stroke-width="3" fill="none" stroke-linecap="round"/>'+
+    '<path d="M45 4 Q44 0 47 -3" stroke="#C2917A" stroke-width="1" fill="none" opacity=".6"/>'+
+    '<line x1="50" y1="55" x2="50" y2="58" stroke="#4A2C3D" stroke-width="1"/>'+
+    '<path d="M22 56 Q50 60 78 56" stroke="#C2917A" stroke-width=".8" fill="none" opacity=".5"/>'+
+    '</svg>',
+
+  /* Liwa-style sand dunes with palm silhouette */
+  dunes: '<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+
+    '<defs><linearGradient id="uaeSky" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#FDFAF5"/><stop offset="1" stop-color="#F9F0E0"/></linearGradient></defs>'+
+    '<rect x="0" y="0" width="100" height="60" fill="url(#uaeSky)"/>'+
+    '<circle cx="80" cy="18" r="8" fill="#B8932F" opacity=".85"/>'+
+    '<circle cx="80" cy="18" r="11" fill="#B8932F" opacity=".15"/>'+
+    '<path d="M0 36 Q30 24 60 36 Q80 40 100 32 L100 60 L0 60 Z" fill="#C2917A" opacity=".55"/>'+
+    '<path d="M0 46 Q24 32 50 46 Q72 54 100 42 L100 60 L0 60 Z" fill="#4A2C3D"/>'+
+    '<g stroke="#4A2C3D" stroke-width="1.2" fill="none">'+
+    '<line x1="22" y1="46" x2="22" y2="38"/>'+
+    '<path d="M22 38 Q14 36 10 38"/><path d="M22 38 Q30 36 34 38"/>'+
+    '<path d="M22 38 Q20 32 18 30"/><path d="M22 38 Q24 32 26 30"/>'+
+    '</g>'+
+    '</svg>',
+
+  /* Barjeel — traditional UAE wind tower */
+  windtower: '<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+
+    '<line x1="2" y1="55" x2="98" y2="55" stroke="#4A2C3D" stroke-width="1"/>'+
+    '<rect x="18" y="36" width="64" height="19" fill="#4A2C3D"/>'+
+    '<rect x="46" y="44" width="8" height="11" fill="#B8932F" opacity=".7"/>'+
+    '<rect x="24" y="40" width="6" height="6" fill="#FDFAF5" opacity=".3"/>'+
+    '<rect x="70" y="40" width="6" height="6" fill="#FDFAF5" opacity=".3"/>'+
+    '<rect x="38" y="12" width="24" height="26" fill="#C2917A"/>'+
+    '<g stroke="#4A2C3D" stroke-width="1">'+
+    '<line x1="43" y1="14" x2="43" y2="36"/><line x1="48" y1="14" x2="48" y2="36"/>'+
+    '<line x1="52" y1="14" x2="52" y2="36"/><line x1="57" y1="14" x2="57" y2="36"/>'+
+    '</g>'+
+    '<path d="M36 12 L64 12 L62 8 L38 8 Z" fill="#B8932F"/>'+
+    '<rect x="40" y="6" width="20" height="2" fill="#4A2C3D"/>'+
+    '<circle cx="50" cy="4" r="1.6" fill="#4A2C3D"/>'+
+    '</svg>',
+
+  /* Modern UAE skyline (silhouette only) */
+  skyline: '<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+
+    '<defs><linearGradient id="uaeSky2" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#FDFAF5"/><stop offset="1" stop-color="#EDE0C8"/></linearGradient></defs>'+
+    '<rect x="0" y="0" width="100" height="56" fill="url(#uaeSky2)"/>'+
+    '<line x1="0" y1="55" x2="100" y2="55" stroke="#4A2C3D" stroke-width="1"/>'+
+    '<rect x="5" y="36" width="9" height="19" fill="#C2917A"/>'+
+    '<rect x="16" y="28" width="12" height="27" fill="#4A2C3D"/>'+
+    '<rect x="30" y="32" width="6" height="23" fill="#C2917A"/>'+
+    '<polygon points="50,8 47,55 53,55" fill="#4A2C3D"/>'+
+    '<line x1="50" y1="8" x2="50" y2="2" stroke="#B8932F" stroke-width="1"/>'+
+    '<circle cx="50" cy="2" r="1" fill="#B8932F"/>'+
+    '<rect x="60" y="24" width="8" height="31" fill="#C2917A"/>'+
+    '<rect x="70" y="20" width="8" height="35" fill="#4A2C3D"/>'+
+    '<rect x="82" y="34" width="12" height="21" fill="#4A2C3D"/>'+
+    '<path d="M80 34 Q88 26 96 34 Z" fill="#B8932F"/>'+
+    '<g fill="#B8932F" opacity=".95">'+
+    '<rect x="8" y="40" width="1.2" height="1.2"/><rect x="11" y="40" width="1.2" height="1.2"/>'+
+    '<rect x="19" y="32" width="1.2" height="1.2"/><rect x="23" y="32" width="1.2" height="1.2"/><rect x="19" y="40" width="1.2" height="1.2"/><rect x="23" y="40" width="1.2" height="1.2"/>'+
+    '<rect x="49.4" y="16" width="1" height="1"/><rect x="49.4" y="24" width="1" height="1"/><rect x="49.4" y="32" width="1" height="1"/><rect x="49.4" y="40" width="1" height="1"/>'+
+    '<rect x="72" y="26" width="1.2" height="1.2"/><rect x="75" y="26" width="1.2" height="1.2"/><rect x="72" y="34" width="1.2" height="1.2"/><rect x="75" y="34" width="1.2" height="1.2"/>'+
+    '</g>'+
+    '</svg>',
+
+  /* Arabic calligraphy flourish */
+  calligraphy: '<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+
+    '<path d="M8 38 Q18 16 34 26 Q50 36 64 20 Q78 6 92 24" stroke="#4A2C3D" stroke-width="2.6" fill="none" stroke-linecap="round"/>'+
+    '<path d="M12 42 Q24 28 38 32 Q50 36 62 26 Q76 14 88 30" stroke="#B8932F" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".75"/>'+
+    '<path d="M92 24 Q98 28 94 36" stroke="#4A2C3D" stroke-width="2" fill="none" stroke-linecap="round"/>'+
+    '<circle cx="34" cy="26" r="2" fill="#D63660"/>'+
+    '<circle cx="64" cy="20" r="2" fill="#D63660"/>'+
+    '<circle cx="50" cy="36" r="1.4" fill="#B8932F"/>'+
+    '<circle cx="20" cy="48" r="1" fill="#4A2C3D" opacity=".6"/>'+
+    '<circle cx="80" cy="48" r="1" fill="#4A2C3D" opacity=".6"/>'+
+    '<circle cx="50" cy="50" r="1.4" fill="#4A2C3D" opacity=".6"/>'+
+    '</svg>',
+
+  /* Open book — knowledge */
+  book: '<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+
+    '<path d="M10 20 L50 16 L50 52 L10 56 Z" fill="#4A2C3D"/>'+
+    '<path d="M90 20 L50 16 L50 52 L90 56 Z" fill="#4A2C3D"/>'+
+    '<path d="M14 24 L50 20 L50 48 L14 52 Z" fill="#FDFAF5"/>'+
+    '<path d="M86 24 L50 20 L50 48 L86 52 Z" fill="#FDFAF5"/>'+
+    '<g stroke="#4A2C3D" stroke-width=".7">'+
+    '<line x1="18" y1="28" x2="46" y2="25"/><line x1="18" y1="32" x2="46" y2="29"/>'+
+    '<line x1="18" y1="36" x2="46" y2="33"/><line x1="18" y1="40" x2="44" y2="37"/>'+
+    '<line x1="54" y1="25" x2="82" y2="28"/><line x1="54" y1="29" x2="82" y2="32"/>'+
+    '<line x1="54" y1="33" x2="82" y2="36"/><line x1="54" y1="37" x2="80" y2="40"/>'+
+    '</g>'+
+    '<g fill="#B8932F">'+
+    '<polygon points="50,4 51.8,8.5 56.5,9 53,12 54.2,16.5 50,14 45.8,16.5 47,12 43.5,9 48.2,8.5"/>'+
+    '<circle cx="30" cy="14" r=".9" opacity=".7"/>'+
+    '<circle cx="70" cy="14" r=".9" opacity=".7"/>'+
+    '</g>'+
+    '</svg>',
+
+  /* Crescent + stars */
+  crescent: '<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+
+    '<defs><linearGradient id="uaeNight" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#FDFAF5"/><stop offset="1" stop-color="#EDE0C8"/></linearGradient></defs>'+
+    '<rect x="0" y="0" width="100" height="60" fill="url(#uaeNight)"/>'+
+    '<path d="M52 10 A20 20 0 1 0 70 30 A15 15 0 1 1 52 10 Z" fill="#B8932F"/>'+
+    '<g fill="#4A2C3D">'+
+    '<polygon points="20,18 21.2,21 24.5,21.4 22,23.4 22.8,26.6 20,24.8 17.2,26.6 18,23.4 15.5,21.4 18.8,21"/>'+
+    '<polygon points="30,48 31,50.5 33.5,50.8 31.6,52.4 32.2,55 30,53.6 27.8,55 28.4,52.4 26.5,50.8 29,50.5"/>'+
+    '</g>'+
+    '<g fill="#C2917A">'+
+    '<polygon points="82,42 83,44.5 85.5,44.8 83.6,46.4 84.2,49 82,47.6 79.8,49 80.4,46.4 78.5,44.8 81,44.5"/>'+
+    '<polygon points="78,16 79,18.5 81.5,18.8 79.6,20.4 80.2,23 78,21.6 75.8,23 76.4,20.4 74.5,18.8 77,18.5"/>'+
+    '</g>'+
+    '</svg>',
+
+  /* Islamic 8-point star geometric pattern */
+  pattern: '<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+
+    '<g transform="translate(50,30)">'+
+    '<polygon points="0,-20 5.5,-5.5 20,0 5.5,5.5 0,20 -5.5,5.5 -20,0 -5.5,-5.5" fill="#4A2C3D"/>'+
+    '<polygon points="0,-14 4,-4 14,0 4,4 0,14 -4,4 -14,0 -4,-4" fill="#B8932F"/>'+
+    '<polygon points="0,-8 2.2,-2.2 8,0 2.2,2.2 0,8 -2.2,2.2 -8,0 -2.2,-2.2" fill="#4A2C3D"/>'+
+    '<circle cx="0" cy="0" r="2.4" fill="#FDFAF5"/>'+
+    '</g>'+
+    '<g fill="#C2917A">'+
+    '<polygon transform="translate(18,15)" points="0,-7 2,-2 7,0 2,2 0,7 -2,2 -7,0 -2,-2"/>'+
+    '<polygon transform="translate(82,15)" points="0,-7 2,-2 7,0 2,2 0,7 -2,2 -7,0 -2,-2"/>'+
+    '<polygon transform="translate(18,45)" points="0,-7 2,-2 7,0 2,2 0,7 -2,2 -7,0 -2,-2"/>'+
+    '<polygon transform="translate(82,45)" points="0,-7 2,-2 7,0 2,2 0,7 -2,2 -7,0 -2,-2"/>'+
+    '</g>'+
+    '<g stroke="#B8932F" stroke-width=".4" fill="none" opacity=".5">'+
+    '<line x1="25" y1="15" x2="42" y2="22"/><line x1="75" y1="15" x2="58" y2="22"/>'+
+    '<line x1="25" y1="45" x2="42" y2="38"/><line x1="75" y1="45" x2="58" y2="38"/>'+
+    '</g>'+
+    '</svg>'
+};
+
+/* Map each skill tab to its default UAE image */
+const TAB_IMAGE_KEY = {
+  'Reading': 'calligraphy',
+  'Writing': 'book',
+  'Listening': 'falcon',
+  'Speaking': 'mosque',
+  'Grammar': 'palm',
+  'Vocabulary': 'dhow',
+  'Student': 'dunes',
+  'SEN A1': 'palm',
+  'Differentiation': 'pattern',
+  'Mixed Practice': 'pattern'
+};
+
+/* Cultural caption shown under each image */
+const UAE_CAPTIONS = {
+  dhow:        { title:'The Dhow',         text:'Traditional UAE sailing boat — a symbol of Emirati trade heritage.' },
+  palm:        { title:'The Date Palm',    text:'The UAE national tree — a symbol of sustenance and resilience.' },
+  falcon:      { title:'The Falcon',       text:'The UAE national bird — a symbol of courage and heritage.' },
+  mosque:      { title:'The Mosque',       text:'A centre of community and contemplation in Emirati culture.' },
+  dallah:      { title:'The Dallah',       text:'The traditional Arabic coffee pot — symbol of UAE hospitality.' },
+  dunes:       { title:'Liwa Dunes',       text:'The sweeping sands of the Empty Quarter — heart of Emirati landscape.' },
+  windtower:   { title:'The Barjeel',      text:'Traditional UAE wind tower — natural cooling before air-conditioning.' },
+  skyline:     { title:'Modern UAE',       text:'The fast-rising skyline of cities like Abu Dhabi and Dubai.' },
+  calligraphy: { title:'Arabic Calligraphy', text:'The art of beautiful writing — a treasured Emirati craft.' },
+  book:        { title:'Books & Learning', text:'Knowledge — a value at the heart of Emirati education.' },
+  crescent:    { title:'Crescent & Stars', text:'A celestial motif from Emirati and Islamic heritage.' },
+  pattern:     { title:'Geometric Art',    text:'Eight-point Islamic star — symmetry, beauty and tradition.' }
+};
+
+/* Pick the most relevant image for a module based on its title */
+function uaeImageKeyForModule(mod, tab){
+  const t = ((mod && mod.title) || '').toLowerCase();
+  if(/architect|mosque|tower|monument|building|construct/.test(t)) return 'mosque';
+  if(/barjeel|wind\s*tower|cool|sustain/.test(t)) return 'windtower';
+  if(/dining|food|cuisine|hospital|celebrat|cultur|tradition|eid|ramadan|festiv/.test(t)) return 'dallah';
+  if(/sleep|brain|night|dream|mind/.test(t)) return 'crescent';
+  if(/silk\s*road|trade|explorer|past|ancient|history|herita/.test(t)) return 'dhow';
+  if(/language|communicat|intercult|sapir|whorf|word|vocab|speech/.test(t)) return 'calligraphy';
+  if(/academic|integrity|essay|study|exam|writing\s*task|paragraph/.test(t)) return 'book';
+  if(/housing|home|city|urban|residence|apartment/.test(t)) return 'skyline';
+  if(/cyber|online|digital|internet|bull|social\s*media|tech/.test(t)) return 'skyline';
+  if(/environment|nature|sustain|green|climate|pollut|recycl/.test(t)) return 'palm';
+  if(/health|flu|medical|disease|therap|wellness|alterna/.test(t)) return 'palm';
+  if(/desert|dune|liwa|empty\s*quarter/.test(t)) return 'dunes';
+  if(/falcon|bird|wildlife|animal/.test(t)) return 'falcon';
+  if(/pattern|geometry|art|design/.test(t)) return 'pattern';
+  if(/celebrat|gift|family|wedding/.test(t)) return 'dallah';
+  if(/diagnostic/.test(t)) return TAB_IMAGE_KEY[tab] || 'dunes';
+  return TAB_IMAGE_KEY[tab] || 'palm';
+}
+
+function uaeSvgFor(key){ return UAE_SVG[key] || UAE_SVG.palm; }
+function uaeCaptionFor(key){ return UAE_CAPTIONS[key] || UAE_CAPTIONS.palm; }
+
+/* Update the banner at the top of the practice page */
+function renderUaeTabBanner(){
+  const el = document.getElementById('uaeTabBanner');
+  if(!el) return;
+  const tab = activeTab;
+  const key = TAB_IMAGE_KEY[tab] || 'palm';
+  const cap = uaeCaptionFor(key);
+  el.style.display = 'flex';
+  el.innerHTML = uaeSvgFor(key) +
+    '<div class="uae-banner-text">' +
+      '<span class="uae-banner-tag">' + escHtml(tab) + ' practice · UAE heritage</span>' +
+      escHtml(cap.title) +
+      '<span class="uae-banner-caption">' + escHtml(cap.text) + '</span>' +
+    '</div>';
+}
+
 let selectedAvatar = localStorage.getItem('studentAvatar') || (AVATARS[0].emoji + ' ' + AVATARS[0].name);
 let teacherSections = JSON.parse(localStorage.getItem('teacherSections') || '[]');
 let localReports = JSON.parse(localStorage.getItem('localReports') || '[]');
-// ── Google Sheets URL ── Paste your Apps Script Web App URL here ──────────────
-const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwqgNQ3t7prIdMo2JJhbFF5S9DDVvhjlxzkSj82OTMyGr6awOVILeMruHhAEVcihOqL/exec';
 
-function loadTeacherAdditions(){
-  const saved = JSON.parse(localStorage.getItem('teacherAdditions') || '{}');
-  Object.keys(saved).forEach(streamKey => {
+/* ════════════════════════════════════════════════════════════
+   MULTI-TEACHER LAYER
+   ── teacherProfile  : the signed-in teacher on THIS device
+   ── classLinkParams : if the page was opened via a class link,
+                        these come from the URL and override the
+                        device profile so that students post to
+                        the link-owner's GAS, not Aliya's.
+   ════════════════════════════════════════════════════════════ */
+
+function loadTeacherProfile(){
+  try { return JSON.parse(localStorage.getItem('teacherProfile') || 'null'); }
+  catch(e){ return null; }
+}
+function saveTeacherProfileObj(p){
+  localStorage.setItem('teacherProfile', JSON.stringify(p));
+}
+function makeTeacherId(name){
+  const safe = String(name||'teacher').trim().replace(/\s+/g,'_').replace(/[^A-Za-z0-9_]/g,'').slice(0,18) || 'teacher';
+  return safe + '_' + Math.random().toString(36).substring(2,7).toUpperCase();
+}
+let teacherProfile = loadTeacherProfile();
+
+/* ── Read class-link parameters from the URL ── */
+function getClassLinkParams(){
+  const p = new URLSearchParams(location.search);
+  const gasB64 = p.get('gas') || '';
+  let gasUrl = '';
+  if(gasB64){
+    try { gasUrl = atob(gasB64); } catch(e){ gasUrl = ''; }
+    if(!/^https:\/\/script\.google\.com\//.test(gasUrl)) gasUrl = '';
+  }
+  return {
+    teacherId:   p.get('teacherId')   || '',
+    teacherName: p.get('teacher')     || p.get('teacherName') || '',
+    grade:       p.get('grade')       || '',
+    section:     p.get('section')     || '',
+    className:   p.get('class')       || '',
+    gasUrl:      gasUrl,
+    bundle:      p.get('bundle')      || ''
+  };
+}
+const classLinkParams = getClassLinkParams();
+
+/* ── Decide which GAS URL to send a given submission to ──
+   Priority:
+   1. URL param (the teacher who shared the class link)
+   2. Currently signed-in teacher on this device
+   3. Owner's default (Aliya)                                       */
+function getActiveGasUrl(){
+  if(classLinkParams.gasUrl) return classLinkParams.gasUrl;
+  if(teacherProfile && teacherProfile.gasUrl) return teacherProfile.gasUrl;
+  return OWNER_GAS_URL || '';
+}
+function getActiveTeacherId(){
+  if(classLinkParams.teacherId) return classLinkParams.teacherId;
+  if(teacherProfile && teacherProfile.teacherId) return teacherProfile.teacherId;
+  return 'owner_aliya';
+}
+function getActiveTeacherName(){
+  if(classLinkParams.teacherName) return decodeURIComponent(classLinkParams.teacherName);
+  if(teacherProfile && teacherProfile.name) return teacherProfile.name;
+  return OWNER_NAME;
+}
+
+/* Kept for back-compat with the rest of the file. */
+const GOOGLE_SHEET_WEB_APP_URL = OWNER_GAS_URL;
+
+function _mergeAdditionsIntoDatabase(saved, teacherTag){
+  Object.keys(saved||{}).forEach(streamKey => {
     if(!DATABASE[streamKey]) DATABASE[streamKey] = {};
     Object.keys(saved[streamKey]).forEach(tab => {
       if(!DATABASE[streamKey][tab]) DATABASE[streamKey][tab] = [];
-      DATABASE[streamKey][tab].push(...saved[streamKey][tab]);
+      saved[streamKey][tab].forEach(mod => {
+        const tagged = Object.assign({}, mod, { _addedBy: mod._addedBy || teacherTag || '' });
+        DATABASE[streamKey][tab].push(tagged);
+      });
     });
   });
+}
+function loadTeacherAdditions(){
+  /* 1. Always load this device's saved additions, tagged with the teacher who owns this device */
+  const saved = JSON.parse(localStorage.getItem('teacherAdditions') || '{}');
+  const meTag = (teacherProfile && teacherProfile.name) ? teacherProfile.name : '';
+  _mergeAdditionsIntoDatabase(saved, meTag);
+
+  /* 2. If the page was opened with a class-link bundle, merge those too */
+  if(classLinkParams.bundle){
+    try {
+      const bundleObj = JSON.parse(decodeURIComponent(escape(atob(classLinkParams.bundle))));
+      _mergeAdditionsIntoDatabase(bundleObj, classLinkParams.teacherName ? decodeURIComponent(classLinkParams.teacherName) : '');
+    } catch(e){ console.warn('Could not parse class-link bundle:', e); }
+  }
 }
 function saveTeacherModule(streamKey, tab, module){
   const saved = JSON.parse(localStorage.getItem('teacherAdditions') || '{}');
   if(!saved[streamKey]) saved[streamKey] = {};
   if(!saved[streamKey][tab]) saved[streamKey][tab] = [];
-  saved[streamKey][tab].push(module);
+  const tag = (teacherProfile && teacherProfile.name) ? teacherProfile.name : '';
+  const tagged = Object.assign({}, module, { _addedBy: tag });
+  saved[streamKey][tab].push(tagged);
   localStorage.setItem('teacherAdditions', JSON.stringify(saved));
+  /* Mirror to GAS if the active teacher has one configured (best-effort, no-cors) */
+  const gas = (teacherProfile && teacherProfile.gasUrl) || '';
+  if(gas){
+    const payload = new URLSearchParams();
+    payload.append('submissionType', 'activity_save');
+    payload.append('teacherId', getActiveTeacherId());
+    payload.append('teacherName', getActiveTeacherName());
+    payload.append('grade', streamKey);
+    payload.append('skill', tab);
+    payload.append('activityTitle', module.title || '');
+    payload.append('payload', JSON.stringify(tagged));
+    fetch(gas, { method:'POST', mode:'no-cors', body: payload }).catch(()=>{});
+  }
+}
+
+/* Export current teacher's additions as a compact base64 bundle for the class link */
+function buildActivityBundleB64(){
+  const saved = JSON.parse(localStorage.getItem('teacherAdditions') || '{}');
+  if(!Object.keys(saved).length) return '';
+  try {
+    return btoa(unescape(encodeURIComponent(JSON.stringify(saved))));
+  } catch(e){ return ''; }
 }
 function refreshStreamButtons(){
   const selector = document.querySelector('.stream-selector');
@@ -1748,26 +2630,41 @@ function refreshStreamButtons(){
   });
 }
 function openTeacherTools(){
+  /* gate 1: shared password */
   if(!teacherAuthenticated){
-    const pw = document.getElementById('teacherPwModal');
-    pw.classList.add('open');
-    pw.setAttribute('aria-hidden','false');
-    const inp = document.getElementById('teacherPwInput');
-    if(inp){ inp.value=''; }
-    document.getElementById('teacherPwError').textContent='';
-    setTimeout(()=>{ if(inp) inp.focus(); }, 80);
-    return;
+    return openTeacherLogin();
+  }
+  /* gate 2: device must have a teacher profile */
+  if(!teacherProfile){
+    return openTeacherSetup(false);
   }
   document.getElementById('teacherModal').classList.add('open');
   document.getElementById('teacherModal').setAttribute('aria-hidden','false');
   populateTeacherControls();
+}
+function openTeacherLogin(){
+  try{ localStorage.setItem('roleChosen','1'); }catch(e){}
+  const pw = document.getElementById('teacherPwModal');
+  pw.classList.add('open');
+  pw.setAttribute('aria-hidden','false');
+  const inp = document.getElementById('teacherPwInput');
+  if(inp){ inp.value=''; }
+  document.getElementById('teacherPwError').textContent='';
+  setTimeout(()=>{ if(inp) inp.focus(); }, 80);
 }
 function checkTeacherPw(){
   const entered = (document.getElementById('teacherPwInput').value || '').trim();
   if(entered === TEACHER_PASSWORD){
     teacherAuthenticated = true;
     closeTeacherPw();
-    openTeacherTools();
+    if(!teacherProfile){
+      openTeacherSetup(false);
+    } else {
+      openTeacherTools();
+      updateTeacherChip();
+    }
+    /* Once logged in, also hide the role overlay if visible */
+    closeRoleOverlay();
   } else {
     document.getElementById('teacherPwError').textContent = 'Incorrect password — please try again.';
     const inp = document.getElementById('teacherPwInput');
@@ -1783,7 +2680,123 @@ function closeTeacherTools(){
   document.getElementById('teacherModal').classList.remove('open');
   document.getElementById('teacherModal').setAttribute('aria-hidden','true');
 }
+
+/* ── Teacher Setup (profile) ─────────────────────────────────── */
+function openTeacherSetup(isEdit){
+  const m = document.getElementById('teacherSetupModal');
+  m.classList.add('open');
+  m.setAttribute('aria-hidden','false');
+  document.getElementById('setupError').textContent='';
+  if(isEdit && teacherProfile){
+    document.getElementById('setupTeacherName').value   = teacherProfile.name   || '';
+    document.getElementById('setupTeacherSchool').value = teacherProfile.school || '';
+    document.getElementById('setupTeacherGas').value    = teacherProfile.gasUrl || '';
+  } else {
+    document.getElementById('setupTeacherName').value   = '';
+    document.getElementById('setupTeacherSchool').value = '';
+    document.getElementById('setupTeacherGas').value    = '';
+  }
+  setTimeout(()=>document.getElementById('setupTeacherName').focus(), 80);
+}
+function closeTeacherSetup(){
+  const m = document.getElementById('teacherSetupModal');
+  m.classList.remove('open');
+  m.setAttribute('aria-hidden','true');
+}
+function saveTeacherSetup(){
+  const name   = document.getElementById('setupTeacherName').value.trim();
+  const school = document.getElementById('setupTeacherSchool').value.trim();
+  const gasUrl = document.getElementById('setupTeacherGas').value.trim();
+  const err = document.getElementById('setupError');
+  if(!name){ err.textContent = 'Please enter your name to continue.'; return; }
+  if(gasUrl && !/^https:\/\/script\.google\.com\//.test(gasUrl)){
+    err.textContent = 'That doesn’t look like a Google Apps Script URL.'; return;
+  }
+  const existing = teacherProfile || {};
+  teacherProfile = {
+    teacherId: existing.teacherId || makeTeacherId(name),
+    name, school, gasUrl,
+    createdAt: existing.createdAt || new Date().toISOString()
+  };
+  saveTeacherProfileObj(teacherProfile);
+  closeTeacherSetup();
+  updateTeacherChip();
+  openTeacherTools();
+}
+function openEditProfile(){
+  closeTeacherTools();
+  openTeacherSetup(true);
+}
+function logoutTeacher(){
+  if(!confirm('Sign out of this teacher account? Your activities and reports on this device will remain saved.')) return;
+  teacherAuthenticated = false;
+  teacherProfile = null;
+  localStorage.removeItem('teacherProfile');
+  closeTeacherTools();
+  updateTeacherChip();
+  /* Re-show role overlay so visitor can pick again */
+  document.getElementById('roleOverlay').classList.add('shown');
+  document.body.classList.add('role-locked');
+}
+
+/* ── Header teacher chip ─────────────────────────────────────── */
+function updateTeacherChip(){
+  const chip = document.getElementById('teacherChip');
+  if(!teacherProfile){ chip.classList.remove('shown','fresh'); return; }
+  chip.classList.add('shown');
+  const name = teacherProfile.name || 'Teacher';
+  const initials = name.split(/\s+/).map(w=>w[0]).filter(Boolean).slice(0,2).join('').toUpperCase() || 'T';
+  document.getElementById('teacherChipAvatar').textContent = initials;
+  document.getElementById('teacherChipName').textContent = name;
+}
+
+/* ── Role picker ─────────────────────────────────────────────── */
+function enterAsStudent(){
+  try{ localStorage.setItem('roleChosen','1'); }catch(e){}
+  closeRoleOverlay();
+}
+function closeRoleOverlay(){
+  document.getElementById('roleOverlay').classList.remove('shown');
+  document.body.classList.remove('role-locked');
+}
+function populateTeacherProfileCard(){
+  const card = document.getElementById('teacherProfileCard');
+  if(!card) return;
+  if(!teacherProfile){ card.style.display = 'none'; return; }
+  card.style.display = 'flex';
+  const name = teacherProfile.name || 'Teacher';
+  const initials = name.split(/\s+/).map(w=>w[0]).filter(Boolean).slice(0,2).join('').toUpperCase() || 'T';
+  document.getElementById('tpcAvatar').textContent = initials;
+  document.getElementById('tpcName').textContent = name;
+  const meta = [];
+  if(teacherProfile.school) meta.push(escapeForHtml(teacherProfile.school));
+  meta.push('Teacher ID: <strong>' + escapeForHtml(teacherProfile.teacherId) + '</strong>');
+  document.getElementById('tpcMeta').innerHTML = meta.join(' · ');
+  const st = document.getElementById('tpcStatus');
+  if(teacherProfile.gasUrl){
+    st.textContent = 'Your Google Apps Script is connected';
+    st.classList.remove('warn');
+  } else {
+    st.textContent = 'No Apps Script URL set — add yours in Reports below';
+    st.classList.add('warn');
+  }
+  /* Show owner badge if signed-in teacher is the original owner */
+  const ob = document.getElementById('ownerBadge');
+  if(ob) ob.style.display = (name.trim().toLowerCase() === OWNER_NAME.toLowerCase()) ? 'inline-block' : 'none';
+}
+
 function populateTeacherControls(){
+  populateTeacherProfileCard();
+  /* Pre-fill the Google Sheets URL field with the signed-in teacher's URL */
+  const gsel = document.getElementById('googleSheetUrl');
+  if(gsel && teacherProfile) gsel.value = teacherProfile.gasUrl || '';
+
+  /* Pre-fill cert teacher name with profile name if blank */
+  const ctn = document.getElementById('certTeacherName');
+  if(ctn && teacherProfile && !ctn.value) ctn.value = teacherProfile.name || '';
+  const csn = document.getElementById('certSchoolName');
+  if(csn && teacherProfile && !csn.value) csn.value = teacherProfile.school || '';
+
   // Helper to build grade options using STREAM_NAMES for friendly labels
   const ALL_GRADES = [
     {k:'g9g', label:'Grade 9 General'},
@@ -1873,17 +2886,60 @@ function addActivityToTab(){
   ['activityTitle','activityQuestion','activityOptions','activityAnswer','activityExplanation'].forEach(id=>document.getElementById(id).value='');
   alert('Activity added successfully.');
 }
+let _lastGeneratedClassLink = '';
 function generateTeacherLink(){
-  const teacherRaw = document.getElementById('teacherCode').value.trim() || 'teacher';
-  const teacher = encodeURIComponent(teacherRaw);
-  const section = encodeURIComponent(document.getElementById('teacherSectionSelect').value || 'section');
-  // Generate a unique teacher ID: teacherName + short hash
-  const teacherId = teacherRaw.replace(/\s+/g,'_') + '_' + Math.random().toString(36).substring(2,7).toUpperCase();
-  const gradeKey = (document.getElementById('teacherLinkGradeSelect') && document.getElementById('teacherLinkGradeSelect').value) ? document.getElementById('teacherLinkGradeSelect').value : (document.getElementById('activityGradeSelect') ? document.getElementById('activityGradeSelect').value : activeStream);
-  const url = `${location.origin}${location.pathname}?teacher=${teacher}&section=${section}&grade=${encodeURIComponent(gradeKey)}&teacherId=${encodeURIComponent(teacherId)}`;
-  const output = document.getElementById('teacherLinkOutput');
-  output.innerHTML = `<a href="${escapeForHtml(url)}" target="_blank" rel="noopener" style="word-break:break-all;color:#1F5560">${escapeForHtml(url)}</a><br><small style="color:#a8998a">Teacher ID: ${escapeForHtml(teacherId)} — Copy and share this link with your students.</small>`;
-  navigator.clipboard?.writeText(url).catch(()=>{});
+  if(!teacherProfile){ alert('Please set up your teacher profile first.'); openTeacherSetup(false); return; }
+  const className = (document.getElementById('teacherCode').value||'').trim();
+  const section = (document.getElementById('teacherSectionSelect').value||'').trim();
+  const gradeKey = (document.getElementById('teacherLinkGradeSelect') && document.getElementById('teacherLinkGradeSelect').value) ? document.getElementById('teacherLinkGradeSelect').value : activeStream;
+  const includeBundle = document.getElementById('bundleActivitiesChk') && document.getElementById('bundleActivitiesChk').checked;
+
+  const params = new URLSearchParams();
+  params.set('teacherId',   teacherProfile.teacherId);
+  params.set('teacherName', teacherProfile.name);
+  params.set('grade',       gradeKey);
+  if(section)   params.set('section', section);
+  if(className) params.set('class',   className);
+  /* Encode the teacher's own GAS URL so student submissions go to their sheet */
+  if(teacherProfile.gasUrl){
+    try { params.set('gas', btoa(teacherProfile.gasUrl)); } catch(e){}
+  }
+  if(includeBundle){
+    const b = buildActivityBundleB64();
+    if(b) params.set('bundle', b);
+  }
+  const url = `${location.origin}${location.pathname}?${params.toString()}`;
+  _lastGeneratedClassLink = url;
+
+  document.getElementById('classLinkUrl').textContent = url;
+  const meta = [];
+  meta.push(`<b>Class:</b> ${escapeForHtml(className || '—')}`);
+  meta.push(`<b>Grade:</b> ${escapeForHtml(STREAM_NAMES[gradeKey]||gradeKey)}`);
+  meta.push(`<b>Section:</b> ${escapeForHtml(section||'—')}`);
+  meta.push(`<b>Reports go to:</b> ${teacherProfile.gasUrl ? '✅ Your Apps Script' : '⚠️ Not set — add your URL in the Reports section first'}`);
+  if(includeBundle){
+    const sizeKb = Math.round((buildActivityBundleB64()||'').length/1024*10)/10;
+    meta.push(`<b>Activities bundled:</b> ${sizeKb||0} KB`);
+  }
+  document.getElementById('classLinkMeta').innerHTML = meta.join(' &nbsp;·&nbsp; ');
+  document.getElementById('classLinkResult').classList.add('shown');
+  try { navigator.clipboard?.writeText(url); document.getElementById('cllCopied').classList.add('shown'); setTimeout(()=>document.getElementById('cllCopied').classList.remove('shown'),1800); } catch(e){}
+}
+function copyClassLink(){
+  if(!_lastGeneratedClassLink) return;
+  navigator.clipboard?.writeText(_lastGeneratedClassLink).then(()=>{
+    document.getElementById('cllCopied').classList.add('shown');
+    setTimeout(()=>document.getElementById('cllCopied').classList.remove('shown'),1800);
+  });
+}
+function openClassLink(){
+  if(_lastGeneratedClassLink) window.open(_lastGeneratedClassLink, '_blank', 'noopener');
+}
+function shareClassLinkEmail(){
+  if(!_lastGeneratedClassLink) return;
+  const subject = encodeURIComponent('Your English Practice class link');
+  const body = encodeURIComponent('Hello,\n\nHere is the link to your English Practice page:\n\n' + _lastGeneratedClassLink + '\n\nBest wishes,\n' + (teacherProfile?teacherProfile.name:''));
+  location.href = 'mailto:?subject=' + subject + '&body=' + body;
 }
 function renderAvatars(){
   const html = AVATARS.map(a => {
@@ -1936,15 +2992,23 @@ function renderBadges(){
   if(studentEl) studentEl.innerHTML = content;
 }
 
-function saveGoogleSheetUrl(){ const el=document.getElementById('googleSheetUrl'); if(el){ localStorage.setItem('googleSheetUrl', el.value.trim()); document.getElementById('reportStatus').textContent='Google Sheets URL saved.'; } }
+function saveGoogleSheetUrl(){
+  const el=document.getElementById('googleSheetUrl');
+  if(!el) return;
+  const url = el.value.trim();
+  if(url && !/^https:\/\/script\.google\.com\//.test(url)){
+    document.getElementById('reportStatus').textContent='⚠ That does not look like a Google Apps Script URL.'; return;
+  }
+  localStorage.setItem('googleSheetUrl', url);
+  if(teacherProfile){ teacherProfile.gasUrl = url; saveTeacherProfileObj(teacherProfile); updateTeacherChip(); populateTeacherProfileCard(); }
+  document.getElementById('reportStatus').textContent = url ? '✅ Saved. Your reports will now go to YOUR Apps Script.' : 'Cleared. Reports will be saved locally only.';
+}
 function sendReportToGoogleSheets(report, statusElId){
-  const hardcoded = GOOGLE_SHEET_WEB_APP_URL;
-  const stored = localStorage.getItem('googleSheetUrl') || '';
-  const url = (hardcoded && hardcoded.startsWith('https://script.google.com/')) ? hardcoded
-             : (stored && stored.startsWith('https://script.google.com/')) ? stored : '';
+  /* Resolves to: ?gas= URL > teacherProfile.gasUrl > OWNER_GAS_URL */
+  const url = getActiveGasUrl();
   const statusIds = [statusElId, 'submitStatusMsg', 'reportStatus'].filter(Boolean);
   function setStatus(msg){ statusIds.forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=msg; }); }
-  if(!url){ setStatus('Google Sheets is not connected. Please add a valid Apps Script URL.'); return; }
+  if(!url){ setStatus('⚠ No Google Apps Script is connected. The teacher who shared this link has not set one up yet.'); return; }
   const _params = new URLSearchParams();
   Object.keys(report).forEach(k => _params.append(k, report[k] == null ? '' : String(report[k])));
   fetch(url,{method:'POST',mode:'no-cors',body:_params})
@@ -1953,49 +3017,100 @@ function sendReportToGoogleSheets(report, statusElId){
 }
 
 function recordLocalReport(isCorrect){
-  const params = new URLSearchParams(location.search);
+  /* Tracks each answer locally only; not sent to GAS per-answer (which was spammy) */
+  const mod = DATABASE[activeStream] && DATABASE[activeStream][activeTab] ? DATABASE[activeStream][activeTab][activeModuleIndex] : null;
   localReports.push({
     date: new Date().toLocaleString(),
-    teacher: params.get('teacher') || '',
-    teacherId: params.get('teacherId') || '',
-    student: localStorage.getItem('studentName') || '',
-    section: params.get('section') || localStorage.getItem('studentSection') || '',
-    grade: STREAM_NAMES[activeStream] || activeStream,
-    tab: activeTab,
-    module: DATABASE[activeStream][activeTab][activeModuleIndex].title,
-    avatar: selectedAvatar,
-    correct: isCorrect ? 'Yes' : 'No',
-    score: `${score}/${answered}`
+    teacher:   getActiveTeacherName(),
+    teacherId: getActiveTeacherId(),
+    student:   localStorage.getItem('studentName') || '',
+    section:   classLinkParams.section || localStorage.getItem('studentSection') || '',
+    grade:     STREAM_NAMES[activeStream] || activeStream,
+    tab:       activeTab,
+    module:    mod && mod.title ? mod.title : '',
+    avatar:    selectedAvatar,
+    correct:   isCorrect ? 'Yes' : 'No',
+    score:     `${score}/${answered}`
   });
+  if(localReports.length > 500) localReports = localReports.slice(-500);
   localStorage.setItem('localReports', JSON.stringify(localReports));
-  sendReportToGoogleSheets(localReports[localReports.length-1]);
   renderBadges();
 }
+function buildReport(type, mod, opts){
+  opts = opts || {};
+  const pct = answered > 0 ? Math.round(score/answered*100) : 0;
+  const badge = opts.badge || (pct>=90?'🏆 Excellence':pct>=75?'⭐ Proficient':pct>=60?'👍 Developing':'💪 Keep Practising');
+  return {
+    submissionType: type,
+    teacherId:   getActiveTeacherId(),
+    teacherName: getActiveTeacherName(),
+    studentName: localStorage.getItem('studentName') || '',
+    className:   classLinkParams.className || classLinkParams.section || localStorage.getItem('studentSection') || '',
+    section:     classLinkParams.section   || localStorage.getItem('studentSection') || '',
+    grade:       STREAM_NAMES[activeStream] || activeStream,
+    stream:      activeStream,
+    skill:       activeTab,
+    activityTitle: (mod && mod.title) || '',
+    score:       String(score),
+    total:       String(answered),
+    percentage:  pct + '%',
+    badge:       badge,
+    avatar:      selectedAvatar,
+    status:      opts.status || (type==='quiz_complete' ? 'Module Submitted' : 'In Progress'),
+    pageUrl:     location.href,
+    date:        new Date().toLocaleString()
+  };
+}
+
 function submitToTeacher(){
-  const params = new URLSearchParams(location.search);
   const modules = DATABASE[activeStream] && DATABASE[activeStream][activeTab] ? DATABASE[activeStream][activeTab] : [];
   const mod = modules[activeModuleIndex] || {};
-  const pct = answered > 0 ? Math.round(score/answered*100) : 0;
-  const badge = pct>=90?'🏆 Excellence':pct>=75?'⭐ Proficient':pct>=60?'👍 Developing':'💪 Keep Practising';
-  const report = {
-    date: new Date().toLocaleString(),
-    teacher: params.get('teacher') || '',
-    student: localStorage.getItem('studentName') || '',
-    section: params.get('section') || localStorage.getItem('studentSection') || '',
-    grade: activeStream,
-    tab: activeTab,
-    module: mod.title || '',
-    avatar: selectedAvatar,
-    score: score,
-    total: answered,
-    percentage: pct + '%',
-    badge: badge,
-    status: 'Module Submitted'
-  };
-  localStorage.setItem('localReports', JSON.stringify(localReports));
+  const report = buildReport('quiz_complete', mod);
   const msgEl = document.getElementById('submitStatusMsg');
   if(msgEl) msgEl.textContent = 'Submitting…';
   sendReportToGoogleSheets(report, 'submitStatusMsg');
+}
+
+function testGoogleSheetUrl(){
+  const url = (teacherProfile && teacherProfile.gasUrl) || (document.getElementById('googleSheetUrl').value||'').trim();
+  const st = document.getElementById('reportStatus');
+  if(!url){ st.textContent = '⚠ Add and save your Apps Script URL first.'; return; }
+  st.textContent = '⏳ Sending a test ping to your Apps Script…';
+  const p = new URLSearchParams();
+  p.append('submissionType','quiz_complete');
+  p.append('teacherId', getActiveTeacherId());
+  p.append('teacherName', getActiveTeacherName());
+  p.append('studentName','— Test ping —');
+  p.append('className', 'TEST');
+  p.append('grade', 'TEST'); p.append('stream','TEST'); p.append('skill','TEST');
+  p.append('activityTitle','Connection test');
+  p.append('score','1'); p.append('total','1'); p.append('percentage','100%');
+  p.append('badge','✓'); p.append('avatar','🧪'); p.append('status','TEST');
+  p.append('pageUrl', location.href);
+  p.append('date', new Date().toLocaleString());
+  fetch(url,{method:'POST',mode:'no-cors',body:p})
+    .then(()=>{ st.textContent = '✅ Test sent. Check your Google Sheet for a row labelled "Test ping".'; })
+    .catch(()=>{ st.textContent = '❌ Could not reach your Apps Script. Check the URL and that it is deployed with "Anyone" access.'; });
+}
+
+function viewLocalReports(){
+  const el = document.getElementById('localReportsPreview');
+  if(!el) return;
+  if(!localReports.length){ el.innerHTML = '<em style="color:#a8998a">No local reports saved yet.</em>'; return; }
+  const rows = localReports.slice(-25).reverse().map(r =>
+    '<div style="border:1px solid #e2d8c6;border-radius:8px;padding:6px 10px;margin:4px 0;background:#fbf7ee">' +
+      '<div><b>' + escapeForHtml(r.student||'—') + '</b> · ' + escapeForHtml(r.grade||'') + ' · ' + escapeForHtml(r.tab||'') + '</div>' +
+      '<div style="color:#a8998a;font-size:.75rem">' + escapeForHtml(r.module||'') + ' — ' + escapeForHtml(r.correct||'') + ' — ' + escapeForHtml(r.score||'') + ' — ' + escapeForHtml(r.date||'') + '</div>' +
+    '</div>'
+  ).join('');
+  el.innerHTML = '<div style="font-size:.74rem;color:#a8998a;margin-bottom:4px">Last ' + Math.min(25, localReports.length) + ' of ' + localReports.length + ' local report(s):</div>' + rows;
+}
+function clearLocalReports(){
+  if(!confirm('Clear all locally saved reports? (Reports already sent to your Google Sheet stay safe.)')) return;
+  localReports = [];
+  localStorage.setItem('localReports', '[]');
+  viewLocalReports();
+  document.getElementById('reportStatus').textContent = '✅ Local reports cleared.';
 }
 
 function downloadReportsCsv(){
@@ -2468,9 +3583,25 @@ async function generateFromWorksheet() {
   const count = Math.max(1, Math.min(20, parseInt(document.getElementById('genQCount').value) || 5));
   const preview = document.getElementById('bulkPreview');
   const aiResultDiv = document.getElementById('bulkAiResult');
-  preview.textContent = '⏳ AI is reading your worksheet and generating questions — please wait…';
+
+  /* The previous build called the Anthropic API directly from the browser, which is blocked
+     by CORS and would also leak an API key. We turn that path into a graceful local fallback:
+     if the pasted text already contains numbered MCQs (1. … A. … Answer: …), we parse them. */
+  const parsed = parseBulkMcqText(text);
+  if(parsed.valid.length){
+    _bulkAiQuestions = parsed.valid.map(q => ({ type:'mcq', q:q.q, options:q.options, answer:q.answer, explanation:q.explanation }));
+    preview.textContent = '✅ ' + parsed.valid.length + ' question(s) ready (parsed locally from your text):\n\n' +
+      _bulkAiQuestions.map((q,i)=>(i+1)+'. '+q.q+'\n   Options: '+q.options.join(' | ')+'\n   Answer: '+q.answer).join('\n\n');
+    aiResultDiv.style.display = 'block';
+    return;
+  }
+  preview.textContent = '⚠ Could not auto-generate questions from this text without a connected AI service.\n\n' +
+    'Use one of these two options:\n' +
+    '  1) Format your text as numbered MCQs (1. Question / A. Opt / B. Opt / Answer: A) and click "Add Manual MCQs", OR\n' +
+    '  2) Use the "Add Activity" form above to enter a single question by hand.';
   aiResultDiv.style.display = 'none';
   _bulkAiQuestions = null;
+  return;
 
   const typesList = [];
   if (genMCQ) typesList.push(`${count} MCQ questions — each with 3 answer options (A, B, C) and one correct answer`);
@@ -2547,21 +3678,114 @@ function addAiQuestionsToTab() {
   alert(module.questions.length + ' question(s) added to ' + tab + '.');
 }
 
-window.addEventListener('DOMContentLoaded',()=>{loadTeacherAdditions(); refreshStreamButtons(); renderStudentProfileControls(); /* Show homepage by default */ document.getElementById('homePage').style.display='flex'; document.getElementById('homePage').style.flexDirection='column'; document.getElementById('practiceApp').style.display='none'; });
+window.addEventListener('DOMContentLoaded',()=>{
+  loadTeacherAdditions();
+  refreshStreamButtons();
+  renderStudentProfileControls();
+
+  /* Persist welcome-banner dismissal */
+  if(localStorage.getItem('welcomeDismissed') === '1'){
+    const wb = document.getElementById('welcomeBanner');
+    if(wb) wb.style.display = 'none';
+  }
+  const closeBtn = document.querySelector('.as-wb-close');
+  if(closeBtn){
+    closeBtn.addEventListener('click', () => {
+      try{ localStorage.setItem('welcomeDismissed','1'); }catch(e){}
+    });
+  }
+
+  /* Show homepage by default */
+  document.getElementById('homePage').style.display='flex';
+  document.getElementById('homePage').style.flexDirection='column';
+  document.getElementById('practiceApp').style.display='none';
+
+  /* Teacher chip + role overlay logic */
+  updateTeacherChip();
+
+  /* If page was opened via a class link, fast-track student directly into that grade */
+  if(classLinkParams.teacherId || classLinkParams.grade){
+    document.body.classList.remove('role-locked');
+    /* Save the link's section into the student's profile so it auto-fills */
+    if(classLinkParams.section){ localStorage.setItem('studentSection', classLinkParams.section); }
+    /* Open practice page in the right stream automatically */
+    if(classLinkParams.grade && DATABASE[classLinkParams.grade]){
+      setTimeout(()=>selectGradeAndShow(classLinkParams.grade), 50);
+    }
+    /* Add a small banner so student knows whose class link they’re on */
+    if(classLinkParams.teacherName){
+      const wb = document.getElementById('welcomeBanner');
+      if(wb){
+        const fromEl = wb.querySelector('.as-wb-from');
+        const sigEl  = wb.querySelector('.as-wb-sig');
+        if(fromEl) fromEl.textContent = 'A class link from ' + decodeURIComponent(classLinkParams.teacherName);
+        if(sigEl)  sigEl.innerHTML = '— <em>' + escHtml(decodeURIComponent(classLinkParams.teacherName)) + '</em>';
+      }
+    }
+    return;
+  }
+
+  /* Otherwise, show the elegant role picker if this is a fresh visit */
+  const hasChosen = localStorage.getItem('roleChosen') === '1';
+  if(!hasChosen){
+    document.getElementById('roleOverlay').classList.add('shown');
+    document.body.classList.add('role-locked');
+  } else {
+    document.body.classList.remove('role-locked');
+  }
+});
+
+/* Role persistence is already handled inside enterAsStudent / openTeacherLogin */
 </script>
-<!-- ── Teacher Password Modal (Fix 2) ──────────────────────────────────────── -->
+<!-- ── Teacher Password Modal (shared password gate) ───────────────────────── -->
 <div class="pw-modal" id="teacherPwModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="pwModalTitle">
   <div class="pw-box">
     <h3 id="pwModalTitle">&#128274; Teacher Access</h3>
-    <p>This area is for teachers only.<br>Please enter the teacher password to continue.</p>
-    <input type="password" id="teacherPwInput" placeholder="Enter password"
+    <p>Enter the shared teacher password to add activities, generate class links, and view your reports.</p>
+    <input type="password" id="teacherPwInput" placeholder="Shared teacher password"
       onkeydown="if(event.key==='Enter')checkTeacherPw()"
       autocomplete="off" aria-label="Teacher password" />
     <div class="pw-error" id="teacherPwError" role="alert"></div>
-    <button class="btn" onclick="checkTeacherPw()">Unlock Teacher Tools</button>
+    <button class="btn" onclick="checkTeacherPw()">Continue</button>
     <button class="btn secondary" onclick="closeTeacherPw()">Cancel</button>
   </div>
 </div>
+
+<!-- ── Teacher Setup Modal (first-time profile + own GAS URL) ──────────────── -->
+<div class="setup-modal" id="teacherSetupModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="setupTitle">
+  <div class="setup-box">
+    <h3 id="setupTitle">Set up your teacher profile</h3>
+    <p class="setup-sub">Your details are saved on this device so your activities, class links and student reports all stay tied to you.</p>
+
+    <label for="setupTeacherName">Your name</label>
+    <input type="text" id="setupTeacherName" placeholder="e.g. Ms Maryam Kassem" autocomplete="name" />
+
+    <label for="setupTeacherSchool">School (optional)</label>
+    <input type="text" id="setupTeacherSchool" placeholder="e.g. Al Khaleej International School" />
+
+    <label for="setupTeacherGas">Your Google Apps Script Web App URL</label>
+    <input type="url" id="setupTeacherGas" placeholder="https://script.google.com/macros/s/.../exec" />
+    <p class="setup-help">
+      This is where <strong>your</strong> students' reports will be saved. You can leave it blank for now and add it later from Teacher Tools.
+      Don't have one yet? <a href="https://script.google.com/" target="_blank" rel="noopener">Open Apps Script</a> and paste the Code.gs from this project.
+    </p>
+
+    <div class="pw-error" id="setupError" role="alert" style="text-align:center"></div>
+
+    <div class="setup-actions">
+      <button class="btn secondary" onclick="closeTeacherSetup()">Cancel</button>
+      <button class="btn" onclick="saveTeacherSetup()">Save &amp; continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Feedback Flash + Confetti hosts ──────────────────────────────────── -->
+<div class="feedback-flash" id="feedbackFlash" aria-hidden="true" role="status">
+  <span class="ff-icon" id="ffIcon">🎉</span>
+  <div class="ff-title" id="ffTitle">Correct!</div>
+  <div class="ff-sub" id="ffSub">Great work — keep going.</div>
+</div>
+<div class="confetti-host" id="confettiHost" aria-hidden="true"></div>
 
 </body>
 </html>
