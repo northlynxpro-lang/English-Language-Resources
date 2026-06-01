@@ -2538,13 +2538,19 @@ const classLinkParams = getClassLinkParams();
 
 /* ── Decide which GAS URL to send a given submission to ──
    Priority:
-   1. URL param (the teacher who shared the class link)
-   2. Currently signed-in teacher on this device
-   3. Owner's default (Aliya)                                       */
+   1. URL param — gas= in the class link (primary, works in Incognito)
+   2. teacherProfile.gasUrl — teacher's own device (localStorage backup)
+   3. localStorage 'googleSheetUrl' — secondary localStorage backup
+   4. OWNER_GAS_URL — only when the page is NOT opened via a class link
+      (direct visit by owner/teacher). Never used when a class link is open,
+      so other teachers' students are never silently sent to the wrong sheet. */
 function getActiveGasUrl(){
   if(classLinkParams.gasUrl) return classLinkParams.gasUrl;
   if(teacherProfile && teacherProfile.gasUrl) return teacherProfile.gasUrl;
-  return OWNER_GAS_URL || '';
+  const lsGas = localStorage.getItem('googleSheetUrl') || '';
+  if(lsGas && /^https:\/\/script\.google\.com\//.test(lsGas)) return lsGas;
+  if(!classLinkParams.teacherName && !classLinkParams.teacherId) return OWNER_GAS_URL || '';
+  return '';
 }
 function getActiveTeacherId(){
   if(classLinkParams.teacherId) return classLinkParams.teacherId;
@@ -2900,9 +2906,15 @@ function generateTeacherLink(){
   params.set('grade',       gradeKey);
   if(section)   params.set('section', section);
   if(className) params.set('class',   className);
-  /* Encode the teacher's own GAS URL so student submissions go to their sheet */
-  if(teacherProfile.gasUrl){
-    try { params.set('gas', btoa(teacherProfile.gasUrl)); } catch(e){}
+  /* Encode the teacher's own GAS URL so student submissions go to their sheet.
+     Read from profile first, then the Reports input field, then localStorage,
+     so the gas= param is always included even if Save URL was not clicked yet. */
+  const gasToEmbed = teacherProfile.gasUrl
+    || ((document.getElementById('googleSheetUrl') && document.getElementById('googleSheetUrl').value.trim()) || '')
+    || (localStorage.getItem('googleSheetUrl') || '');
+  if(gasToEmbed && /^https:\/\/script\.google\.com\//.test(gasToEmbed)){
+    try { params.set('gas', btoa(gasToEmbed)); } catch(e){}
+    if(!teacherProfile.gasUrl){ teacherProfile.gasUrl = gasToEmbed; saveTeacherProfileObj(teacherProfile); }
   }
   if(includeBundle){
     const b = buildActivityBundleB64();
@@ -2916,7 +2928,7 @@ function generateTeacherLink(){
   meta.push(`<b>Class:</b> ${escapeForHtml(className || '—')}`);
   meta.push(`<b>Grade:</b> ${escapeForHtml(STREAM_NAMES[gradeKey]||gradeKey)}`);
   meta.push(`<b>Section:</b> ${escapeForHtml(section||'—')}`);
-  meta.push(`<b>Reports go to:</b> ${teacherProfile.gasUrl ? '✅ Your Apps Script' : '⚠️ Not set — add your URL in the Reports section first'}`);
+  meta.push(`<b>Reports go to:</b> ${gasToEmbed ? '✅ Your Apps Script' : '⚠️ Not set — add your URL in the Reports section first'}`);
   if(includeBundle){
     const sizeKb = Math.round((buildActivityBundleB64()||'').length/1024*10)/10;
     meta.push(`<b>Activities bundled:</b> ${sizeKb||0} KB`);
@@ -3008,11 +3020,11 @@ function sendReportToGoogleSheets(report, statusElId){
   const url = getActiveGasUrl();
   const statusIds = [statusElId, 'submitStatusMsg', 'reportStatus'].filter(Boolean);
   function setStatus(msg){ statusIds.forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=msg; }); }
-  if(!url){ setStatus('⚠ No Google Apps Script is connected. The teacher who shared this link has not set one up yet.'); return; }
+  if(!url){ setStatus('Teacher connection is missing. Please ask your teacher for the correct class link.'); return; }
   const _params = new URLSearchParams();
   Object.keys(report).forEach(k => _params.append(k, report[k] == null ? '' : String(report[k])));
   fetch(url,{method:'POST',mode:'no-cors',body:_params})
-    .then(()=>{ setStatus('\u2705 Submitted to teacher successfully!'); })
+    .then(()=>{ setStatus('Submitted to teacher successfully.'); })
     .catch(()=>{ setStatus('\u274c Submission failed. Check your internet connection.'); });
 }
 
@@ -3044,14 +3056,19 @@ function buildReport(type, mod, opts){
     submissionType: type,
     teacherId:   getActiveTeacherId(),
     teacherName: getActiveTeacherName(),
+    teacher:     getActiveTeacherName(),
     studentName: localStorage.getItem('studentName') || '',
+    student:     localStorage.getItem('studentName') || '',
     className:   classLinkParams.className || classLinkParams.section || localStorage.getItem('studentSection') || '',
     section:     classLinkParams.section   || localStorage.getItem('studentSection') || '',
     grade:       STREAM_NAMES[activeStream] || activeStream,
     stream:      activeStream,
     skill:       activeTab,
+    tab:         activeTab,
     activityTitle: (mod && mod.title) || '',
+    module:      (mod && mod.title) || '',
     score:       String(score),
+    correct:     String(score),
     total:       String(answered),
     percentage:  pct + '%',
     badge:       badge,
