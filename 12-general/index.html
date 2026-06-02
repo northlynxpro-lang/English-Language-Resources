@@ -2833,16 +2833,12 @@ function populateTeacherControls(){
   }
 
   const secSelect = document.getElementById('teacherSectionSelect');
-  function updateTeacherSections(gradeKey){
-    const n = (gradeKey==='general'||gradeKey==='advanced') ? 11 : (parseInt((gradeKey||'').replace(/[^0-9]/g,''))||11);
-    const defaultSecs = [`${n} G 1`,`${n} G 2`,`${n} G 3`,`${n} G 4`,`${n} G 5`,`${n} G 6`];
-    const secs = teacherSections.length ? teacherSections : defaultSecs;
-    if(secSelect) secSelect.innerHTML = secs.map(s=>`<option value="${s}">${s}</option>`).join('');
-  }
-  updateTeacherSections(activeStream);
+  const ALL_DEFAULT_SECTIONS = ['9 G 1','9 G 2','9 G 3','9 G 4','10 G 1','10 G 2','10 G 3','10 G 4','11 G 1','11 G 2','11 G 3','11 G 4','12 G 1','12 G 2','12 G 3','12 G 4'];
+  const secs = teacherSections.length ? teacherSections : ALL_DEFAULT_SECTIONS;
+  if(secSelect) secSelect.innerHTML = secs.map(s=>`<option value="${s}">${s}</option>`).join('');
 
   const linkGrSel = document.getElementById('teacherLinkGradeSelect');
-  if(linkGrSel){ linkGrSel.innerHTML = gradeOptions(activeStream); linkGrSel.onchange = function(){ updateTeacherSections(this.value); }; }
+  if(linkGrSel) linkGrSel.innerHTML = gradeOptions(activeStream);
 
   // Populate cert grade dropdown (Issue 1)
   const certGrSel = document.getElementById('certGradeSelect');
