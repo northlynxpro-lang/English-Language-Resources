@@ -3021,11 +3021,14 @@ function sendReportToGoogleSheets(report, statusElId){
   const statusIds = [statusElId, 'submitStatusMsg', 'reportStatus'].filter(Boolean);
   function setStatus(msg){ statusIds.forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=msg; }); }
   if(!url){ setStatus('Teacher connection is missing. Please ask your teacher for the correct class link.'); return; }
-  /* Send as JSON inside a text/plain body.
-     - text/plain is a CORS-safelisted Content-Type so no preflight is needed with no-cors.
-     - GAS receives the raw string in e.postData.contents, which JSON.parse() reads correctly.
-     - Sending as URLSearchParams (form-encoded) would fail because GAS expects JSON. */
-  fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(report)})
+  /* Append all report fields as URL query parameters and send as a GET request.
+     This is the most reliable method for cross-origin no-cors requests to GAS:
+     - No preflight needed (GET is always a simple request).
+     - Data arrives in e.parameter on the GAS side \u2014 no body parsing or JSON.parse needed.
+     - Works in Incognito, other browsers, and other devices without any cookies or login. */
+  const _qp = new URLSearchParams();
+  Object.keys(report).forEach(k => _qp.set(k, report[k] == null ? '' : String(report[k])));
+  fetch(url + (url.indexOf('?') === -1 ? '?' : '&') + _qp.toString(), {method:'GET', mode:'no-cors'})
     .then(()=>{ setStatus('Submitted to teacher successfully.'); })
     .catch(()=>{ setStatus('\u274c Submission failed. Check your internet connection.'); });
 }
