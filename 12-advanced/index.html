@@ -2833,7 +2833,7 @@ function populateTeacherControls(){
   }
 
   const secSelect = document.getElementById('teacherSectionSelect');
-  const ALL_DEFAULT_SECTIONS = ['9 G 1','9 G 2','9 G 3','9 G 4','10 G 1','10 G 2','10 G 3','10 G 4','11 G 1','11 G 2','11 G 3','11 G 4','12 G 1','12 G 2','12 G 3','12 G 4'];
+  const ALL_DEFAULT_SECTIONS = ['9 G 1','9 G 2','9 G 3','9 G 4','9 A 1','9 A 2','9 A 3','9 A 4','10 G 1','10 G 2','10 G 3','10 G 4','10 A 1','10 A 2','10 A 3','10 A 4','11 G 1','11 G 2','11 G 3','11 G 4','11 A 1','11 A 2','11 A 3','11 A 4','12 G 1','12 G 2','12 G 3','12 G 4','12 A 1','12 A 2','12 A 3','12 A 4'];
   const secs = teacherSections.length ? teacherSections : ALL_DEFAULT_SECTIONS;
   if(secSelect) secSelect.innerHTML = secs.map(s=>`<option value="${s}">${s}</option>`).join('');
 
