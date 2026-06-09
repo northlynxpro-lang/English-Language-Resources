@@ -1367,6 +1367,7 @@ body.role-locked #backToHomeBtn{visibility:hidden}
 }
 @media print{ .uae-thumb, .quiz-image-strip, .uae-banner, .hp-uae-motif{ display:none!important; } }
 </style>
+<link rel="stylesheet" href="timed-exam.css">
 </head>
 <body data-active-stream="general" class="role-locked">
 
@@ -1517,6 +1518,31 @@ body.role-locked #backToHomeBtn{visibility:hidden}
         <button class="hp-card-btn" tabindex="-1">Open Practice Page</button>
       </div><!-- /grade-card -->
 
+    </div>
+  </section>
+
+  <!-- ── Timed Exam Practice Section ── -->
+  <section class="te-hp-section" id="teHomepageSection">
+    <div class="te-hp-inner">
+      <div class="te-hp-text">
+        <div class="te-hp-badge">⏱ New Feature</div>
+        <h2 class="te-hp-heading">Timed Exam Practice</h2>
+        <p class="te-hp-sub">Simulate the real Cycle 3 English exam. Full 60-minute timed exam with all five sections — Vocabulary, Grammar, and three Reading parts — for every grade and stream.</p>
+        <div class="te-hp-features">
+          <span class="te-hp-feat">📝 100-mark structured exam</span>
+          <span class="te-hp-feat">⏱ 60-minute countdown timer</span>
+          <span class="te-hp-feat">📊 Instant scoring &amp; review</span>
+          <span class="te-hp-feat">📤 Results sent to teacher</span>
+          <span class="te-hp-feat">🔒 Password protected</span>
+        </div>
+        <button class="te-hp-open-btn" onclick="openTimedExamSection()" aria-label="Open Timed Exam Practice">Start Timed Exam Practice</button>
+      </div>
+      <div class="te-hp-cards" aria-hidden="true">
+        <div class="te-hp-mini-card"><span class="mc-icon">📖</span><span class="mc-label">Parts</span><span class="mc-val">5</span></div>
+        <div class="te-hp-mini-card"><span class="mc-icon">🎯</span><span class="mc-label">Marks</span><span class="mc-val">100</span></div>
+        <div class="te-hp-mini-card"><span class="mc-icon">⏱</span><span class="mc-label">Time</span><span class="mc-val">60m</span></div>
+        <div class="te-hp-mini-card"><span class="mc-icon">🎓</span><span class="mc-label">Grades</span><span class="mc-val">9–12</span></div>
+      </div>
     </div>
   </section>
 
@@ -3760,6 +3786,71 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 /* Role persistence is already handled inside enterAsStudent / openTeacherLogin */
 </script>
+<!-- ══════════════════════════════════════════════════════════
+     TIMED EXAM OVERLAY — added as new feature, no existing code changed
+     ══════════════════════════════════════════════════════════ -->
+<div id="teOverlay" aria-modal="true" role="dialog" aria-labelledby="teModalTitle" style="display:none">
+  <div class="te-modal-box">
+    <div class="te-modal-header">
+      <div>
+        <p class="te-modal-title" id="teModalTitle">⏱ Timed Exam Practice</p>
+        <p class="te-modal-subtitle">Cycle 3 English Language · 60 minutes · 100 marks</p>
+      </div>
+      <button class="te-close-btn" onclick="closeTimedExam()" aria-label="Close timed exam">✕</button>
+    </div>
+    <div class="te-modal-body">
+
+      <!-- PASSWORD SCREEN -->
+      <div id="tePasswordScreen">
+        <span class="te-pw-icon">🔒</span>
+        <h2 class="te-pw-heading">Enter Exam Password</h2>
+        <p class="te-pw-sub">Your teacher has set a password for the timed exam. Enter it below to continue.</p>
+        <input type="password" id="tePwInput" class="te-pw-field"
+          placeholder="Enter password"
+          onkeydown="if(event.key==='Enter')teCheckPassword()"
+          autocomplete="off" aria-label="Exam password" />
+        <div id="tePwError" role="alert"></div>
+        <button class="te-pw-btn" onclick="teCheckPassword()">Continue →</button>
+      </div>
+
+      <!-- GRADE SELECTION SCREEN -->
+      <div id="teGradeScreen" style="display:none">
+        <h2 class="te-gs-heading">Select Your Grade &amp; Stream</h2>
+        <p class="te-gs-sub">Choose your grade and enter your details, then click Start Exam.</p>
+        <div class="te-student-fields">
+          <div>
+            <label for="teStudentName">Your Name *</label>
+            <input type="text" id="teStudentName" placeholder="e.g. Ahmed Al Mansouri" autocomplete="name" />
+            <div id="teStudentNameError" role="alert"></div>
+          </div>
+          <div>
+            <label for="teStudentSection">Section (optional)</label>
+            <input type="text" id="teStudentSection" placeholder="e.g. 11 A 1" />
+          </div>
+        </div>
+        <div class="te-grade-grid" id="teGradeGrid"><!-- rendered by JS --></div>
+        <button class="te-start-btn" id="teStartBtn" onclick="teStartExam()" disabled>Start Exam →</button>
+      </div>
+
+      <!-- EXAM SCREEN -->
+      <div id="teExamScreen" style="display:none">
+        <div class="te-timer-bar">
+          <div id="teTimerWrap"><span id="teTimerDisplay">60:00</span></div>
+          <span class="te-exam-grade-label" id="teExamGradeLabel"></span>
+          <button class="te-btn te-btn-secondary" style="padding:8px 14px;font-size:.78rem" onclick="teConfirmSubmit()">Submit Now</button>
+        </div>
+        <div class="te-warning-banner" id="teWarningBanner">⚠️ Less than 5 minutes remaining — please review and submit your answers.</div>
+        <div class="te-part-tabs" id="tePartTabs"></div>
+        <div id="teExamBody"></div>
+      </div>
+
+      <!-- RESULTS SCREEN -->
+      <div id="teResultsScreen" style="display:none"><!-- rendered by JS --></div>
+
+    </div><!-- /.te-modal-body -->
+  </div><!-- /.te-modal-box -->
+</div><!-- /#teOverlay -->
+
 <!-- ── Teacher Password Modal (shared password gate) ───────────────────────── -->
 <div class="pw-modal" id="teacherPwModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="pwModalTitle">
   <div class="pw-box">
@@ -3810,5 +3901,8 @@ window.addEventListener('DOMContentLoaded',()=>{
 </div>
 <div class="confetti-host" id="confettiHost" aria-hidden="true"></div>
 
+<!-- ── Timed Exam scripts (new feature — do not remove) ── -->
+<script src="timed-exam-data.js"></script>
+<script src="timed-exam.js"></script>
 </body>
 </html>

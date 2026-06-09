@@ -1,0 +1,648 @@
+/* ============================================================
+   TIMED EXAM STYLES — English Language Practice Hub
+   All class names prefixed .timed-exam-* or .te-*
+   ============================================================ */
+
+/* ── Homepage Timed Exam Section ───────────────────────────── */
+.te-hp-section {
+  background: linear-gradient(135deg, #1F2E4A 0%, #2C3E6B 60%, #3A4F8B 100%);
+  padding: 44px 5%;
+  position: relative;
+  overflow: hidden;
+}
+.te-hp-section::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E") repeat;
+  pointer-events: none;
+}
+.te-hp-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  gap: 48px;
+  align-items: center;
+  position: relative;
+}
+.te-hp-text { flex: 1; }
+.te-hp-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: .7rem; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: rgba(255,255,255,.85);
+  margin-bottom: 14px;
+}
+.te-hp-heading {
+  font-family: "DM Serif Display", serif;
+  font-style: italic;
+  font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+  color: #fff;
+  margin: 0 0 10px;
+  line-height: 1.2;
+}
+.te-hp-sub {
+  font-size: .9rem;
+  color: rgba(255,255,255,.78);
+  line-height: 1.65;
+  margin: 0 0 22px;
+  max-width: 500px;
+}
+.te-hp-features {
+  display: flex; flex-wrap: wrap; gap: 10px 20px;
+  margin-bottom: 26px;
+}
+.te-hp-feat {
+  font-size: .78rem; font-weight: 600;
+  color: rgba(255,255,255,.75);
+  display: flex; align-items: center; gap: 6px;
+}
+.te-hp-open-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #fff;
+  color: #1F2E4A;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-weight: 800; font-size: .95rem;
+  cursor: pointer;
+  transition: transform .18s, box-shadow .18s;
+  box-shadow: 0 4px 20px rgba(0,0,0,.25);
+  font-family: inherit;
+}
+.te-hp-open-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,.35);
+}
+.te-hp-open-btn::after { content: " →"; }
+.te-hp-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  flex-shrink: 0;
+  width: 280px;
+}
+.te-hp-mini-card {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  color: #fff;
+}
+.te-hp-mini-card .mc-icon { font-size: 1.4rem; display: block; margin-bottom: 4px; }
+.te-hp-mini-card .mc-label { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+.te-hp-mini-card .mc-val { font-size: 1.1rem; font-weight: 800; }
+@media (max-width: 760px) {
+  .te-hp-inner { flex-direction: column; gap: 28px; }
+  .te-hp-cards { width: 100%; }
+}
+
+/* ── Full-Screen Overlay ────────────────────────────────────── */
+#teOverlay {
+  position: fixed; inset: 0;
+  background: rgba(10,15,30,.7);
+  backdrop-filter: blur(4px);
+  z-index: 700;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.te-modal-box {
+  background: #fff;
+  border-radius: 24px;
+  max-width: 900px;
+  width: 100%;
+  margin: auto;
+  box-shadow: 0 32px 80px rgba(0,0,0,.4);
+  overflow: hidden;
+  position: relative;
+}
+
+.te-modal-header {
+  background: linear-gradient(135deg, #1F2E4A 0%, #2C3E6B 100%);
+  padding: 22px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.te-modal-title {
+  font-family: "DM Serif Display", serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  color: #fff; margin: 0;
+}
+.te-modal-subtitle {
+  font-size: .8rem; color: rgba(255,255,255,.7);
+  margin: 3px 0 0;
+}
+.te-close-btn {
+  background: rgba(255,255,255,.15);
+  border: none; color: #fff;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  cursor: pointer; font-size: .9rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background .18s;
+}
+.te-close-btn:hover { background: rgba(255,255,255,.3); }
+
+.te-modal-body { padding: 28px; }
+
+/* ── Password Screen ─────────────────────────────────────────── */
+#tePasswordScreen { text-align: center; }
+.te-pw-icon { font-size: 3rem; margin-bottom: 10px; display: block; }
+.te-pw-heading {
+  font-family: "DM Serif Display", serif; font-style: italic;
+  font-size: 1.6rem; color: #1F2E4A; margin: 0 0 6px;
+}
+.te-pw-sub { font-size: .88rem; color: #56666a; margin: 0 0 22px; line-height: 1.55; }
+.te-pw-field {
+  width: 100%; max-width: 320px;
+  padding: 13px 16px;
+  border: 1.5px solid #D6CDBC;
+  border-radius: 12px;
+  font: inherit; font-size: 1.1rem;
+  text-align: center; letter-spacing: .12em;
+  margin-bottom: 10px;
+  transition: border-color .2s, box-shadow .2s;
+  display: block; margin-left: auto; margin-right: auto;
+}
+.te-pw-field:focus {
+  outline: none;
+  border-color: #1F2E4A;
+  box-shadow: 0 0 0 3px rgba(31,46,74,.12);
+}
+#tePwError {
+  color: #B14545; font-size: .83rem; font-weight: 700;
+  min-height: 20px; margin-bottom: 12px;
+}
+.te-pw-btn {
+  background: #1F2E4A; color: #fff;
+  border: none; border-radius: 10px;
+  padding: 12px 32px; font-weight: 800;
+  font-size: .95rem; cursor: pointer;
+  font-family: inherit;
+  transition: opacity .18s, transform .14s;
+}
+.te-pw-btn:hover { opacity: .88; transform: translateY(-1px); }
+
+/* ── Grade Selection Screen ─────────────────────────────────── */
+#teGradeScreen { }
+.te-gs-heading {
+  font-family: "DM Serif Display", serif; font-style: italic;
+  font-size: 1.5rem; color: #1F2E4A; margin: 0 0 6px;
+}
+.te-gs-sub { font-size: .86rem; color: #56666a; margin: 0 0 20px; }
+.te-student-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 22px;
+  background: #F6F2EC;
+  border-radius: 14px;
+  padding: 16px;
+}
+.te-student-fields label {
+  display: block; font-size: .72rem;
+  font-weight: 800; letter-spacing: .1em;
+  text-transform: uppercase; color: #536468;
+  margin-bottom: 6px;
+}
+.te-student-fields input,
+.te-student-fields textarea {
+  width: 100%; padding: 10px 12px;
+  border: 1.5px solid #D6CDBC; border-radius: 10px;
+  font: inherit; font-size: .9rem;
+  transition: border-color .2s;
+  box-sizing: border-box;
+}
+.te-student-fields input:focus { outline: none; border-color: #1F2E4A; }
+#teStudentNameError {
+  font-size: .78rem; color: #B14545; font-weight: 700;
+  min-height: 16px; margin-top: 4px;
+}
+.te-grade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.te-grade-card {
+  background: #F9F5EF;
+  border: 1.5px solid #E6DFD1;
+  border-radius: 14px;
+  padding: 18px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform .18s, border-color .18s, box-shadow .18s;
+  font-family: inherit;
+}
+.te-grade-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(31,46,74,.15);
+  border-color: #1F2E4A;
+}
+.te-grade-card.selected {
+  border-color: #1F2E4A;
+  background: #E8EDF5;
+  box-shadow: 0 4px 14px rgba(31,46,74,.2);
+}
+.te-grade-icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+.te-grade-name { font-weight: 800; font-size: .86rem; color: #1F2E4A; display: block; margin-bottom: 3px; }
+.te-grade-level { font-size: .7rem; color: #56666a; display: block; }
+.te-start-btn {
+  width: 100%;
+  background: #1F2E4A; color: #fff;
+  border: none; border-radius: 12px;
+  padding: 14px; font-weight: 800;
+  font-size: 1rem; cursor: pointer;
+  font-family: inherit;
+  transition: opacity .18s, transform .14s;
+}
+.te-start-btn:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); }
+.te-start-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ── Exam Screen ─────────────────────────────────────────────── */
+#teExamScreen { }
+
+/* Timer bar */
+.te-timer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #F6F2EC;
+  border-radius: 12px;
+  padding: 12px 18px;
+  margin-bottom: 18px;
+}
+#teTimerWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #1F2E4A;
+  color: #fff;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: .06em;
+  transition: background .4s;
+}
+#teTimerWrap.warning { background: #B8932F; }
+#teTimerWrap.critical { background: #B14545; animation: te-pulse 1s ease infinite; }
+@keyframes te-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+#teTimerWrap::before { content: "⏱"; font-size: 1rem; }
+.te-exam-grade-label {
+  font-weight: 700; font-size: .82rem; color: #344a50;
+}
+.te-warning-banner {
+  display: none;
+  background: #FFF3CD;
+  border: 1px solid #B8932F;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  font-size: .84rem;
+  font-weight: 700;
+  color: #7A5200;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Part tabs */
+.te-part-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+.te-part-tab {
+  border: 1.5px solid #D6CDBC;
+  background: #fff;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: .78rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #344a50;
+  transition: .15s;
+  font-family: inherit;
+}
+.te-part-tab:hover { background: #F4EFE5; }
+.te-part-tab.active {
+  background: #1F2E4A;
+  color: #fff;
+  border-color: #1F2E4A;
+}
+
+/* Part header */
+.te-part-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.te-part-label {
+  font-size: .8rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .12em;
+  color: #1F2E4A;
+}
+.te-part-marks {
+  font-size: .76rem; color: #56666a;
+  background: #EEE7D9; border-radius: 999px;
+  padding: 3px 10px; font-weight: 700;
+}
+
+/* Question counter + progress */
+.te-q-counter {
+  font-size: .82rem; font-weight: 700; color: #56666a;
+  margin-bottom: 6px;
+}
+.te-q-progress-bar {
+  height: 6px; background: #eee7d9;
+  border-radius: 999px; overflow: hidden;
+  margin-bottom: 16px;
+}
+.te-q-progress-bar span {
+  display: block; height: 100%;
+  background: #1F2E4A;
+  transition: width .3s ease;
+  border-radius: 999px;
+}
+
+/* Question card */
+.timed-exam-card {
+  background: #fff;
+  border: 1.5px solid #E6DFD1;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
+  margin-bottom: 16px;
+}
+.timed-exam-question {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #112226;
+  margin: 0 0 18px;
+}
+
+/* Options */
+.te-options-stack { display: flex; flex-direction: column; gap: 10px; }
+.timed-exam-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #F9F5EF;
+  border: 1.5px solid #E6DFD1;
+  border-radius: 12px;
+  padding: 13px 16px;
+  text-align: left;
+  cursor: pointer;
+  font: inherit; font-size: .93rem;
+  transition: .15s;
+  width: 100%;
+}
+.timed-exam-option:hover {
+  background: #EDE8E0;
+  border-color: #1F2E4A;
+  transform: translateX(2px);
+}
+.timed-exam-option.selected {
+  background: #E8EDF5;
+  border-color: #1F2E4A;
+  font-weight: 700;
+}
+.timed-exam-option.correct {
+  background: #E0F2EA !important;
+  border-color: #2E7D52 !important;
+  color: #1a4733;
+}
+.timed-exam-option.incorrect {
+  background: #FDEAEA !important;
+  border-color: #B14545 !important;
+  color: #6b1c1c;
+}
+.te-opt-letter {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px;
+  background: #1F2E4A; color: #fff;
+  border-radius: 50%;
+  font-size: .75rem; font-weight: 800;
+  flex-shrink: 0; margin-top: 1px;
+}
+.timed-exam-option.selected .te-opt-letter { background: #2C3E6B; }
+.timed-exam-option.correct .te-opt-letter { background: #2E7D52; }
+.timed-exam-option.incorrect .te-opt-letter { background: #B14545; }
+.te-opt-text { line-height: 1.45; }
+
+/* T/F/NG */
+.te-tfng-questions { display: flex; flex-direction: column; gap: 16px; }
+.te-tfng-row {
+  background: #fff;
+  border: 1.5px solid #E6DFD1;
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+}
+.te-tfng-q {
+  font-weight: 700; font-size: .95rem;
+  color: #112226; margin-bottom: 10px;
+  line-height: 1.45;
+}
+.te-tfng-opts { display: flex; gap: 8px; flex-wrap: wrap; }
+.te-tfng-btn {
+  border: 1.5px solid #D6CDBC;
+  background: #F9F5EF;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font: inherit; font-size: .86rem;
+  font-weight: 700; cursor: pointer;
+  transition: .15s; color: #344a50;
+}
+.te-tfng-btn:hover { background: #EDE8E0; border-color: #1F2E4A; }
+.te-tfng-btn.selected {
+  background: #1F2E4A; color: #fff; border-color: #1F2E4A;
+}
+.te-tfng-btn.correct {
+  background: #2E7D52 !important; color: #fff !important; border-color: #2E7D52 !important;
+}
+.te-tfng-btn.incorrect {
+  background: #B14545 !important; color: #fff !important; border-color: #B14545 !important;
+}
+
+/* Reading card */
+.te-reading-card { margin-bottom: 16px; }
+.te-reading-title {
+  font-weight: 800; font-size: .86rem;
+  color: #1F2E4A; text-transform: uppercase;
+  letter-spacing: .1em; margin-bottom: 10px;
+}
+.te-reading-text {
+  font-size: .9rem; line-height: 1.75;
+  color: #344a50;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+.te-reading-text::-webkit-scrollbar { width: 4px; }
+.te-reading-text::-webkit-scrollbar-thumb { background: #D6CDBC; border-radius: 4px; }
+
+/* Navigation row */
+.te-nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.te-btn {
+  background: #1F2E4A; color: #fff;
+  border: none; border-radius: 10px;
+  padding: 11px 22px; font-weight: 800;
+  font-size: .88rem; cursor: pointer;
+  font-family: inherit;
+  transition: opacity .16s, transform .14s;
+}
+.te-btn:hover { opacity: .88; transform: translateY(-1px); }
+.te-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+.te-btn-secondary {
+  background: #EEE7D9; color: #344a50;
+}
+.te-btn-secondary:hover { background: #E5DDCF; }
+.te-btn-next-part { background: #2C3E6B; }
+.te-btn-submit { background: #2E7D52; }
+.te-answered-count {
+  font-size: .8rem; font-weight: 700; color: #56666a;
+  text-align: center; flex: 1;
+}
+
+/* ── Results Screen ──────────────────────────────────────────── */
+.te-auto-notice {
+  background: #FFF3CD; border: 1px solid #B8932F;
+  border-radius: 10px; padding: 10px 14px;
+  font-size: .84rem; font-weight: 700; color: #7A5200;
+  margin-bottom: 16px;
+}
+.te-results-hero {
+  text-align: center;
+  background: linear-gradient(135deg, #F6F2EC 0%, #fff 100%);
+  border: 1px solid #E6DFD1;
+  border-radius: 18px;
+  padding: 28px;
+  margin-bottom: 20px;
+}
+.te-results-score {
+  font-family: "DM Serif Display", serif;
+  font-size: 4rem; font-weight: 400; line-height: 1;
+  margin-bottom: 4px;
+}
+.te-results-score span { font-size: 1.8rem; color: #56666a; }
+.te-results-pct {
+  font-size: 1.3rem; font-weight: 800; color: #344a50;
+  margin-bottom: 10px;
+}
+.te-results-feedback {
+  font-size: 1rem; font-weight: 700; color: #1F2E4A;
+  margin-bottom: 14px;
+}
+.te-results-meta {
+  display: flex; flex-wrap: wrap; gap: 8px 20px;
+  justify-content: center; font-size: .8rem;
+  color: #56666a; font-weight: 600;
+}
+.te-section-scores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.te-section-score-card {
+  background: #fff;
+  border: 1px solid #E6DFD1;
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+.te-ss-label { font-size: .72rem; font-weight: 800; color: #1F2E4A; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+.te-ss-bar { height: 8px; background: #EEE7D9; border-radius: 999px; overflow: hidden; margin-bottom: 6px; }
+.te-ss-bar span { display: block; height: 100%; border-radius: 999px; transition: width .5s ease; }
+.te-ss-nums { font-size: .86rem; font-weight: 800; color: #344a50; }
+.te-sheet-status {
+  text-align: center; font-size: .82rem; font-weight: 700;
+  color: #56666a; padding: 8px; margin-bottom: 14px;
+}
+.te-review-heading {
+  font-family: "DM Serif Display", serif; font-style: italic;
+  font-size: 1.3rem; color: #1F2E4A; margin: 0 0 14px;
+  border-bottom: 1px solid #E6DFD1; padding-bottom: 10px;
+}
+.te-review-part {
+  margin-bottom: 22px;
+}
+.te-review-part h4 {
+  font-size: .88rem; font-weight: 800; color: #1F2E4A;
+  text-transform: uppercase; letter-spacing: .08em;
+  margin: 0 0 10px; padding: 8px 0; border-bottom: 1px solid #F4EFE5;
+}
+.te-review-q {
+  display: flex; flex-direction: column; gap: 3px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  border-left: 4px solid #ccc;
+}
+.te-review-q.correct { background: #E0F2EA; border-left-color: #2E7D52; }
+.te-review-q.incorrect { background: #FDEAEA; border-left-color: #B14545; }
+.te-rq-text { font-size: .88rem; font-weight: 600; color: #112226; line-height: 1.4; }
+.te-rq-answer { font-size: .82rem; color: #344a50; }
+.te-rq-correct { font-size: .82rem; color: #2E7D52; }
+.te-rq-mark { font-size: .78rem; font-weight: 800; color: #56666a; margin-top: 2px; }
+.te-results-actions {
+  display: flex; gap: 10px; justify-content: center;
+  margin-top: 24px; padding-top: 18px;
+  border-top: 1px solid #E6DFD1;
+}
+
+/* ── Print ───────────────────────────────────────────────────── */
+@media print {
+  #teOverlay {
+    position: static !important;
+    display: block !important;
+    background: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+  }
+  .te-modal-box { box-shadow: none !important; }
+  .te-modal-header,
+  #tePasswordScreen,
+  #teGradeScreen,
+  #teExamScreen,
+  .te-results-actions,
+  .te-close-btn,
+  .te-sheet-status { display: none !important; }
+  #teResultsScreen { display: block !important; }
+}
+
+/* ── Mobile ──────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .te-modal-body { padding: 18px; }
+  .te-grade-grid { grid-template-columns: repeat(2, 1fr); }
+  .te-student-fields { grid-template-columns: 1fr; }
+  .te-section-scores { grid-template-columns: 1fr 1fr; }
+  .te-results-score { font-size: 3rem; }
+  .te-part-tabs { gap: 4px; }
+  .te-part-tab { padding: 6px 10px; font-size: .72rem; }
+}
